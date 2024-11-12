@@ -57,6 +57,9 @@
                     </div>
                     <span v-if="user.password_confirmation.hasError" class="text-red-500 text-xs w-full text-start">
                         {{ user.password_confirmation.errorMessage }}</span>
+                    <span v-if="emailAlreadyExist.hasError" class="text-red-500 text-xs w-full text-start">
+                        {{  emailAlreadyExist.message }}
+                    </span>
                     <button @click="handleLogin" 
                         class="rounded-[0.7rem] bg-c1 text-white py-1 sm:py-2 px-6 sm:px-8 mt-7">
                         Continue
@@ -77,7 +80,7 @@
 </template>
 
 <script setup>
-import { signInWithPopup, signInWithEmailAndPassword} from "firebase/auth";
+import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 import { auth, google, github } from './firebase'
 import { useRouter } from 'vue-router';
 import * as yup from 'yup';
@@ -92,6 +95,9 @@ import VisibilityOffOutline from './components/icons/VisibilityOffOutline.vue'
 const isLoginSetup = ref(true)
 const showPass = ref(false)
 const showPassConfirmation = ref(false)
+const emailAlreadyExist = reactive({
+    hasError: false, message: 'An error occurred. Please Try Again'
+})
 
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
@@ -112,6 +118,7 @@ const login = () => {
     signInWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((userCredential) => {
         // Signed in 
+        thisUser.setDisplayName(userCredential.user.displayName)
         redirectToDashboard()
         // ...
     })
@@ -179,6 +186,7 @@ const createUserAccount = () => {
     createUserWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((userCredential) => {
         // Signed up 
+        thisUser.setDisplayName(userCredential.user.displayName)
         redirectToDashboard();
         // ...
     })
@@ -186,7 +194,11 @@ const createUserAccount = () => {
         // const errorCode = error.code;
         // const errorMessage = error.message;
         // ..
-        // console.log(error.message)
+        // console.log(error.code)
+        if(error.code === 'auth/email-already-in-use'){
+            emailAlreadyExist.hasError = true
+            emailAlreadyExist.message = 'The email address is already registered.'
+        }
     });
 }
 
