@@ -4,8 +4,8 @@ import { auth } from '../firebase'
 import Protected from '../Protected.vue'
 
 import Auth from    '../Auth.vue'
-import LoginPage from '../authPages/LoginPage.vue'
-import SignupPage from '../authPages/SignupPage.vue'
+// import LoginPage from '../authPages/LoginPage.vue'
+// import SignupPage from '../authPages/SignupPage.vue'
 import DashboardPage from '../protectedPages/DashboardPage.vue'
 import ProfilePage from '../protectedPages/ProfilePage.vue'
 
@@ -17,21 +17,21 @@ const router = createRouter({
     routes: [
 
         {
-            path: '/login',
+            path: '/auth',
             name: 'Auth',
             component: Auth,
-            children: [
-                {
-                    path: '/login',
-                    name: 'Login',
-                    component: LoginPage
-                },
-                {
-                    path: '/signup',
-                    name: 'Signup',
-                    component: SignupPage
-                }
-            ]
+            // children: [
+            //     {
+            //         path: '/login',
+            //         name: 'Login',
+            //         component: LoginPage
+            //     },
+            //     {
+            //         path: '/signup',
+            //         name: 'Signup',
+            //         component: SignupPage
+            //     }
+            // ]
         },
         {
             path: '/',
@@ -86,8 +86,8 @@ const getCurrentUser = () => {
   
 router.beforeEach(async (to) => {
     if (to.meta.requiresAuth && !(await getCurrentUser())) {
-        return '/login'
-    } else if ((to.name === 'Signup' || to.name === 'Login') && (await getCurrentUser())) {
+        return '/auth'
+    } else if (to.name === 'Auth' && (await getCurrentUser())) {
         return '/'
     }
 })

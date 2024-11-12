@@ -8,14 +8,11 @@ export default {
     extend: {
       colors: {
         c1: '#113567',
-        c2: "#85AADD",
-        c3: '#516980',
-        c4: '#EBF1FDEE'
+        c2: "#4682B4",
+        c3: '#85AADD',
+        c4: '#EBF1FD',
+        c5: '#DFEAFF'
       },
-      fontFamily: {
-                   // font, callback, callbacks... 
-        'sample': ['Babylonica', 'sans', 'sans-serif']
-      }
     },
   },
   plugins: [],
