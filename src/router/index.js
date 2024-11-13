@@ -53,7 +53,7 @@ const router = createRouter({
                 component: ProfilePage
             },
             {
-                path: 'landing',
+                path: '/landing',
                 name: 'Landing',
                 component: LandingPage
             }
