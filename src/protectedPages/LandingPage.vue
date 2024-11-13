@@ -98,5 +98,5 @@
 </style>
 
 <script setup>
-import MdiLightArrowRight from '../components/icons/MDILightArrowRight.vue';
+import MdiLightArrowRight from '../components/icons/MdiLightArrowRight.vue';
 </script>
