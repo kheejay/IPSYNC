@@ -68,7 +68,7 @@
                 @click="$router.push({ name: 'Auth' })" 
                 class="pl-6 pr-3 py-2 bg-[#EBF1FD] text-[#113567] font-bold rounded-2xl flex items-center">
                 JOIN NOW
-                <MdiLightArrowRight class="w-[2rem] md:w-[3rem] h-[1.5rem] md:h-[2rem] ml-1 text-[#113567]" />
+                <LightArrowRight class="w-[2rem] md:w-[3rem] h-[1.5rem] md:h-[2rem] ml-1 text-[#113567]" />
             </button>
         </div>
     </div>
@@ -98,5 +98,6 @@
 </style>
 
 <script setup>
-import MdiLightArrowRight from '../components/icons/MdiLightArrowRight.vue';
+import LightArrowRight from '../components/icons/LightArrowRight.vue';
+// fix error import
 </script>
