@@ -24,7 +24,7 @@ const router = createRouter({
             component: SignupPage
         },
         {
-            path: '/',
+            path: '/dashboard',
             name: 'Dashboard',
             component: DashboardPage
         },
@@ -34,7 +34,7 @@ const router = createRouter({
             component: ProfilePage
         },
         {
-            path: '/landing',
+            path: '/',
             name: 'Landing',
             component: LandingPage
         },

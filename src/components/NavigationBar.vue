@@ -4,15 +4,15 @@
             <IPSYNCLogo class="w-[5rem]" />
         </div>
         <div class="hidden md:flex gap-[1.75rem] lg:gap-[4rem] text-nowrap">
-            <RouterLink :to="{ name: 'Dashboard' }"
+            <RouterLink :to="{ name: 'Landing' }"
                 class="font-bold underline text-font text-[0.8rem] lg:text-[1rem]">
                 HOME
             </RouterLink>
-            <RouterLink :to="{ name: 'Landing' }"
+            <RouterLink :to="{ name: 'Dashboard' }"
                 :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
                 DASHBOARD
             </RouterLink>
-            <RouterLink :to="{ name: 'Landing' }"
+            <RouterLink :to="{ name: '' }"
                 :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
                 INTERNSHIPS AND PROJECTS
             </RouterLink>
@@ -20,7 +20,7 @@
                 :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
                 ABOUT US
             </RouterLink>
-            <RouterLink :to="{ name: 'Dashboard' }"
+            <RouterLink :to="{ name: '' }"
                 :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
                 CONTACT US
             </RouterLink>
