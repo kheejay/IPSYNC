@@ -90,13 +90,20 @@ const getCurrentUser = () => {
     })
 }
   
+// router.beforeEach(async (to) => {
+//     if (to.meta.requiresAuth && !(await getCurrentUser())) {
+//         return '/login'
+//     } else if ((to.name === 'Login' || to.name === 'Signup') && (await getCurrentUser())) {
+//         return '/'
+//     } else if(to.name === 'Auth') {
+//         return '/'
+//     }
+// })
 router.beforeEach(async (to) => {
-    if (to.meta.requiresAuth && !(await getCurrentUser())) {
-        return '/login'
-    } else if ((to.name === 'Login' || to.name === 'Signup') && (await getCurrentUser())) {
-        return '/'
-    } else if(to.name === 'Auth') {
-        return '/'
+    if (!(await getCurrentUser())) {
+        // restrict authenticated functions
+    } else if ((await getCurrentUser())) {
+        // update user data
     }
 })
 
