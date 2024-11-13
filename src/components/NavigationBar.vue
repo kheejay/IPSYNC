@@ -1,32 +1,32 @@
 <template>
-    <div class="w-screen max-w-[100rem] mx-auto flex justify-between items-center px-12 sticky top-0 bg-white shadow">
-        <div class="w-[9rem] py-2 flex justify-center items-center">
-            <IPSYNCLogo class="w-[6.3rem] h-14" />
+    <div class="w-full max-w-[100rem] mx-auto flex justify-between items-center px-12 sticky top-0 bg-white shadow">
+        <div class="w-[9rem] h-[4rem] flex justify-center items-center">
+            <IPSYNCLogo class="w-[5rem]" />
         </div>
-        <div class="flex gap-[4rem]">
+        <div class="hidden md:flex gap-[1.75rem] lg:gap-[4rem] text-nowrap">
             <RouterLink :to="{ name: 'Dashboard' }"
-                class="font-bold underline text-font text-[1rem] w-max border">
+                class="font-bold underline text-font text-[0.8rem] lg:text-[1rem]">
                 HOME
             </RouterLink>
-            <RouterLink :to="{ name: 'Dashboard' }"
-                :class="`text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
+            <RouterLink :to="{ name: 'Landing' }"
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
                 DASHBOARD
             </RouterLink>
             <RouterLink :to="{ name: 'Landing' }"
-                :class="`text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
                 INTERNSHIPS AND PROJECTS
             </RouterLink>
             <RouterLink :to="{ name: '' }"
-                :class="`text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
                 ABOUT US
             </RouterLink>
             <RouterLink :to="{ name: 'Dashboard' }"
-                :class="`text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
                 CONTACT US
             </RouterLink>
         </div>
         <div class="w-[9rem] flex justify-center items-center relative">
-            <div @click="showDropDown = !showDropDown" class="relative">
+            <div @mouseup="showDropDown = !showDropDown" class="relative">
                 <img src="../assets/images/jacquard.png" alt="profile" 
                     class="bg-black w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
                 <ArrowDown  class="absolute top-1/2 -right-1"/> 

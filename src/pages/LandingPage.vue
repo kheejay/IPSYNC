@@ -91,7 +91,7 @@
 
 @media (min-width: 48rem) {
     .bg-image {
-        height: 92vh; 
+        height: calc(100vh - 4rem); 
     }
 }
 </style>
