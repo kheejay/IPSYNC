@@ -1,10 +1,15 @@
 <template>
+    <NavigationBar />
     <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
             <component :is="Component" />
         </transition>
     </router-view>
 </template>
+
+<script setup>
+import NavigationBar from './components/NavigationBar.vue';
+</script>
 
 <style lang="css">
 .fade-enter-active,

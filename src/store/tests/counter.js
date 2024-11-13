@@ -6,6 +6,9 @@ export const useCounterMyVersion = defineStore('counter', () => {
     const increment = () => {
       count.value++
     }
+    const decrement = () => {
+      count.value--
+    }
   
-    return { count, increment }
+    return { count, increment, decrement }
 }) 

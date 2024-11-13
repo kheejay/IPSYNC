@@ -5,6 +5,6 @@
   
   <script>
   export default {
-    name: 'MdiLightArrowRight'
+    name: 'LightArrowRight'
   }
   </script>

@@ -122,6 +122,9 @@ import VisibilityOutline from '../components/icons/VisibilityOutline.vue'
 import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
 
 import { toast } from "../funtions";
+import { userInfo } from "../store/user";
+
+const sessionUser = userInfo()
 
 const showPass = ref(false)
 const hasError = reactive({
@@ -149,8 +152,10 @@ const login = () => {
     signInWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((userCredential) => {
         // Signed in 
-        thisUser.setDisplayName(userCredential.user.displayName)
-        redirectToDashboard()
+        sessionUser.setUserPhotoURL(userCredential.user.photoURL)
+        router.push({ name: 'TestPage'})
+        // thisUser.setDisplayName(userCredential.user.displayName)
+        // redirectToDashboard()
         // ...
     })
     .catch((error) => {
@@ -165,6 +170,10 @@ const login = () => {
     });
 }
 
+const setUserPhotoURL = (url) => {
+    sessionUser.photoURL = url
+    localStorage.setItem('sessionUser', url)
+}
 import { userState } from '../store/authState'
 const thisUser = userState()
 const loginGoogle = () => {
@@ -177,11 +186,15 @@ const loginGoogle = () => {
         // The signed-in user info.
         // const user = result.user;
         // alert(result.user.displayName)
-        thisUser.setDisplayName(result.user.displayName)
-        redirectToDashboard();
+        // sessionUser.setUserPhotoURLsetUserPhotoURL
+        setUserPhotoURL(result.user.photoURL)
+        router.push({ name: 'TestPage'})
+        // thisUser.setDisplayName(result.user.displayName)
+        // redirectToDashboard();
         // IdP data available using getAdditionalUserInfo(result)
         // ...
     }).catch((error) => {
+        alert(error)
         const errorCode = getErrorMessage(error.code)
         hasError.value = true;
         hasError.message = errorCode;
@@ -202,9 +215,10 @@ const loginGithub = () => {
     .then((result) => {
         // This gives you a GitHub Access Token. You can use it to access the GitHub API.
         // const credential = GithubAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
-        thisUser.setDisplayName(result.user.email)
-        redirectToDashboard();
+        // // const token = credential.accessToken;
+        console.log(result)
+        // thisUser.setDisplayName(result.user.email)
+        // redirectToDashboard();
         // console.log(result)
         // The signed-in user info.
         // const user = result.user;

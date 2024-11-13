@@ -11,7 +11,8 @@ export default {
         c2: "#4682B4",
         c3: '#85AADD',
         c4: '#EBF1FD',
-        c5: '#DFEAFF'
+        c5: '#DFEAFF',
+        font: '#3A3A3A'
       },
     },
   },

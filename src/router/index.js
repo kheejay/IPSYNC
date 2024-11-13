@@ -1,63 +1,42 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import { auth } from '../firebase'
 
-import Protected from '../Protected.vue'
-
-import Auth from    '../Auth.vue'
-import LoginPage from '../authPages/LoginPage.vue'
-import SignupPage from '../authPages/SignupPage.vue'
-import DashboardPage from '../protectedPages/DashboardPage.vue'
-import ProfilePage from '../protectedPages/ProfilePage.vue'
-import LandingPage from '../protectedPages/LandingPage.vue'
+import LoginPage from '../pages/LoginPage.vue'
+import SignupPage from '../pages/SignupPage.vue'
+import DashboardPage from '../pages/DashboardPage.vue'
+import ProfilePage from '../pages/ProfilePage.vue'
+import LandingPage from '../pages/LandingPage.vue'
 
 import page404 from '../page404.vue'
 import { onAuthStateChanged } from 'firebase/auth'
 
 const router = createRouter({
     history: createWebHistory(),
-    routes: [
-
+    routes: [    
         {
-            path: '/auth',
-            name: 'Auth',
-            component: Auth,
-            children: [
-                {
-                    path: '/login',
-                    name: 'Login',
-                    component: LoginPage
-                },
-                {
-                    path: '/signup',
-                    name: 'Signup',
-                    component: SignupPage
-                }
-            ]
+            path: '/login',
+            name: 'Login',
+            component: LoginPage
+        },
+        {
+            path: '/signup',
+            name: 'Signup',
+            component: SignupPage
         },
         {
             path: '/',
-            name: 'Protected',
-            component: Protected,
-            meta: {
-                requiresAuth: { requiresAuth: true }
-            },
-            children: [
-            {
-                path: '',
-                name: 'Dashboard',
-                component: DashboardPage
-            },
-            {
-                path: 'profile',
-                name: 'Profile',
-                component: ProfilePage
-            },
-            {
-                path: '/landing',
-                name: 'Landing',
-                component: LandingPage
-            }
-            ]
+            name: 'Dashboard',
+            component: DashboardPage
+        },
+        {
+            path: '/profile',
+            name: 'Profile',
+            component: ProfilePage
+        },
+        {
+            path: '/landing',
+            name: 'Landing',
+            component: LandingPage
         },
         {
             path: "/:pathMatch(.*)*",
@@ -90,21 +69,24 @@ const getCurrentUser = () => {
     })
 }
   
-// router.beforeEach(async (to) => {
-//     if (to.meta.requiresAuth && !(await getCurrentUser())) {
-//         return '/login'
-//     } else if ((to.name === 'Login' || to.name === 'Signup') && (await getCurrentUser())) {
-//         return '/'
-//     } else if(to.name === 'Auth') {
-//         return '/'
-//     }
-// })
 router.beforeEach(async (to) => {
-    if (!(await getCurrentUser())) {
-        // restrict authenticated functions
-    } else if ((await getCurrentUser())) {
-        // update user data
+    if (to.meta.requiresAuth && !(await getCurrentUser())) {
+        return '/login'
+    } else if ((to.name === 'Login' || to.name === 'Signup') && (await getCurrentUser())) {
+        return '/'
+    } else if(to.name === 'Auth') {
+        return '/'
     }
 })
+// router.beforeEach(async (to) => {
+//     if (!(await getCurrentUser())) {
+//         // restrict authenticated functions
+//     } else if ((await getCurrentUser())) {
+//         // update user data
+//     }
+//     if(to.name === 'Auth') {
+//         return '/login'
+//     }
+// })
 
 export default router
