@@ -23,7 +23,7 @@ const a = ref(counter.count)
 const router = useRouter()
 const handleLogout = () => {
     signOut(auth).then(() => {
-        router.push({ name: 'Auth' })
+        router.push({ name: 'Login' })
     }).catch((error) => {
 
     })
