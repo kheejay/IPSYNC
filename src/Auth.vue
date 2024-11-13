@@ -1,4 +1,8 @@
 <template>
+    <RouterView />
+</template>
+
+<!-- <template>
     <div :class="`flex items-center justify-center ${ !isLoginSetup ? 'overflow-auto py-10' : 'w-screen h-screen'}`">
         <div class="shadow-[0rem_0.25rem_0.25rem_black] border border-black rounded-[1.25rem] bg-c5 px-9 pb-12 pt-9
             flex flex-col items-center justify-center">
@@ -245,4 +249,4 @@ const handleLogin = () => {
         createUserAccount();
     }
 }
-</script>
+</script> -->
