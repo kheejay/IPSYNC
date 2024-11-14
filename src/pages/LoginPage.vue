@@ -1,18 +1,19 @@
 <template>
-    <div class="flex items-center justify-center w-screen h-screen bg-c1 overflow-auto px-8 sm:px-0">
+    <div class="flex items-center justify-center w-screen h-screen bg-c1 overflow-auto px-4 sm:px-0">
         <div v-if="!resetPassword" 
-            class="shadow-[0rem_0.25rem_0.25rem_black] border border-black bg-white px-2 md:px-4 pt-7 md:pt-9 pb-5 
+            class="shadow-[0rem_0.25rem_0.25rem_black] border border-black bg-white px-2 md:px-4 pt-6 md:pt-9 pb-5 
                 w-full sm:w-[80%] md:w-[68%] flex flex-col items-center justify-center max-w-[62rem]">
-            <div class="w-full flex justify-start pl-2 px-2"><IPSYNCLogo class="w-12 h-7 sm:w-16 sm:h-9 md:w-20 md:h-12"/></div>
-            <div class="text-c1 font-bold text-[1.5rem] sm:text-[2rem] md:text-[2.5rem] sm:-translate-y-2 md:-translate-y-6
+            <div class="w-full flex justify-start pl-2 px-2">
+                <IPSYNCLogo class="w-12 h-7 sm:w-16 sm:h-9 md:w-20 md:h-12"/>
+            </div>
+            <div class="text-c1 font-bold text-[1.5rem] sm:text-[2rem] md:text-[2.5rem]
                 px-2">
                 Sign In to IPSync
             </div>
-            <div class="text-[0.6rem] sm:text-[0.65rem] md:text-[0.8rem] sm:-translate-y-2 md:-translate-y-6">
+            <div class="text-[0.6rem] sm:text-[0.65rem] md:text-[0.8rem]">
                 Welcome back! Please sign in to continue.
             </div>
-            <div class="flex flex-col items-center w-full sm:w-[20rem] md:w-[24rem] gap-3 md:gap-4 py-4 sm:-translate-y-2 px-4 sm:px-0
-                    md:-translate-y-6">
+            <div class="flex flex-col items-center w-full sm:w-[20rem] md:w-[24rem] gap-3 md:gap-4 py-4 sm:-translate-y-2 px-4 sm:px-0">
                 <div @click="loginGoogle"
                     class="flex items-center justify-center border border-black w-full text-xs sm:text-[0.90rem] md:text-[1rem] 
                         py-3 md:py-4 relative shadow cursor-pointer">
@@ -62,7 +63,7 @@
                         <span v-if="hasError.value" class="text-red-500 text-xs w-full text-start">
                             {{  hasError.message }}
                         </span>
-                        <div class="w-full flex justify-start text-[0.6rem] sm:text-xs md:text-[0.80rem] gap-1 my-1 md:mt-3">
+                        <div class="w-full flex justify-start text-[0.6rem] sm:text-xs md:text-[0.80rem] gap-1 mt-3">
                             Forgot your password? 
                             <span @click="resetPassword = true" 
                                 class="font-bold text-c1 cursor-pointer hover:underline">Reset</span>
@@ -70,7 +71,7 @@
                     </div>
                     <div class="w-full">
                         <button @click="handleLogin" 
-                            class="rounded-[1.87rem] bg-c1 text-white py-[0.4rem] sm:py-[0.5rem] md:py-[0.75rem] my-1 md:my-3 
+                            class="rounded-[1.87rem] bg-c1 text-white py-[0.4rem] sm:py-[0.5rem] md:py-[0.75rem] my-3 
                             w-full text-xs sm:text-[0.90rem] md:text-[1rem] font-semibold active:scale-[99%]">
                             LOGIN
                         </button>
