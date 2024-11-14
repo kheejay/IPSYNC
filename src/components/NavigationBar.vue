@@ -6,24 +6,27 @@
         <div class="hidden md:flex gap-[1.75rem] lg:gap-[4rem] text-nowrap">
             <RouterLink :to="{ name: 'Landing' }"
                 :class="`text-[0.8rem] lg:text-[1rem] text-font ${ $route.name === 'Landing' ? 'font-bold underline' : '' } 
-                    hover:font-bold hover:underline`">
+                    hover:font-bold hover:underline text-shadow`">
                 HOME
             </RouterLink>
             <RouterLink :to="{ name: 'Dashboard' }"
                 :class="`text-[0.8rem] lg:text-[1rem] text-font ${ $route.name === 'Dashboard' ? 'font-bold  underline' : '' } 
-                    hover:font-bold hover:underline`">
+                    hover:font-bold hover:underline text-shadow`">
                 DASHBOARD
             </RouterLink>
             <RouterLink :to="{ name: '' }"
-                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
+                    hover:font-bold hover:underline text-shadow`">
                 INTERNSHIPS AND PROJECTS
             </RouterLink>
             <RouterLink :to="{ name: '' }"
-                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
+                    hover:font-bold hover:underline text-shadow`">
                 ABOUT US
             </RouterLink>
             <RouterLink :to="{ name: '' }"
-                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
+                    hover:font-bold hover:underline text-shadow`">
                 CONTACT US
             </RouterLink>
         </div>
@@ -44,7 +47,8 @@
                     </div>
                 </div>
                 <div class="w-11/12 mx-auto border-t border-black p-2">
-                     <p class="text-[1rem]m mb-1 cursor-pointer">VIEW PROFILE</p>
+                     <p @click="goToProfile"
+                        class="text-[1rem]m mb-1 cursor-pointer">VIEW PROFILE</p>
                      <p class="text-[1rem] cursor-pointer text-red-500">SIGN OUT</p>
                 </div>
             </div>
@@ -57,8 +61,16 @@ import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 import IPSYNCLogo from "./IPSYNCLogo.vue";
 import ArrowDown from './icons/ArrowDown.vue'
+import { useRouter } from "vue-router";
 const showDropDown = ref(false)
+
+const router = useRouter()
 
 const target = ref(null)
 onClickOutside(target, event => showDropDown.value = false)
+
+const goToProfile = () => {
+    router.push({ name: 'Profile'})
+    showDropDown.value = false
+}
 </script>

@@ -80,3 +80,10 @@
     font-family: 'Poppins', sans-serif;
 }
 }
+
+@layer utilities {
+  /* styles.css */
+.text-shadow { /* Tailwind text size and font weight */
+  text-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2); /* Custom shadow */
+}
+}
