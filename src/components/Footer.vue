@@ -1,8 +1,8 @@
 <template>
     <div class="w-full max-w-[100rem] mx-auto flex flex-col px-3 xl:px-12 sticky top-0 bg-c5 shadow">
         <div class="flex w-full h-[12rem] border-b-2 border-c1 pb-2 sm:pb-6">
-            <div class="w-1/2 flex items-center h-full sm:pl-10">
-                <IPSYNCLogo class="scale-50 sm:scale-100" />
+            <div class="w-1/2 flex items-center h-full sm:pl-10 border">
+                <IPSYNCLogo class="w-[5rem] h-[3rem]" />
             </div>
             <div class="w-1/2 flex items-end justify-end h-full sm:pr-10">
                 <div class="flex gap-5 scale-75 sm:scale-90 md:scale-100">
