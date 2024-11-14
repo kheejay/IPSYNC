@@ -6,11 +6,14 @@
         <div @click="$router.push({ name: 'Profile' })" class="p-4 border w-max">Profile</div>
         <p class="font-sample text-4xl">Hello{{ (user.displayName !== null ? ' ' + user.displayName : ' pip') + '!'}}</p>
     </div>
+    <!-- <LoadingScreen /> -->
 </template>
 
 <script setup>
 import { useCounterMyVersion } from '../store/tests/counter';
 import { userState } from '../store/authState'
+
+// import LoadingScreen from '../components/LoadingScreen.vue';
 
 const user = userState();
 
