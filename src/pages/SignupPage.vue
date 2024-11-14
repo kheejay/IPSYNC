@@ -1,34 +1,35 @@
 <template>
-    <div class="flex items-center justify-center w-screen h-screen bg-c1 overflow-auto px-8 sm:px-0">
-        <div class="shadow-[0rem_0.25rem_0.25rem_black] border border-black bg-white px-2 md:px-4 pt-7 md:pt-9 pb-5 
-            w-full sm:w-[80%] md:w-[68%] flex flex-col items-center justify-center max-w-[62rem]">
-            <div class="w-full flex justify-start pl-2 px-2"><IPSYNCLogo class="w-12 h-7 sm:w-16 sm:h-9 md:w-20 md:h-12"/></div>
-            <div class="text-c1 font-bold text-[1.5rem] sm:text-[2rem] md:text-[2.5rem] sm:-translate-y-2 md:-translate-y-6
-                px-2">
-                Sign Up to IPSync
+    <div class="flex items-center justify-center w-screen h-screen bg-c1 overflow-auto px-4 sm:px-0">
+        <div class="shadow-[0rem_0.25rem_0.25rem_black] border border-black bg-white px-2 sm:px-4 sm: py-7 
+                w-full sm:w-[80%] md:w-[68%] flex flex-col items-center justify-center max-w-[62rem]">
+            <div class="w-full flex justify-start pl-2 pb-2">
+                <IPSYNCLogo class="w-14 h-9 md:w-20 md:h-12"/>
             </div>
-            <div class="text-[0.6rem] sm:text-[0.65rem] md:text-[0.8rem] sm:-translate-y-2 md:-translate-y-6">
+            <div class="text-c1 font-bold text-[2rem] sm:text-[2.5rem]
+                px-2">
+                Sign In to IPSync
+            </div>
+            <div class="text-xs sm:text-[0.8rem]">
                 Welcome to IPSync! Let's get you started.
             </div>
-            <div class="flex flex-col items-center w-full sm:w-[20rem] md:w-[24rem] gap-3 md:gap-4 py-4 sm:-translate-y-2 px-4 sm:px-0
-                md:-translate-y-6">
+            <div class="flex flex-col items-center w-full sm:w-[20rem] md:w-[24rem] gap-3 md:gap-4 py-4 px-4 sm:px-0 mt-1">
                 <div @click="loginGoogle"
-					class="flex items-center justify-center border border-black w-full text-xs sm:text-[0.90rem] md:text-[1rem] 
-                		py-3 md:py-4 relative shadow cursor-pointer">
+                    class="flex items-center justify-center border border-black w-full text-[0.90rem] sm:text-[1rem] 
+                        py-3 md:py-4 relative shadow cursor-pointer">
                     <GoogleIcon @click="loginGoogle" class="w-[1.12rem] h-[1.25rem] sm:w-[1.5rem] sm:h-[1.5rem] md:w-[1.75rem] 
                         md:h-[1.75rem] absolute left-3 top-1/2 -translate-y-1/2" /> 
                     continue with Google
                 </div>
                 <div @click="loginGithub"
-					class="flex items-center justify-center border border-black w-full text-xs sm:text-[0.90rem] md:text-[1rem]   
-                		py-3 md:py-4 relative shadow cursor-pointer">
+                    class="flex items-center justify-center border border-black w-full text-[0.90rem] sm:text-[1rem]   
+                        py-3 md:py-4 relative shadow cursor-pointer">
                     <GithubIcon @click="loginGoogle" class="w-[1.12rem] h-[1.25rem] sm:w-[1.5rem] sm:h-[1.5rem] md:w-[1.75rem] 
                         md:h-[1.75rem] absolute left-3 top-1/2 -translate-y-1/2" /> 
                     continue with Github
                 </div>
                 <div class="flex items-center justify-center w-full sm:my-1">
                     <span class="border-b border-black flex-grow"></span>
-                    <div class="px-2 md:px-4 text-[0.6rem] sm:text-xs md:text-[1rem]">
+                    <div class="px-2 md:px-4 text-xs sm:text-[1rem]">
                         or
                     </div>
                     <span class="border-b border-black flex-grow"></span>
@@ -36,9 +37,9 @@
                 <div class="w-full flex flex-col items-end justify-center gap-3 md:gap-4">
                     <div class="w-full">
                         <input type="text" v-model="user.email.value" @blur="validateInput('email')"
-							@focus="hasError.value = false"
-                        	class="w-full py-3 border border-black focus:outline-none px-4 text-xs sm:text-[0.90rem] md:text-[1rem]
-                            	placeholder:font-light shadow"
+                            @focus="hasError.value = false"
+                        class="w-full py-3 border border-black focus:outline-none px-4 text-[0.90rem] sm:text-[1rem]
+                            placeholder:font-light shadow"
                             placeholder="Email Address">
                         <span v-if="user.email.hasError" class="text-red-500 text-xs w-full text-start">
                             {{ user.email.errorMessage }}</span>
@@ -47,9 +48,9 @@
                         <div class="relative w-full">
                             <input :type="showPass ? 'text' : 'password'" 
                                 v-model="user.password.value" @blur="validateInput('password')"
-								@focus="hasError.value = false"
-                                class="w-full py-3 border border-black focus:outline-none px-4 text-xs sm:text-[0.90rem] 
-                                    md:text-[1rem] placeholder:font-light shadow"
+                                @input="hasError.value = false"
+                                class="w-full py-3 border border-black focus:outline-none px-4 text-[0.90rem] 
+                                    sm:text-[1rem] placeholder:font-light shadow"
                                 placeholder="Password">
                             <VisibilityOutline v-if="showPass" @click="showPass = false" 
                                 class="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 cursor-pointer" />
@@ -64,15 +65,16 @@
                     </div>
                     <div class="w-full">
                         <button @click="handleLogin" 
-                            class="rounded-[1.87rem] bg-c1 text-white py-[0.4rem] sm:py-[0.5rem] md:py-[0.75rem] my-1 md:my-3 
-                            w-full text-xs sm:text-[0.90rem] md:text-[1rem] font-semibold active:scale-[99%]">
+                            class="rounded-[1.87rem] bg-c1 text-white py-[0.4rem] sm:py-[0.5rem] md:py-[0.75rem] my-3 
+                            w-full text-[0.90rem] sm:text-[1rem] font-semibold active:scale-[99%]">
                             SIGNUP
                         </button>
-                        <div class="w-full text-center text-[0.6rem] sm:text-xs md:text-[0.80rem]">
+                        <div class="w-full text-center text-xs sm:text-[0.80rem]">
                             Already have an account? 
-                            <span @click="$router.push({ name: 'Login'})" class="font-bold text-c1 cursor-pointer hover:underline">
-								Sign in
-							</span>
+                            <span @click="$router.push({ name: 'Login' })" class="font-bold text-c1 cursor-pointer 
+                                hover:underline">
+                                Sign in
+                            </span>
                         </div>
                     </div>
                 </div>       
