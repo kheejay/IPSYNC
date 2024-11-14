@@ -19,7 +19,7 @@ const route = useRoute()
 const isAuthPage = computed(() => (route.name !== 'Login' && route.name !== 'Signup'))
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.3s;
