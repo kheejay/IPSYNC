@@ -61,7 +61,7 @@
             enter-to-class="opacity-[0.65]" leave-active-class="transition-opacity duration-300" 
             leave-from-class="opacity-[0.65]" leave-to-class="opacity-0">        
             <div @click="showMobileNav = false"
-                v-if="showMobileNav" class="absolute w-screen h-screen top-0 left-0 md:hidden bg-c1 opacity-65">
+                v-if="showMobileNav" class="absolute w-screen h-screen top-0 left-0 md:hidden bg-c2 opacity-50">
             </div>
         </Transition>
         <Transition enter-active-class="transition ease-out duration-500" enter-from-class="translate-x-full"
