@@ -1,8 +1,5 @@
 <template>
     <div class="w-full">
-        <!-- <div class="w-full bg-[#113567] h-[3.8rem] text-white font-extrabold flex items-center justify-center text-sm md:text-base">
-            DUMMY NAVBAR LANG TOOO BIHH CHILLLL....
-        </div> -->
         <div class="bg-image text-white">
             <div class="pt-[10rem] px-6 text-center md:text-left md:pt-[10rem] md:pl-[7.5rem] sm:pt-[12rem] tracking-widest">
                 <div class="font-black text-[2.5rem] md:text-[3.25rem] md:w-[60%] sm:text-[3rem] leading-tight">

@@ -37,7 +37,7 @@
                 <ArrowDown  class="absolute top-1/2 -right-1"/> 
             </div>
             <div  v-if="showDropDown" ref="target"
-                class="absolute -bottom-[10.3rem] -left-[11.66rem] sm:-left-[8.2rem] h-[9.5rem] w-[14rem] bg-white rounded-[0.625rem] p-2">
+                class="absolute -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-[9.5rem] w-[14rem] bg-white rounded-[0.625rem] p-2">
                 <div class="flex p-2">
                     <img src="../assets/images/jacquard.png" alt="" 
                         class="bg-black w-11 h-11 rounded-full border-2 border-c1">

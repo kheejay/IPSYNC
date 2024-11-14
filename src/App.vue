@@ -5,11 +5,13 @@
             <component :is="Component" class="bg-c4" />
         </transition>
     </router-view>
+    <Footer />
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
+import Footer from './components/Footer.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute()
