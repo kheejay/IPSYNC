@@ -24,7 +24,7 @@
                     hover:font-bold hover:underline w-[6rem] lg:w-[10rem] xl:w-[13rem] text-center`">
                 ABOUT US
             </RouterLink>
-            <RouterLink :to="{ name: '' }"
+            <RouterLink :to="{ name: 'Contact' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
                     hover:font-bold hover:underline w-[5.6rem] lg:w-[6.1rem] xl:w-[7rem] text-center`">
                 CONTACT US
@@ -111,18 +111,28 @@
                                 INTERNSHIPS AND PROJECTS
                             </div>
                         </div>
+<<<<<<< Updated upstream
                         <div @mousedown="goTo('')" 
                             :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
                                 ${ $route.name === '' && 'bg-c4'}`">
+=======
+                        <div @mousedown="goTo('About')" 
+                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+>>>>>>> Stashed changes
                             <BaselineGroups class="text-font w-7 h-7" />
                             <div :class="`text-[1rem] text-font ${ $route.name === '' && 'font-bold underline' } 
                                     hover:font-bold hover:underline text-shadow`">
                                 ABOUT US
                             </div>
                         </div>
+<<<<<<< Updated upstream
                         <div @mousedown="goTo('')" 
                             :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
                                 ${ $route.name === '' && 'bg-c4'}`">
+=======
+                        <div @mousedown="goTo('Contact')" 
+                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+>>>>>>> Stashed changes
                             <BaselinePhone class="text-font w-7 h-7" />
                             <div :class="`text-[1rem] text-font ${ $route.name === '' && 'font-bold underline' } 
                                     hover:font-bold hover:underline text-shadow`">
