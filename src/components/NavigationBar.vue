@@ -5,11 +5,13 @@
         </div>
         <div class="hidden md:flex gap-[1.75rem] lg:gap-[4rem] text-nowrap">
             <RouterLink :to="{ name: 'Landing' }"
-                class="font-bold underline text-font text-[0.8rem] lg:text-[1rem]">
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ $route.name === 'Landing' ? 'font-bold underline' : '' } 
+                    hover:font-bold hover:underline`">
                 HOME
             </RouterLink>
             <RouterLink :to="{ name: 'Dashboard' }"
-                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } hover:font-bold hover:underline`">
+                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ $route.name === 'Dashboard' ? 'font-bold  underline' : '' } 
+                    hover:font-bold hover:underline`">
                 DASHBOARD
             </RouterLink>
             <RouterLink :to="{ name: '' }"
