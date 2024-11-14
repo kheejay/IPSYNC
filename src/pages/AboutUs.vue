@@ -5,7 +5,7 @@
             <div class="font-extrabold text-[3rem] pt-[6rem] md:pt-[4rem] ">
                 ABOUT US
             </div>
-            <div class="tracking-widest font-light px-[3rem] text-[0.85rem] md:text-[1rem] sm:text-[0.9rem]">
+            <div class="tracking-widest font-light px-[10%] text-[0.85rem] md:text-[1rem] sm:text-[0.9rem]">
                 IPSync is a platform that connects students, faculty mentors, and industry partners from West Visayas State University to foster hands-on learning and career readiness.
             </div>
         </div>
@@ -14,7 +14,7 @@
             <div class="font-extrabold text-[3rem] pt-[10rem] md:pt-[8rem] text-center pb-4 mb-6">
                 OUR MISSION 
             </div>
-            <div class="px-[5%] xl:px-[10%] ">
+            <div class="px-[10%] md:px-[3%] ">
                 <div class="md:flex md:grid-flow-row lg:grid-cols-2 gap-5">
                     <!--Mission 1-->
                     <div class="xl:w-[45%] md:w-[50%] flex md:justify-end justify-center">
@@ -134,7 +134,7 @@
                         Allan Andrews Tacuel
                     </div>
                     <div class="text-white tracking-wider">
-                        ILLUSTRATOR/ASSET
+                        ILLUSTRATOR/DOCUMENTER
                     </div>
                 </div>
             </div>
