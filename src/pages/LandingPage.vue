@@ -13,7 +13,7 @@
                 </div>
                 <div class="flex justify-center md:justify-start">
                     <button 
-                        @click="$router.push({ name: 'Auth' })" 
+                        @click="$router.push({ name: 'Login' })" 
                         class="pl-6 pr-3 py-2 bg-[#EBF1FD] text-[#113567] font-bold rounded-3xl flex items-center">
                         GET STARTED 
                         <LightArrowRight class="w-[2rem] md:w-[3rem] h-[1.5rem] md:h-[2rem] ml-1 text-[#113567]" />
@@ -63,7 +63,7 @@
             </div>
             <div class="flex justify-center md:justify-start mt-6">
                 <button 
-                    @click="$router.push({ name: 'Auth' })" 
+                    @click="$router.push({ name: 'Login' })" 
                     class="pl-6 pr-3 py-2 bg-[#EBF1FD] text-[#113567] font-bold rounded-2xl flex items-center">
                     JOIN NOW
                     <LightArrowRight class="w-[2rem] md:w-[3rem] h-[1.5rem] md:h-[2rem] ml-1 text-[#113567]" />

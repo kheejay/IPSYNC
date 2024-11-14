@@ -37,7 +37,7 @@
                 <ArrowDown  class="absolute top-1/2 -right-1"/> 
             </div>
             <div  v-if="showDropDown" ref="target"
-                class="absolute -bottom-[10.3rem] -left-[11.66rem] sm:-left-[8.2rem] h-[9rem] w-[14rem] bg-white rounded-[0.625rem] p-2">
+                class="absolute -bottom-[10.3rem] -left-[11.66rem] sm:-left-[8.2rem] h-[9.5rem] w-[14rem] bg-white rounded-[0.625rem] p-2">
                 <div class="flex p-2">
                     <img src="../assets/images/jacquard.png" alt="" 
                         class="bg-black w-11 h-11 rounded-full border-2 border-c1">
@@ -48,8 +48,8 @@
                 </div>
                 <div class="w-11/12 mx-auto border-t border-black p-2">
                      <p @click="goToProfile"
-                        class="text-[1rem]m mb-1 cursor-pointer">VIEW PROFILE</p>
-                     <p class="text-[1rem] cursor-pointer text-red-500">SIGN OUT</p>
+                        class="text-[1rem]m py-1 cursor-pointer">VIEW PROFILE</p>
+                     <p @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer pb-1 text-red-500">SIGN OUT</p>
                 </div>
             </div>
         </div>
@@ -126,10 +126,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full text-end text-red-500 pr-4">SIGN OUT</div>
+                <div @mousedown="confirmActionLogout" class="w-full text-end text-red-500 pr-4">SIGN OUT</div>
             </div>
         </Transition>
     </div>
+    <ConfirmationModal v-if="confirmLogout"
+        @confirm="handleLogout"
+        @cancel="confirmLogout = false"
+        :message="'Please confirm to logout.'" />
 </template>
 
 <script setup>
@@ -142,7 +146,13 @@ import BaselineOutline from './icons/BaselineHouse.vue';
 import BaselineEngineering from './icons/RoundEngineering.vue';
 import BaselineGroups from './icons/BaselineGroups.vue';
 import BaselinePhone from './icons/BaselinePhone.vue'
+import ConfirmationModal from "./modals/ConfirmationModal.vue";
+
 import { useRouter } from "vue-router";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import { toast } from "../functions";
+
 const showDropDown = ref(false)
 
 const router = useRouter()
@@ -151,6 +161,7 @@ const target = ref(null)
 onClickOutside(target, event => showDropDown.value = false)
 
 const showMobileNav = ref(false)
+const confirmLogout = ref(false)
 
 const goToProfile = () => {
     router.push({ name: 'Profile'})
@@ -161,5 +172,18 @@ const goToProfile = () => {
 const goTo = (name) => {
     router.push({ name: name})
     showMobileNav.value = false
+}
+
+const handleLogout = () => {
+    signOut(auth).then(() => {
+        toast("Logout successful!")
+        router.push({ name: 'Landing' })
+        confirmLogout.value = false;
+    })
+}
+
+const confirmActionLogout = () => {
+    confirmLogout.value = true;
+    showMobileNav.value = false;
 }
 </script>

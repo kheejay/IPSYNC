@@ -121,7 +121,7 @@ import GithubIcon from "../components/icons/GithubIcon.vue";
 import VisibilityOutline from '../components/icons/VisibilityOutline.vue'
 import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
 
-import { toast } from "../funtions";
+import { toast } from "../functions";
 import { userInfo } from "../store/user";
 
 const sessionUser = userInfo()
