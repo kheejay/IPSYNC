@@ -1,6 +1,6 @@
 <template>
     <div class="z-[1] w-full max-w-[100rem] mx-auto flex justify-between items-center px-3 xl:px-12 sticky top-0 bg-white shadow">
-        <div class="md:w-[9rem] h-[3.5rem] md:h-[4rem] flex justify-center items-center">
+        <div class="md:w-[9rem] h-[4rem] flex justify-center items-center">
             <IPSYNCLogo class="w-[3rem] md:w-[5rem]" />
         </div>
         <div class="hidden md:flex text-nowrap">
@@ -55,8 +55,8 @@
         </div>
 
         <RoundMenu @click="showMobileNav = true"
-            :class="`flex md:hidden border border-c1 w-8 h-8 p-1 rounded-sm active:text-c1 active:bg-white active:scale-95
-            ${ showMobileNav ? 'text-c1' : 'text-white bg-c1'}`" />
+            :class="`flex md:hidden w-11 h-11 p-[0.125rem] rounded-sm active:text-white active:bg-c1 active:scale-95
+            ${ showMobileNav ? 'text-white' : 'text-c1 bg-white'}`" />
         <Transition enter-active-class="transition-opacity duration-500" enter-from-class="opacity-0"
             enter-to-class="opacity-[0.65]" leave-active-class="transition-opacity duration-300" 
             leave-from-class="opacity-[0.65]" leave-to-class="opacity-0">        
@@ -70,7 +70,7 @@
             <div v-if="showMobileNav" class="z-[2] fixed top-0 right-0 md:hidden h-screen bg-white w-[32rem] max-w-[80vw]
                 flex flex-col justify-between p-4">
                 <div class="flex-grow">
-                    <div @mousedown="goToProfile" class="w-full active:bg-c4">
+                    <div @mousedown="goToProfile" :class="`w-full active:bg-c4 rounded ${ $route.name === 'Profile' && 'bg-c4'}`">
                         <div class="flex p-2">
                             <img src="../assets/images/jacquard.png" alt="" 
                                 class="bg-black w-11 h-11 rounded-full border-2 border-c1">
@@ -85,23 +85,26 @@
                     </div>
                     <div class="w-full grid">
                         <div @mousedown="goTo('Landing')" 
-                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
+                                ${ $route.name === 'Landing' && 'bg-c4'}`">
                             <BaselineOutline class="text-font w-7 h-7" />
-                            <div :class="`text-[1rem] text-font ${ $route.name === 'Landing' ? 'font-bold underline' : '' } 
+                            <div :class="`text-[1rem] text-font ${ $route.name === 'Landing' && 'font-bold underline'} 
                                     hover:font-bold hover:underline text-shadow`">
                                 HOME
                             </div>
                         </div>
                         <div @mousedown="goTo('Dashboard')" 
-                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
-                            <BaselineOutline class="text-font w-7 h-7" />
-                            <div :class="`text-[1rem] text-font ${ $route.name === 'Dashboard' ? 'font-bold underline' : '' } 
+                            :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
+                                ${ $route.name === 'Dashboard' && 'bg-c4'}`">
+                            <DashboardIcon class="text-font w-7 h-7" />
+                            <div :class="`text-[1rem] text-font ${ $route.name === 'Dashboard' && 'font-bold underline' } 
                                     hover:font-bold hover:underline text-shadow`">
                                 DASHBOARD
                             </div>
                         </div>
                         <div @mousedown="goTo('')" 
-                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
+                                ${ $route.name === '' && 'bg-c4'}`">
                             <BaselineEngineering class="text-font w-7 h-7" />
                             <div :class="`text-[1rem] text-font ${ $route.name === '' ? 'font-bold underline' : '' } 
                                     hover:font-bold hover:underline text-shadow`">
@@ -109,17 +112,19 @@
                             </div>
                         </div>
                         <div @mousedown="goTo('')" 
-                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
+                                ${ $route.name === '' && 'bg-c4'}`">
                             <BaselineGroups class="text-font w-7 h-7" />
-                            <div :class="`text-[1rem] text-font ${ $route.name === '' ? 'font-bold underline' : '' } 
+                            <div :class="`text-[1rem] text-font ${ $route.name === '' && 'font-bold underline' } 
                                     hover:font-bold hover:underline text-shadow`">
                                 ABOUT US
                             </div>
                         </div>
                         <div @mousedown="goTo('')" 
-                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
+                                ${ $route.name === '' && 'bg-c4'}`">
                             <BaselinePhone class="text-font w-7 h-7" />
-                            <div :class="`text-[1rem] text-font ${ $route.name === '' ? 'font-bold underline' : '' } 
+                            <div :class="`text-[1rem] text-font ${ $route.name === '' && 'font-bold underline' } 
                                     hover:font-bold hover:underline text-shadow`">
                                 CONTACT US
                             </div>
@@ -143,6 +148,7 @@ import IPSYNCLogo from "./IPSYNCLogo.vue";
 import ArrowDown from './icons/ArrowDown.vue';
 import RoundMenu from './icons/RoundMenu.vue';
 import BaselineOutline from './icons/BaselineHouse.vue';
+import DashboardIcon from './icons/DashboardIcon.vue'
 import BaselineEngineering from './icons/RoundEngineering.vue';
 import BaselineGroups from './icons/BaselineGroups.vue';
 import BaselinePhone from './icons/BaselinePhone.vue'
