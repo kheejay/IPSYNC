@@ -83,9 +83,9 @@
             </div>
         </div>
         <div v-if="resetPassword"
-            class="flex flex-col gap-4 p-8 bg-white shadow-[0rem_0.25rem_0.25rem_black] border border-black">
+            class="flex flex-col gap-4 p-4 sm:p-8 bg-white shadow-[0rem_0.25rem_0.25rem_black] border border-black w-full sm:w-max">
             Enter email address
-            <div class="w-[24rem]">
+            <div class="w-full sm:w-[24rem]">
                 <input type="text" v-model="user.email.value" @blur="validateInput('email')"
                     class="w-full py-3 border border-black focus:outline-none px-4 text-xs sm:text-[0.90rem] md:text-[1rem]
                         placeholder:font-light shadow"
@@ -304,7 +304,7 @@ const handleReset = () => {
             .then(() => {
                 // Password reset email sent!
                 // ..
-                toast();
+                toast("Reset password link has been sent!");
                 setTimeout(() => {
                     resetPassword.value = false
                 }, 1600)

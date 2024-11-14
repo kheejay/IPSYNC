@@ -1,8 +1,8 @@
 import Toastify from 'toastify-js'
-const toast = (left = "#113567", right = "#184c95", color = "#FFFFFF") => {
+const toast = (message = "Request success!", left = "#113567", right = "#184c95", color = "#FFFFFF") => {
     return (
         Toastify({
-            text: "Reset password link has been sent!",
+            text: message,
             duration: 1000,
             newWindow: true,
             close: true,
