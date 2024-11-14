@@ -1,7 +1,7 @@
 <template>
     <NavigationBar v-if="!isAuthPage" />
     <router-view class="max-w-[100rem] mx-auto" v-slot="{ Component }">
-        <transition :name="`${ isAuthPage && 'fade' }`" mode="out-in">
+        <transition :name="`${ !isAuthPage && 'fade' }`" mode="out-in">
             <component :is="Component" :class="`${ !isAuthPage && 'bg-c4' }`" />
         </transition>
     </router-view>
