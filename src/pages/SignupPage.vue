@@ -78,6 +78,7 @@
                 </div>       
             </div>
         </div>
+        <LoadingScreen v-if="isLoading" />
     </div>
 </template>
 
@@ -93,12 +94,14 @@ import GoogleIcon from "../components/icons/GoogleIcon.vue";
 import GithubIcon from "../components/icons/GithubIcon.vue";
 import VisibilityOutline from '../components/icons/VisibilityOutline.vue'
 import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
+import LoadingScreen from '../components/LoadingScreen.vue'
 
 const showPass = ref(false)
 const hasError = reactive({
     value: false, message: 'An error occurred. Please Try Again'
 })
 const buttonLock = ref(false)
+const isLoading = ref(false)
 
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
@@ -115,11 +118,7 @@ const redirectToDashboard = () => {
     router.push({ name: "Dashboard" })
 }
 
-import { userState } from '../store/authState'
-const thisUser = userState()
-
 const loginGoogle = () => {
-
     signInWithPopup(auth, google)
     .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -128,7 +127,6 @@ const loginGoogle = () => {
         // The signed-in user info.
         // const user = result.user;
         // alert(result.user.displayName)
-        thisUser.setDisplayName(result.user.displayName)
         redirectToDashboard();
         // IdP data available using getAdditionalUserInfo(result)
         // ...
@@ -147,13 +145,11 @@ const loginGoogle = () => {
 }
   
 const loginGithub = () => {
-  
     signInWithPopup(auth, github)
     .then((result) => {
         // This gives you a GitHub Access Token. You can use it to access the GitHub API.
         // const credential = GithubAuthProvider.credentialFromResult(result);
         // const token = credential.accessToken;
-        thisUser.setDisplayName(result.user.email)
         redirectToDashboard();
         // console.log(result)
         // The signed-in user info.
@@ -176,14 +172,16 @@ const loginGithub = () => {
 }
 
 const createUserAccount = () => {
+    isLoading.value = true;
     createUserWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((userCredential) => {
         // Signed up 
-        thisUser.setDisplayName(userCredential.user.displayName)
+        isLoading.value = false;
         redirectToDashboard();
         // ...
     })
     .catch((error) => {
+        isLoading.value = false;
         const errorCode = getErrorMessage(error.code)
         hasError.value = true;
         hasError.message = errorCode;
@@ -250,6 +248,8 @@ const getErrorMessage = (error) => {
       return 'Account exists with different credential';
     case 'auth/invalid-credential':
       return 'Invalid credential';
+    case 'auth/popup-closed-by-user':
+      return 'Popup closed by user';
     default:
       return 'An error occurred please try again.';
   }

@@ -1,11 +1,11 @@
 <template>
-    <NavigationBar v-if="isAuthPage" />
+    <NavigationBar v-if="!isAuthPage" />
     <router-view class="max-w-[100rem] mx-auto" v-slot="{ Component }">
         <transition :name="`${ isAuthPage && 'fade' }`" mode="out-in">
-            <component :is="Component" class="bg-c4" />
+            <component :is="Component" :class="`${ !isAuthPage && 'bg-c4' }`" />
         </transition>
     </router-view>
-    <Footer />
+    <Footer v-if="!isAuthPage" />
 </template>
 
 <script setup>
@@ -16,7 +16,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute()
 
-const isAuthPage = computed(() => (route.name !== 'Login' && route.name !== 'Signup'))
+const isAuthPage = computed(() => route.meta.isAuthPage)
 </script>
 
 <style lang="css" scoped>

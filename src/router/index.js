@@ -7,7 +7,6 @@ import DashboardPage from '../pages/DashboardPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
 import LandingPage from '../pages/LandingPage.vue'
 
-import page404 from '../page404.vue'
 import { onAuthStateChanged } from 'firebase/auth'
 
 const router = createRouter({
@@ -16,12 +15,18 @@ const router = createRouter({
         {
             path: '/login',
             name: 'Login',
-            component: LoginPage
+            component: LoginPage,
+            meta: {
+                isAuthPage: true
+            }
         },
         {
             path: '/signup',
             name: 'Signup',
-            component: SignupPage
+            component: SignupPage,
+            meta: {
+                isAuthPage: true
+            }
         },
         {
             path: '/dashboard',
@@ -40,8 +45,7 @@ const router = createRouter({
         },
         {
             path: "/:pathMatch(.*)*",
-            name: 'not-found',
-            component: page404
+            redirect: '/'
         },
         
     ],

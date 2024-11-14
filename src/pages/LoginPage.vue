@@ -105,6 +105,7 @@
                 </span>
             </div>
         </div>
+        <LoadingScreen v-if="isLoading" />
     </div>
 </template>
 
@@ -120,6 +121,7 @@ import GoogleIcon from "../components/icons/GoogleIcon.vue";
 import GithubIcon from "../components/icons/GithubIcon.vue";
 import VisibilityOutline from '../components/icons/VisibilityOutline.vue'
 import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
+import LoadingScreen from '../components/LoadingScreen.vue'
 
 import { toast } from "../functions";
 import { userInfo } from "../store/user";
@@ -132,6 +134,7 @@ const hasError = reactive({
 })
 const buttonLock = ref(false)
 const resetPassword = ref(false)
+const isLoading = ref(false)
 
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
@@ -149,16 +152,18 @@ const redirectToLanding= () => {
 }
   
 const login = () => {
+    isLoading.value = true;
     signInWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((userCredential) => {
         // Signed in 
+        isLoading.value = false;
         thisUser.setDisplayName(userCredential.user.displayName)
         redirectToLanding()
         // ...
     })
     .catch((error) => {
+        isLoading.value = false;
         const errorCode = getErrorMessage(error.code)
-        alert(error.code)
         hasError.value = true;
         hasError.message = errorCode;
 		buttonLock.value = false;
@@ -191,7 +196,7 @@ const loginGoogle = () => {
         // IdP data available using getAdditionalUserInfo(result)
         // ...
     }).catch((error) => {
-        alert(error)
+        // alert(error)
         const errorCode = getErrorMessage(error.code)
         hasError.value = true;
         hasError.message = errorCode;
@@ -292,6 +297,8 @@ const getErrorMessage = (error) => {
       return 'Invalid credential';
     case 'auth/too-many-requests':
       return 'Too many requests';
+    case 'auth/popup-closed-by-user':
+      return 'Popup closed by user';
     default:
       return 'An error occurred please try again.';
   }
