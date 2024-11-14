@@ -1,6 +1,6 @@
 <template>
-    <div class="w-full max-w-[100rem] mx-auto flex justify-between items-center px-2 xl:px-12 sticky top-0 bg-white shadow">
-        <div class="sm:w-[9rem] h-[3.5rem] sm:h-[4rem] flex justify-center items-center">
+    <div class="z-[1] w-full max-w-[100rem] mx-auto flex justify-between items-center px-3 xl:px-12 sticky top-0 bg-white shadow">
+        <div class="md:w-[9rem] h-[3.5rem] md:h-[4rem] flex justify-center items-center">
             <IPSYNCLogo class="w-[3rem] md:w-[5rem]" />
         </div>
         <div class="hidden md:flex text-nowrap">
@@ -30,7 +30,7 @@
                 CONTACT US
             </RouterLink>
         </div>
-        <div class="sm:w-[9rem] flex justify-center items-center relative">
+        <div class="w-[2.5rem] md:w-[9rem] hidden md:flex justify-center items-center relative">
             <div @mouseup="showDropDown = !showDropDown" class="relative">
                 <img src="../assets/images/jacquard.png" alt="profile" 
                     class="bg-black w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
@@ -53,6 +53,82 @@
                 </div>
             </div>
         </div>
+
+        <RoundMenu @click="showMobileNav = true"
+            :class="`flex md:hidden border border-c1 w-8 h-8 p-1 rounded-sm active:text-c1 active:bg-white active:scale-95
+            ${ showMobileNav ? 'text-c1' : 'text-white bg-c1'}`" />
+        <Transition enter-active-class="transition-opacity duration-500" enter-from-class="opacity-0"
+            enter-to-class="opacity-[0.65]" leave-active-class="transition-opacity duration-300" 
+            leave-from-class="opacity-[0.65]" leave-to-class="opacity-0">        
+            <div @click="showMobileNav = false"
+                v-if="showMobileNav" class="absolute w-screen h-screen top-0 left-0 md:hidden bg-c1 opacity-65">
+            </div>
+        </Transition>
+        <Transition enter-active-class="transition ease-out duration-500" enter-from-class="translate-x-full"
+        enter-to-class="translate-x-0" leave-active-class="transition ease-in duration-300"
+        leave-from-class="translate-x-0" leave-to-class="translate-x-full">
+            <div v-if="showMobileNav" class="z-[2] fixed top-0 right-0 md:hidden h-screen bg-white w-[32rem] max-w-[80vw]
+                flex flex-col justify-between p-4">
+                <div class="flex-grow">
+                    <div @mousedown="goToProfile" class="w-full active:bg-c4">
+                        <div class="flex p-2">
+                            <img src="../assets/images/jacquard.png" alt="" 
+                                class="bg-black w-11 h-11 rounded-full border-2 border-c1">
+                            <div class=" flex-grow flex flex-col justify-center px-2">
+                                <p class="font-bold text-[1rem]">Chicken Bilog</p>
+                                <p class="text-[0.90rem]">STUDENT</p>
+                            </div>
+                        </div>
+                        <div class="w-11/12 mx-auto border-t border-black p-2">
+                            <p class="text-[1rem]m mb-1 cursor-pointer">VIEW PROFILE</p>
+                        </div>
+                    </div>
+                    <div class="w-full grid">
+                        <div @mousedown="goTo('Landing')" 
+                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            <BaselineOutline class="text-font w-7 h-7" />
+                            <div :class="`text-[1rem] text-font ${ $route.name === 'Landing' ? 'font-bold underline' : '' } 
+                                    hover:font-bold hover:underline text-shadow`">
+                                HOME
+                            </div>
+                        </div>
+                        <div @mousedown="goTo('Dashboard')" 
+                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            <BaselineOutline class="text-font w-7 h-7" />
+                            <div :class="`text-[1rem] text-font ${ $route.name === 'Dashboard' ? 'font-bold underline' : '' } 
+                                    hover:font-bold hover:underline text-shadow`">
+                                DASHBOARD
+                            </div>
+                        </div>
+                        <div @mousedown="goTo('')" 
+                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            <BaselineEngineering class="text-font w-7 h-7" />
+                            <div :class="`text-[1rem] text-font ${ $route.name === '' ? 'font-bold underline' : '' } 
+                                    hover:font-bold hover:underline text-shadow`">
+                                INTERNSHIPS AND PROJECTS
+                            </div>
+                        </div>
+                        <div @mousedown="goTo('')" 
+                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            <BaselineGroups class="text-font w-7 h-7" />
+                            <div :class="`text-[1rem] text-font ${ $route.name === '' ? 'font-bold underline' : '' } 
+                                    hover:font-bold hover:underline text-shadow`">
+                                ABOUT US
+                            </div>
+                        </div>
+                        <div @mousedown="goTo('')" 
+                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            <BaselinePhone class="text-font w-7 h-7" />
+                            <div :class="`text-[1rem] text-font ${ $route.name === '' ? 'font-bold underline' : '' } 
+                                    hover:font-bold hover:underline text-shadow`">
+                                CONTACT US
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full text-end text-red-500 pr-4">SIGN OUT</div>
+            </div>
+        </Transition>
     </div>
 </template>
 
@@ -60,7 +136,12 @@
 import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 import IPSYNCLogo from "./IPSYNCLogo.vue";
-import ArrowDown from './icons/ArrowDown.vue'
+import ArrowDown from './icons/ArrowDown.vue';
+import RoundMenu from './icons/RoundMenu.vue';
+import BaselineOutline from './icons/BaselineHouse.vue';
+import BaselineEngineering from './icons/RoundEngineering.vue';
+import BaselineGroups from './icons/BaselineGroups.vue';
+import BaselinePhone from './icons/BaselinePhone.vue'
 import { useRouter } from "vue-router";
 const showDropDown = ref(false)
 
@@ -69,8 +150,16 @@ const router = useRouter()
 const target = ref(null)
 onClickOutside(target, event => showDropDown.value = false)
 
+const showMobileNav = ref(false)
+
 const goToProfile = () => {
     router.push({ name: 'Profile'})
+    showMobileNav.value = false
     showDropDown.value = false
+}
+
+const goTo = (name) => {
+    router.push({ name: name})
+    showMobileNav.value = false
 }
 </script>
