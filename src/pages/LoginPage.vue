@@ -144,18 +144,16 @@ const user = reactive({
 })
 
 const router = useRouter()
-const redirectToDashboard = () => {
-    router.push({ name: "Dashboard" })
+const redirectToLanding= () => {
+    router.push({ name: "Landing" })
 }
   
 const login = () => {
     signInWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((userCredential) => {
         // Signed in 
-        sessionUser.setUserPhotoURL(userCredential.user.photoURL)
-        router.push({ name: 'TestPage'})
-        // thisUser.setDisplayName(userCredential.user.displayName)
-        // redirectToDashboard()
+        thisUser.setDisplayName(userCredential.user.displayName)
+        redirectToLanding()
         // ...
     })
     .catch((error) => {
@@ -187,8 +185,7 @@ const loginGoogle = () => {
         // const user = result.user;
         // alert(result.user.displayName)
         // sessionUser.setUserPhotoURLsetUserPhotoURL
-        setUserPhotoURL(result.user.photoURL)
-        router.push({ name: 'TestPage'})
+        redirectToLanding();
         // thisUser.setDisplayName(result.user.displayName)
         // redirectToDashboard();
         // IdP data available using getAdditionalUserInfo(result)
@@ -216,9 +213,9 @@ const loginGithub = () => {
         // This gives you a GitHub Access Token. You can use it to access the GitHub API.
         // const credential = GithubAuthProvider.credentialFromResult(result);
         // // const token = credential.accessToken;
-        console.log(result)
+        // console.log(result)
         // thisUser.setDisplayName(result.user.email)
-        // redirectToDashboard();
+        redirectToLanding();
         // console.log(result)
         // The signed-in user info.
         // const user = result.user;

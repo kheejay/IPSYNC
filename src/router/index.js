@@ -55,29 +55,29 @@ const router = createRouter({
 
 })
 
-const getCurrentUser = () => {
-    return new Promise((resolve, reject) => {
-        const unsubscribe = onAuthStateChanged(
-            auth,
-            (user) => {
-                console.log(user)
-                unsubscribe()
-                resolve(user)
-            },
-            reject
-        ) 
-    })
-}
+// const getCurrentUser = () => {
+//     return new Promise((resolve, reject) => {
+//         const unsubscribe = onAuthStateChanged(
+//             auth,
+//             (user) => {
+//                 console.log(user)
+//                 unsubscribe()
+//                 resolve(user)
+//             },
+//             reject
+//         ) 
+//     })
+// }
   
-router.beforeEach(async (to) => {
-    if (to.meta.requiresAuth && !(await getCurrentUser())) {
-        return '/login'
-    } else if ((to.name === 'Login' || to.name === 'Signup') && (await getCurrentUser())) {
-        return '/'
-    } else if(to.name === 'Auth') {
-        return '/'
-    }
-})
+// router.beforeEach(async (to) => {
+//     if (to.meta.requiresAuth && !(await getCurrentUser())) {
+//         return '/login'
+//     } else if ((to.name === 'Login' || to.name === 'Signup') && (await getCurrentUser())) {
+//         return '/'
+//     } else if(to.name === 'Auth') {
+//         return '/'
+//     }
+// })
 // router.beforeEach(async (to) => {
 //     if (!(await getCurrentUser())) {
 //         // restrict authenticated functions
