@@ -6,27 +6,27 @@
         <div class="hidden md:flex text-nowrap">
             <RouterLink :to="{ name: 'Landing' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ $route.name === 'Landing' ? 'font-bold underline' : '' } 
-                    hover:font-bold hover:underline text-shadow w-[3rem] lg:w-[3.5rem] xl:w-[4rem] text-center`">
+                    hover:font-bold hover:underline w-[3rem] lg:w-[3.5rem] xl:w-[4rem] text-center`">
                 HOME
             </RouterLink>
             <RouterLink :to="{ name: 'Dashboard' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ $route.name === 'Dashboard' ? 'font-bold  underline' : '' } 
-                    hover:font-bold hover:underline text-shadow w-[6rem] lg:w-[10rem] xl:w-[13rem] text-center`">
+                    hover:font-bold hover:underline w-[6rem] lg:w-[10rem] xl:w-[13rem] text-center`">
                 DASHBOARD
             </RouterLink>
             <RouterLink :to="{ name: '' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
-                    hover:font-bold hover:underline text-shadow w-[11.5rem] lg:w-[12rem] xl:w-[15rem] text-center`">
+                    hover:font-bold hover:underline w-[11.5rem] lg:w-[12rem] xl:w-[15rem] text-center`">
                 INTERNSHIPS AND PROJECTS
             </RouterLink>
-            <RouterLink :to="{ name: '' }"
+            <RouterLink :to="{ name: 'About' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
-                    hover:font-bold hover:underline text-shadow w-[6rem] lg:w-[10rem] xl:w-[13rem] text-center`">
+                    hover:font-bold hover:underline w-[6rem] lg:w-[10rem] xl:w-[13rem] text-center`">
                 ABOUT US
             </RouterLink>
             <RouterLink :to="{ name: '' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
-                    hover:font-bold hover:underline text-shadow w-[5.6rem] lg:w-[6.1rem] xl:w-[7rem] text-center`">
+                    hover:font-bold hover:underline w-[5.6rem] lg:w-[6.1rem] xl:w-[7rem] text-center`">
                 CONTACT US
             </RouterLink>
         </div>
