@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full max-w-[100rem] mx-auto flex justify-between items-center px-12 sticky top-0 bg-white shadow">
+    <div class="w-full max-w-[100rem] mx-auto flex justify-between items-center xl:px-12 sticky top-0 bg-white shadow">
         <div class="w-[9rem] h-[4rem] flex justify-center items-center">
             <IPSYNCLogo class="w-[5rem]" />
         </div>
@@ -10,7 +10,7 @@
                 HOME
             </RouterLink>
             <RouterLink :to="{ name: 'Dashboard' }"
-                :class="`text-[0.8rem] lg:text-[1rem] text-font ${ $route.name === 'Dashboard' ? 'font-bold  underline' : '' } 
+                :class="`text-[0.8rem] xl:text-[1rem] text-font ${ $route.name === 'Dashboard' ? 'font-bold  underline' : '' } 
                     hover:font-bold hover:underline text-shadow`">
                 DASHBOARD
             </RouterLink>

@@ -1,6 +1,6 @@
 <template>
     <NavigationBar />
-    <router-view v-slot="{ Component }">
+    <router-view class="max-w-[100rem] mx-auto" v-slot="{ Component }">
         <transition name="fade" mode="out-in">
             <component :is="Component" />
         </transition>
