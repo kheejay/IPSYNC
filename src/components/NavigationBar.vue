@@ -1,5 +1,5 @@
 <template>
-    <div class="z-[1] w-full max-w-[100rem] mx-auto flex justify-between items-center px-3 xl:px-12 sticky top-0 bg-white shadow">
+    <div class="z-[3] w-full max-w-[100rem] mx-auto flex justify-between items-center px-3 xl:px-12 sticky top-0 bg-white shadow">
         <div class="md:w-[9rem] h-[4rem] flex justify-center items-center">
             <IPSYNCLogo class="w-[3rem] md:w-[5rem]" />
         </div>
