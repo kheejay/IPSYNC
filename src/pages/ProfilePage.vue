@@ -16,21 +16,24 @@
             <div class="w-full h-[30%] lg:h-[40%] bg-transparent bg-black"></div>
             <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4">
                 <div class="w-full flex flex-col-reverse sm:flex-col">
-                    <div class="w-full flex justify-end items-center gap-4 mt-4 sm:mt-0">
-                        <button class="rounded-full bg-c1 text-white sm:py-[0.4rem]
-                            my-3 py-1.5 px-6 sm:px-0 sm:w-[10rem] text-[1rem] active:scale-[99%]">
+                    <div class="w-full flex justify-end items-center gap-4 mt-4 sm:mt-0 py-6">
+                        <button v-if="isEditMode" @click="turnEditModeOff" class="rounded-full bg-c1 text-white h-[2.2rem]
+                            sm:h-[2.5rem] px-6 sm:px-0 sm:w-[10rem] text-[1rem] active:scale-[99%]">
                             Save Changes
                         </button>
-                        <EditProfileInfo class="w-[2rem] h-[2rem] cursor-pointer 
-                            hover:scale-105 active:scale-95 duration-200" />
+                        <div v-else class="h-[2.2rem] sm:h-[2.5rem] flex items-center mr-2">
+                            <EditProfileInfo @click="handleEdit" class="w-[2rem] h-[2rem] sm:w-[2.2rem] sm:h-[2.2rem] 
+                                cursor-pointer hover:scale-105 active:scale-95 duration-200" />
+                        </div>  
                     </div>
                     <div class="w-full flex flex-col items-start pt-2 mt-[4.4rem] sm:mt-0">
                         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
-                            <input type="text" class="w-full h-full bg-transparent px-2 text-[1.75rem] 
+                            <input :disabled="!isEditMode" type="text" ref="fullName"
+                                class="w-full h-full bg-transparent px-2 text-[1.75rem] 
                                 focus:outline-none text-center sm:text-start" value="Chicken Bilog Doe">
                         </div>
                         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
-                            <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1
+                            <input :disabled="!isEditMode" type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1
                                 focus:outline-none text-center sm:text-start" 
                                 value="College of Senior High School">
                         </div>
@@ -40,20 +43,24 @@
                 <div class="w-full sm:h-[9rem] grid gap-4 sm:flex items-center sm:mt-[2rem] text-c1">
                     <div class="w-full sm:w-[40%] grid gap-4 py-2 border-b-2 sm:border-b-0 sm:border-r-2 border-black pr-4">
                         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
-                            <input type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 text-c1 focus:outline-none" 
-                            placeholder="Degree Program">
+                            <input :disabled="!isEditMode" 
+                                type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 text-c1 focus:outline-none" 
+                                placeholder="Degree Program">
                         </div>
                         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
-                            <input type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 text-c1 focus:outline-none" 
-                            placeholder="Year Level">
+                            <input :disabled="!isEditMode"  
+                                type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 text-c1 focus:outline-none" 
+                                placeholder="Year Level">
                         </div>
                         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
-                            <input type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 text-c1 focus:outline-none" 
-                            placeholder="Student ID">
+                            <input :disabled="!isEditMode" 
+                                type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 text-c1 focus:outline-none" 
+                                placeholder="Student ID">
                         </div>
                     </div>
                     <div class="w-full sm:w-[60%] h-full sm:px-4">
-                        <textarea class="w-full min-h-[9rem] border p-2 focus:outline-none focus:border focus:border-c1
+                        <textarea :disabled="!isEditMode" 
+                                class="w-full min-h-[9rem] border p-2 focus:outline-none focus:border focus:border-c1
                                 resize-none max-h-[9rem] text-[1rem]"
                                 ref="textarea"
                                 v-model="input"
@@ -147,6 +154,19 @@
 import EditProfileInfo from '../components/icons/EditProfileInfo.vue';
 import JobTitleModal from '../components/modals/JobTitleModal.vue';
 import PlusIcon from '../components/icons/PlusIcon.vue'
-import { useTextareaAutosize } from '@vueuse/core';
+import { useTextareaAutosize, useFocus } from '@vueuse/core';
+import { ref } from 'vue';
 const { textarea, input } = useTextareaAutosize()
+
+const fullName = ref()
+const { focused } = useFocus(fullName)
+
+const isEditMode = ref(false);
+const turnEditModeOn = () => isEditMode.value = true;
+const turnEditModeOff = () => isEditMode.value = false;
+
+const handleEdit = () => {
+    turnEditModeOn();
+    setTimeout(() => focused.value = true, 50)
+}
 </script>
