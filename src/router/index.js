@@ -8,6 +8,8 @@ import ProfilePage from '../pages/ProfilePage.vue'
 import LandingPage from '../pages/LandingPage.vue'
 
 import { onAuthStateChanged } from 'firebase/auth'
+import AboutUs from '../pages/AboutUs.vue'
+import ContactUs from '../pages/ContactUs.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,6 +44,16 @@ const router = createRouter({
             path: '/',
             name: 'Landing',
             component: LandingPage
+        },
+        {
+            path: '/about',
+            name: 'About',
+            component: AboutUs
+        },
+        {
+            path: '/contact',
+            name: 'Contact',
+            component: ContactUs
         },
         {
             path: "/:pathMatch(.*)*",
