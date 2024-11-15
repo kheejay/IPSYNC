@@ -79,8 +79,16 @@
   * {
     font-family: "Poppins", sans-serif;
   }
+  
 }
 
-@layer utilities {
-  /* styles.css */
+@layer components {
+  textarea {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  textarea::-webkit-scrollbar {
+    display: none;
+  }
 }
