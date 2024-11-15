@@ -30,7 +30,8 @@
                 CONTACT US
             </RouterLink>
         </div>
-        <div class="w-[2.5rem] md:w-[9rem] hidden md:flex justify-center items-center relative">
+        <div v-if="isAuthenticated"
+            class="w-[2.5rem] md:w-[9rem] hidden md:flex justify-center items-center relative">
             <div @mouseup="showDropDown = !showDropDown" class="relative">
                 <img src="../assets/images/jacquard.png" alt="profile" 
                     class="bg-black w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
@@ -47,13 +48,19 @@
                     </div>
                 </div>
                 <div class="w-11/12 mx-auto border-t border-black p-2">
-                     <p v-if="isAuthenticated" @click="goToProfile"
+                     <p @click="goToProfile"
                         class="text-[1rem]m py-1 cursor-pointer w-max">VIEW PROFILE</p>
-                     <p v-if="isAuthenticated" @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer 
+                     <p @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer 
                         pb-1 text-red-500 w-max">SIGN OUT</p>
-                     <p v-else @mousedown="goTo('Login')" class="text-[1rem] cursor-pointer pb-1 text-c1 w-max">SIGN IN</p>
                 </div>
             </div>
+        </div>
+
+        <div v-else 
+            @mousedown="goTo('Login')"
+            class="w-[2.5rem] md:w-[9rem] hidden md:flex justify-center items-center text-[1.125rem] text-c1 
+            cursor-pointer hover:scale-105">
+            SIGN IN
         </div>
 
         <RoundMenu @click="showMobileNav = true"
@@ -153,7 +160,7 @@
 
 <script setup>
 import { onClickOutside } from "@vueuse/core";
-import { onBeforeMount, onUnmounted, ref, watch } from "vue";
+import { onBeforeMount, onUnmounted, ref } from "vue";
 import IPSYNCLogo from "./IPSYNCLogo.vue";
 import ArrowDown from './icons/ArrowDown.vue';
 import RoundMenu from './icons/RoundMenu.vue';
