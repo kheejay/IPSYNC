@@ -80,7 +80,7 @@
                 </div>       
             </div>
         </div>
-        <LoadingScreen v-if="isLoading" />
+        <LoadingScreen :loadingPrompt="'Setting up your profile, just a moment...'" v-if="isLoading" />
     </div>
 </template>
 
@@ -124,10 +124,10 @@ const redirectTo = (route) => {
     router.push({ name: route });
 }
 
-const handleNewUser = async (uid) => {
+const handleNewUser = async (result) => {
     isLoading.value = true;
     try {
-        const docRef = doc(db, "users", uid)
+        const docRef = doc(db, "users", result.user.uid)
         const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
             isLoading.value = false;
@@ -136,6 +136,7 @@ const handleNewUser = async (uid) => {
         } else {
             // docSnap.data() will be undefined in this case
             isLoading.value = false;
+            genericProfile.value = result.user.photoURL;
             console.log("No such document!");
             toast('Welcome! Let\'s get you set up with just a few quick details.', "top", "5000")
             redirectTo('Profile');
@@ -156,8 +157,7 @@ const loginGoogle = () => {
         // The signed-in user info.
         // const user = result.user;
         // alert(result.user.displayName)
-        const userId = result.user.uid;
-        handleNewUser(userId);
+        handleNewUser(result);
         // IdP data available using getAdditionalUserInfo(result)
         // ...
     }).catch((error) => {
@@ -180,8 +180,7 @@ const loginGithub = () => {
         // This gives you a GitHub Access Token. You can use it to access the GitHub API.
         // const credential = GithubAuthProvider.credentialFromResult(result);
         // const token = credential.accessToken;
-        const userId = result.user.uid;
-        handleNewUser(userId);
+        handleNewUser(result);
         // console.log(result)
         // The signed-in user info.
         // const user = result.user;
@@ -262,9 +261,12 @@ const validateInput = (name) => {
 }
 
 const handleLogin = () => {
-    if(!user.email.hasError && !user.password.hasError && !buttonLock.value) {
+    if(!user.email.hasError && !user.password.hasError && !buttonLock.value && user.email.value && user.password.value) {
         createUserAccount();
 		buttonLock.value = true;
+    } else {
+        validateInput('email')
+        validateInput('password')
     }
 }
 

@@ -34,14 +34,14 @@
         <div v-if="isAuthenticated"
             class="w-[2.5rem] md:w-[9rem] hidden md:flex justify-center items-center relative">
             <div @mouseup="showDropDown = !showDropDown" class="relative">
-                <img src="../assets/images/jacquard.png" alt="profile" 
+                <img :src="genericProfile" alt="profile" 
                     class="bg-black w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
                 <ArrowDown  class="absolute top-1/2 -right-1"/> 
             </div>
             <div  v-if="showDropDown" ref="target"
                 class="absolute -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-[9.5rem] w-[14rem] bg-white rounded-[0.625rem] p-2">
                 <div class="flex p-2">
-                    <img src="../assets/images/jacquard.png" alt="" 
+                    <img :src="genericProfile" alt="" 
                         class="bg-black w-11 h-11 rounded-full border-2 border-c1">
                     <div class=" flex-grow flex flex-col justify-center px-2">
                         <p class="font-bold text-[1rem]">Chicken Bilog</p>
@@ -163,7 +163,7 @@
 
 <script setup>
 import { onClickOutside } from "@vueuse/core";
-import { onBeforeMount, onUnmounted, ref } from "vue";
+import { inject, onBeforeMount, onUnmounted, ref } from "vue";
 import IPSYNCLogo from "./IPSYNCLogo.vue";
 import ArrowDown from './icons/ArrowDown.vue';
 import RoundMenu from './icons/RoundMenu.vue';
@@ -248,4 +248,6 @@ onUnmounted(() => {
         unsubscribeAuth.value()
     }
 })
+
+const { genericProfile } = inject('userData')
 </script>

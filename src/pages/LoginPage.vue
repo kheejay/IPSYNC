@@ -106,7 +106,7 @@
                 </span>
             </div>
         </div>
-        <LoadingScreen v-if="isLoading" />
+        <LoadingScreen :loadingPrompt="'Authenticating User'" v-if="isLoading" />
     </div>
 </template>
 
@@ -116,7 +116,7 @@ import { auth, google, github, db } from '../firebase';
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from 'vue-router';
 import * as yup from 'yup';
-import { reactive, ref } from "vue";
+import { inject, reactive, ref } from "vue";
 
 import IPSYNCLogo from "../components/IPSYNCLogo.vue";
 import GoogleIcon from "../components/icons/GoogleIcon.vue";
@@ -135,6 +135,8 @@ const buttonLock = ref(false)
 const resetPassword = ref(false)
 const isLoading = ref(false)
 
+const { genericProfile } = inject('userData')
+
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
     // last_name: { value: '', hasError: false, errorMessage: '' },
@@ -145,10 +147,10 @@ const user = reactive({
     // confirmation_code: { value: '', hasError: false, errorMessage: '' },
 })
 
-const handleUserLogin = async (uid) => {
+const handleUserLogin = async (result) => {
     isLoading.value = true;
     try {
-        const docRef = doc(db, "users", uid)
+        const docRef = doc(db, "users", result.user.uid)
         const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
             isLoading.value = false;
@@ -156,6 +158,7 @@ const handleUserLogin = async (uid) => {
         } else {
             // docSnap.data() will be undefined in this case
             isLoading.value = false;
+            genericProfile.value = result.user.photoURL;
             console.log("No such document!");
             toast('Account is not registered, finish quick setup. Thank you!', "top", "5000")
             redirectTo('Profile');
@@ -176,7 +179,6 @@ const login = () => {
     signInWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((userCredential) => {
         // Signed in 
-
         isLoading.value = false;
         redirectTo('Landing')
         // ...
@@ -203,9 +205,7 @@ const loginGoogle = async () => {
         // The signed-in user info.
         // const user = result.user;
         // alert(result.user.displayName)
-        // sessionUser.setUserPhotoURLsetUserPhotoURL
-        const userId = result.user.uid
-        handleUserLogin(userId)
+        handleUserLogin(result)
         // thisUser.setDisplayName(result.user.displayName)
         // redirectToDashboard();
         // IdP data available using getAdditionalUserInfo(result)
@@ -235,8 +235,7 @@ const loginGithub = () => {
         // // const token = credential.accessToken;
         // console.log(result)
         // thisUser.setDisplayName(result.user.email)
-        const userId = result.user.uid;
-        handleUserLogin(userId);
+        handleUserLogin(result);
         // console.log(result)
         // The signed-in user info.
         // const user = result.user;
@@ -293,9 +292,12 @@ const validateInput = (name) => {
 }
 
 const handleLogin = () => {
-    if(!user.email.hasError && !user.password.hasError && !buttonLock.value) {
+    if(!user.email.hasError && !user.password.hasError && !buttonLock.value && user.email.value && user.password.value) {
         login();
         buttonLock.value = true;
+    } else {
+        validateInput('email')
+        validateInput('password')
     }
 }
 

@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, provide, ref } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
 import Footer from './components/Footer.vue';
 import { useRoute } from 'vue-router';
@@ -18,6 +18,14 @@ const route = useRoute()
 
 const isAuthPage = computed(() => route.meta.isAuthPage)
 
+// USER
+const userData = ref({})
+const genericProfile = ref('/src/assets/images/np.svg')
+
+provide('userData', {
+    userData,
+    genericProfile
+})
 
 </script>
 
