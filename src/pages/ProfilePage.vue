@@ -8,12 +8,13 @@
             <div class="lg:w-[55rem] lg:h-[55rem] bg-c1 absolute rounded-full -top-[15rem] -left-[12.6rem]"></div>
             <div class="lg:w-[30rem] lg:h-[30rem] bg-[#4A658D] absolute top-0 rounded-lg -right-[17.2rem]"></div>
             <div class="z-[2] absolute w-[11rem] h-[11rem] lg:w-[12rem] lg:h-[12rem] bg-white rounded-full left-1/2 -translate-x-1/2 sm:-translate-x-0 sm:left-[3.5rem] lg:left-[2.7rem] top-[12.2rem] sm:top-[5.7rem] lg:top-[13.8rem] flex items-center 
-                justify-center border border-c1 hover:cursor-pointer overflow-hidden">
-                <div class="w-full h-full border-[0.2rem] rounded-full border-white z-[2] absolute"></div>
+                justify-center border-0 hover:cursor-pointer overflow-hidden">
+                <div class="w-full h-full border-[0.2rem] rounded-full border-white z-[2] absolute">
+                </div>
                 <img src="/src/assets/images/jacquard.png" alt="user photo" class="bg-black">
             </div>
             <div class="w-full h-[30%] lg:h-[40%] bg-transparent bg-black"></div>
-            <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-black px-4 lg:p-4">
+            <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4">
                 <div class="w-full flex flex-col-reverse sm:flex-col">
                     <div class="w-full flex justify-end items-center gap-4 mt-4 sm:mt-0">
                         <button class="rounded-full bg-c1 text-white sm:py-[0.4rem]
