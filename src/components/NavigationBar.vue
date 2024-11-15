@@ -9,12 +9,12 @@
                     hover:font-bold hover:underline w-[3rem] lg:w-[3.5rem] xl:w-[4rem] text-center`">
                 HOME
             </RouterLink>
-            <RouterLink :to="{ name: 'Dashboard' }"
+            <RouterLink v-if="isAuthenticated" :to="{ name: 'Dashboard' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ $route.name === 'Dashboard' ? 'font-bold  underline' : '' } 
                     hover:font-bold hover:underline w-[6rem] lg:w-[10rem] xl:w-[13rem] text-center`">
                 DASHBOARD
             </RouterLink>
-            <RouterLink :to="{ name: '' }"
+            <RouterLink v-if="isAuthenticated" :to="{ name: '' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
                     hover:font-bold hover:underline w-[11.5rem] lg:w-[12rem] xl:w-[15rem] text-center`">
                 INTERNSHIPS AND PROJECTS
@@ -47,9 +47,11 @@
                     </div>
                 </div>
                 <div class="w-11/12 mx-auto border-t border-black p-2">
-                     <p @click="goToProfile"
-                        class="text-[1rem]m py-1 cursor-pointer">VIEW PROFILE</p>
-                     <p @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer pb-1 text-red-500">SIGN OUT</p>
+                     <p v-if="isAuthenticated" @click="goToProfile"
+                        class="text-[1rem]m py-1 cursor-pointer w-max">VIEW PROFILE</p>
+                     <p v-if="isAuthenticated" @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer 
+                        pb-1 text-red-500 w-max">SIGN OUT</p>
+                     <p v-else @mousedown="goTo('Login')" class="text-[1rem] cursor-pointer pb-1 text-c1 w-max">SIGN IN</p>
                 </div>
             </div>
         </div>
@@ -70,7 +72,12 @@
             <div v-if="showMobileNav" class="z-[2] fixed top-0 right-0 md:hidden h-screen bg-white w-[32rem] max-w-[80vw]
                 flex flex-col justify-between p-4">
                 <div class="flex-grow">
-                    <div @mousedown="goToProfile" :class="`w-full active:bg-c4 rounded ${ $route.name === 'Profile' && 'bg-c4'}`">
+                    <RouterLink v-if="!isAuthenticated" :to="({ name: 'Login' })"
+                        class="p-4 bg-c1 text-white rounded mb-4 flex items-center gap-2">
+                        SIGN IN TO GET STARTED <LightArrowRight class="w-[1.75rem] h-[1.75rem]" />
+                    </RouterLink>
+                    <div v-if="isAuthenticated" 
+                        @mousedown="goToProfile" :class="`w-full active:bg-c4 rounded ${ $route.name === 'Profile' && 'bg-c4'}`">
                         <div class="flex p-2">
                             <img src="../assets/images/jacquard.png" alt="" 
                                 class="bg-black w-11 h-11 rounded-full border-2 border-c1">
@@ -94,6 +101,7 @@
                             </div>
                         </div>
                         <div @mousedown="goTo('Dashboard')" 
+                            v-if="isAuthenticated"
                             :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
                                 ${ $route.name === 'Dashboard' && 'bg-c4'}`">
                             <DashboardIcon class="text-font w-7 h-7" />
@@ -103,6 +111,7 @@
                             </div>
                         </div>
                         <div @mousedown="goTo('')" 
+                            v-if="isAuthenticated"
                             :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
                                 ${ $route.name === '' && 'bg-c4'}`">
                             <BaselineEngineering class="text-font w-7 h-7" />
@@ -129,7 +138,10 @@
                         </div>
                     </div>
                 </div>
-                <div @mousedown="confirmActionLogout" class="w-full text-end text-red-500 pr-4">SIGN OUT</div>
+                <div v-if="isAuthenticated" @mousedown="confirmActionLogout" class="w-full text-end text-red-500 pr-4">
+                    SIGN OUT
+                </div>
+                <div v-else @mousedown="goTo('Login')" class="w-full text-end text-c1 pr-4">SIGN IN</div>
             </div>
         </Transition>
     </div>
@@ -141,7 +153,7 @@
 
 <script setup>
 import { onClickOutside } from "@vueuse/core";
-import { ref } from "vue";
+import { onBeforeMount, onUnmounted, ref, watch } from "vue";
 import IPSYNCLogo from "./IPSYNCLogo.vue";
 import ArrowDown from './icons/ArrowDown.vue';
 import RoundMenu from './icons/RoundMenu.vue';
@@ -149,11 +161,12 @@ import BaselineOutline from './icons/BaselineHouse.vue';
 import DashboardIcon from './icons/DashboardIcon.vue'
 import BaselineEngineering from './icons/RoundEngineering.vue';
 import BaselineGroups from './icons/BaselineGroups.vue';
-import BaselinePhone from './icons/BaselinePhone.vue'
+import BaselinePhone from './icons/BaselinePhone.vue';
+import LightArrowRight from '../components/icons/LightArrowRight.vue';
 import ConfirmationModal from "./modals/ConfirmationModal.vue";
 
-import { useRouter } from "vue-router";
-import { signOut } from "firebase/auth";
+import { RouterLink, useRouter } from "vue-router";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { toast } from "../functions";
 
@@ -180,14 +193,49 @@ const goTo = (name) => {
 
 const handleLogout = () => {
     signOut(auth).then(() => {
-        toast("Logout successful!")
-        router.push({ name: 'Landing' })
-        confirmLogout.value = false;
-    })
+    // Sign-out successful.
+    toast("Logout successful!")
+    router.push({ name: 'Landing' })
+    confirmLogout.value = false;
+    }).catch((error) => {
+    // An error happened.
+    console.log(error)
+    });
 }
 
 const confirmActionLogout = () => {
     confirmLogout.value = true;
     showMobileNav.value = false;
 }
+
+const isAuthenticated = ref(false)
+
+const unsubscribeAuth = ref(null)
+
+const listenAuth = () => {
+    unsubscribeAuth.value = onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/auth.user
+            isAuthenticated.value = true;
+            const uid = user.uid;
+            console.log(uid)
+            // ...
+        } else {
+            // User is signed out
+            // ...
+            isAuthenticated.value = false;
+        }
+    });
+}
+
+onBeforeMount(async () => {
+    listenAuth()
+})
+
+onUnmounted(() => {
+    if(unsubscribeAuth.value) {
+        unsubscribeAuth.value()
+    }
+})
 </script>
