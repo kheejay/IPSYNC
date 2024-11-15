@@ -10,9 +10,11 @@
             <div class="lg:w-[30rem] lg:h-[30rem] bg-[#4A658D] absolute top-0 rounded-lg -right-[17.2rem]"></div>
             <div :class="`z-[2] absolute w-[11rem] h-[11rem] lg:w-[12rem] lg:h-[12rem] bg-white rounded-full left-1/2 
                 -translate-x-1/2 sm:-translate-x-0 sm:left-[3.5rem] lg:left-[2.7rem] top-[12.2rem] sm:top-[5.7rem] 
-                lg:top-[13.8rem] ${ isEditMode && 'top-[15.2rem] sm:top-[8rem] lg:top-[16.8rem]'} flex items-center 
-                justify-center border-0 hover:cursor-pointer overflow-hidden object-cover`">
-                <div class="w-full h-full border-[0.2rem] rounded-full border-white z-[2] absolute">
+                hover:cursor-pointer lg:top-[13.8rem] ${ isEditMode && 'top-[15.2rem] sm:top-[8rem] lg:top-[16.8rem]'} flex items-center 
+                justify-center border-0 overflow-hidden object-cover`">
+                <div @click="showProfile"
+                    :class="`w-full h-full border-[0.2rem] rounded-full border-white z-[2] absolute 
+                    ${ !isEditMode ? 'hover:bg-c1 opacity-20 cursor-pointer' : 'cursor-default' }`">
                 </div>
                 <img :src="userInfo.photoURL" alt="user photo" class="w-full h-auto border-0">
             </div>
@@ -202,7 +204,15 @@
                 v-model="userInfo.mobileNumber.value">
         </div>
     </div>
-
+    <transition name="fade" mode="out-in">
+        <div v-if="previewProfile" 
+            class="w-screen h-screen fixed top-0 left-0 z-[5] flex items-center justify-center shadow">
+            <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
+            <div ref="target" class="h-[40rem] w-[64rem] z-[1] bg-c5 flex justify-center relative py-8 rounded-lg">
+                <img :src="userInfo.photoURL" alt="profile" class="h-full w-auto">
+            </div>
+        </div>
+    </transition>    
 </div>
 </template>
 
@@ -210,7 +220,7 @@
 import EditProfileInfo from '../components/icons/EditProfileInfo.vue';
 import JobTitleModal from '../components/modals/JobTitleModal.vue';
 import PlusIcon from '../components/icons/PlusIcon.vue'
-import { useTextareaAutosize, useFocus } from '@vueuse/core';
+import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
 import * as yup from 'yup';
 import { inject, reactive, ref } from 'vue';
 const { textarea, input } = useTextareaAutosize()
@@ -221,11 +231,22 @@ const { focused } = useFocus(fullName)
 const isEditMode = ref(false);
 const turnEditModeOn = () => isEditMode.value = true;
 const turnEditModeOff = () => isEditMode.value = false;
+const previewProfile = ref(false)
+
+const showProfile = () => {
+    if(!isEditMode.value) {
+        previewProfile.value = true;
+    }
+}
+const hideProfile = () => previewProfile.value = false;
 
 const handleEdit = () => {
     turnEditModeOn();
     setTimeout(() => focused.value = true, 50)
 }
+
+const target = ref(null)
+onClickOutside(target, event => hideProfile())
 
 const { genericProfile, userGmailName } = inject('userData') 
 
@@ -294,3 +315,12 @@ const validateInput = (name) => {
         });
 }
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 300ms;
+}
+.fade-enter, .fade-leave-to  {
+    opacity: 0;
+}
+</style>
