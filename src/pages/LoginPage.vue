@@ -135,7 +135,7 @@ const buttonLock = ref(false)
 const resetPassword = ref(false)
 const isLoading = ref(false)
 
-const { genericProfile } = inject('userData')
+const { genericProfile, userGmailName } = inject('userData')
 
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
@@ -159,6 +159,8 @@ const handleUserLogin = async (result) => {
             // docSnap.data() will be undefined in this case
             isLoading.value = false;
             genericProfile.value = result.user.photoURL;
+            userGmailName.value = result.user.displayName;
+            console.log(result.user.displayName)
             console.log("No such document!");
             toast('Account is not registered, finish quick setup. Thank you!', "top", "5000")
             redirectTo('Profile');

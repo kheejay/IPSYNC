@@ -90,7 +90,7 @@ import { auth, google, github, db } from '../firebase';
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from 'vue-router';
 import * as yup from 'yup';
-import { reactive, ref } from "vue";
+import { inject, reactive, ref } from "vue";
 
 import IPSYNCLogo from "../components/IPSYNCLogo.vue";
 import GoogleIcon from "../components/icons/GoogleIcon.vue";
@@ -100,6 +100,7 @@ import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
 import LoadingScreen from '../components/LoadingScreen.vue';
 
 import { toast } from "../functions";
+const { genericProfile, userGmailName} = inject('userData')
 
 const showPass = ref(false)
 const hasError = reactive({
@@ -119,7 +120,6 @@ const user = reactive({
 })
 
 const router = useRouter()
-
 const redirectTo = (route) => {
     router.push({ name: route });
 }
@@ -137,6 +137,7 @@ const handleNewUser = async (result) => {
             // docSnap.data() will be undefined in this case
             isLoading.value = false;
             genericProfile.value = result.user.photoURL;
+            userGmailName.value = result.user.displayName;
             console.log("No such document!");
             toast('Welcome! Let\'s get you set up with just a few quick details.', "top", "5000")
             redirectTo('Profile');

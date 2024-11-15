@@ -227,10 +227,10 @@ const handleEdit = () => {
     setTimeout(() => focused.value = true, 50)
 }
 
-const { genericProfile } = inject('userData') 
+const { genericProfile, userGmailName } = inject('userData') 
 
 const userInfo = reactive({
-    full_name: {value: '', hasError: false, errorMessage: ''},
+    full_name: {value: userGmailName.value, hasError: false, errorMessage: ''},
     department: {value: '', hasError: false, errorMessage: ''},
     degree_program: {value: '', hasError: false, errorMessage: ''},
     year_level: {value: '', hasError: false, errorMessage: ''},
