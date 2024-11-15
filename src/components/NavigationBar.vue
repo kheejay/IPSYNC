@@ -20,12 +20,13 @@
                 INTERNSHIPS AND PROJECTS
             </RouterLink>
             <RouterLink :to="{ name: 'About' }"
-                :class="`text-[0.8rem] xl:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
-                    hover:font-bold hover:underline w-[6rem] lg:w-[10rem] xl:w-[13rem] text-center`">
+                :class="`text-[0.8rem] xl:text-[1rem] text-font ${ $route.name === 'About' && 'font-bold  underline' }  
+                    ${ !isAuthenticated && 'xl:w-[15rem]' }
+                    hover:font-bold hover:underline w-[5rem] lg:w-[9rem] xl:w-[12rem] text-center`">
                 ABOUT US
             </RouterLink>
             <RouterLink :to="{ name: 'Contact' }"
-                :class="`text-[0.8rem] xl:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
+                :class="`text-[0.8rem] xl:text-[1rem] text-font ${ $route.name === 'Contact' && 'font-bold  underline' } 
                     hover:font-bold hover:underline w-[5.6rem] lg:w-[6.1rem] xl:w-[7rem] text-center`">
                 CONTACT US
             </RouterLink>
@@ -128,17 +129,19 @@
                             </div>
                         </div>
                         <div @mousedown="goTo('About')" 
-                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4
+                            ${ $route.name === 'About' && 'bg-c4'}`">
                             <BaselineGroups class="text-font w-7 h-7" />
-                            <div :class="`text-[1rem] text-font ${ $route.name === '' && 'font-bold underline' } 
+                            <div :class="`text-[1rem] text-font ${ $route.name === 'About' && 'font-bold underline' } 
                                     hover:font-bold hover:underline text-shadow`">
                                 ABOUT US
                             </div>
                         </div>
                         <div @mousedown="goTo('Contact')" 
-                            class="w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4">
+                            :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4
+                            ${ $route.name === 'Contact' && 'bg-c4'}`">
                             <BaselinePhone class="text-font w-7 h-7" />
-                            <div :class="`text-[1rem] text-font ${ $route.name === '' && 'font-bold underline' } 
+                            <div :class="`text-[1rem] text-font ${ $route.name === 'Contact' && 'font-bold underline' } 
                                     hover:font-bold hover:underline text-shadow`">
                                 CONTACT US
                             </div>

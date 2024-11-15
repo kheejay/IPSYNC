@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router'
+import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../firebase'
 
 import LoginPage from '../pages/LoginPage.vue'
@@ -6,8 +7,6 @@ import SignupPage from '../pages/SignupPage.vue'
 import DashboardPage from '../pages/DashboardPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
 import LandingPage from '../pages/LandingPage.vue'
-
-import { onAuthStateChanged } from 'firebase/auth'
 import AboutUs from '../pages/AboutUs.vue'
 import ContactUs from '../pages/ContactUs.vue'
 
@@ -55,6 +54,11 @@ const router = createRouter({
             name: 'Contact',
             component: ContactUs
         },
+        // {
+        //     path: '/inspect-user/:id',
+        //     name: 'InspectUser',
+        //     component: InspectUser
+        // },
         {
             path: "/:pathMatch(.*)*",
             redirect: '/'
