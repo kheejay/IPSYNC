@@ -7,7 +7,7 @@
             </div>
             <div class="text-c1 font-bold text-[2rem] sm:text-[2.5rem]
                 px-2">
-                Sign In to IPSync
+                Sign Up to IPSync
             </div>
             <div class="text-xs sm:text-[0.8rem]">
                 Welcome to IPSync! Let's get you started.
@@ -86,7 +86,8 @@
 
 <script setup>
 import { signInWithPopup, createUserWithEmailAndPassword} from "firebase/auth";
-import { auth, google, github } from '../firebase'
+import { auth, google, github, db } from '../firebase';
+import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from 'vue-router';
 import * as yup from 'yup';
 import { reactive, ref } from "vue";
@@ -96,7 +97,9 @@ import GoogleIcon from "../components/icons/GoogleIcon.vue";
 import GithubIcon from "../components/icons/GithubIcon.vue";
 import VisibilityOutline from '../components/icons/VisibilityOutline.vue'
 import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
-import LoadingScreen from '../components/LoadingScreen.vue'
+import LoadingScreen from '../components/LoadingScreen.vue';
+
+import { toast } from "../functions";
 
 const showPass = ref(false)
 const hasError = reactive({
@@ -116,8 +119,32 @@ const user = reactive({
 })
 
 const router = useRouter()
-const redirectToDashboard = () => {
-    router.push({ name: "Dashboard" })
+
+const redirectTo = (route) => {
+    router.push({ name: route });
+}
+
+const handleNewUser = async (uid) => {
+    isLoading.value = true;
+    try {
+        const docRef = doc(db, "users", uid)
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+            isLoading.value = false;
+            toast('Account already registered, Welcome Back!', "top")
+            redirectTo('Landing');
+        } else {
+            // docSnap.data() will be undefined in this case
+            isLoading.value = false;
+            console.log("No such document!");
+            toast('Welcome! Let\'s get you set up with just a few quick details.', "top", "5000")
+            redirectTo('Profile');
+        }
+    } catch (error) {
+        console.log(error)
+        isLoading.value = false;
+        hasError.value = true;
+    }
 }
 
 const loginGoogle = () => {
@@ -129,7 +156,8 @@ const loginGoogle = () => {
         // The signed-in user info.
         // const user = result.user;
         // alert(result.user.displayName)
-        redirectToDashboard();
+        const userId = result.user.uid;
+        handleNewUser(userId);
         // IdP data available using getAdditionalUserInfo(result)
         // ...
     }).catch((error) => {
@@ -152,7 +180,8 @@ const loginGithub = () => {
         // This gives you a GitHub Access Token. You can use it to access the GitHub API.
         // const credential = GithubAuthProvider.credentialFromResult(result);
         // const token = credential.accessToken;
-        redirectToDashboard();
+        const userId = result.user.uid;
+        handleNewUser(userId);
         // console.log(result)
         // The signed-in user info.
         // const user = result.user;
@@ -161,7 +190,7 @@ const loginGithub = () => {
     }).catch((error) => {
         const errorCode = getErrorMessage(error.code)
         hasError.value = true;
-        hasError.message = errorCode;s
+        hasError.message = errorCode;
         // Handle Errors here.
         // const errorCode = error.code;
         // const errorMessage = error.message;
@@ -176,10 +205,11 @@ const loginGithub = () => {
 const createUserAccount = () => {
     isLoading.value = true;
     createUserWithEmailAndPassword(auth, user.email.value, user.password.value)
-    .then((userCredential) => {
+    .then((result) => {
         // Signed up 
         isLoading.value = false;
-        redirectToDashboard();
+        const userId = result.user.uid;
+        handleNewUser(userId);
         // ...
     })
     .catch((error) => {

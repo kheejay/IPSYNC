@@ -1,12 +1,13 @@
 import Toastify from 'toastify-js'
-const toast = (message = "Request success!", left = "#113567", right = "#184c95", color = "#FFFFFF") => {
+const toast = (message = "Request success!", gravity = "top", duration = "1000",
+            left = "#113567", right = "#184c95", color = "#FFFFFF") => {
     return (
         Toastify({
             text: message,
-            duration: 1000,
+            duration: duration,
             newWindow: true,
             close: false,
-            gravity: "bottom", // `top` or `bottom`
+            gravity: gravity, // `top` or `bottom`
             // position: "left", // `left`, `center` or `right`
             stopOnFocus: true, // Prevents dismissing of toast on hover
             style: {

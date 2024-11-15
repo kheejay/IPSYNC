@@ -95,7 +95,7 @@
                     {{ user.email.errorMessage }}</span>
             </div>
             <div class="w-full flex flex-col items-center gap-2">
-                <button @click="handleReset" 
+                <button @click="handleResetPassword" 
                     class="rounded-[1.5rem] bg-c1 text-white py-[0.4rem] sm:py-[0.5rem] md:py-[0.75rem] mt-1 md:mt-3 
                     w-[10rem] text-[0.90rem] sm:text-[1rem] font-semibold active:scale-[99%]">
                     Send
@@ -112,7 +112,8 @@
 
 <script setup>
 import { signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
-import { auth, google, github } from '../firebase'
+import { auth, google, github, db } from '../firebase';
+import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from 'vue-router';
 import * as yup from 'yup';
 import { reactive, ref } from "vue";
@@ -125,9 +126,6 @@ import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
 import LoadingScreen from '../components/LoadingScreen.vue'
 
 import { toast } from "../functions";
-import { userInfo } from "../store/user";
-
-const sessionUser = userInfo()
 
 const showPass = ref(false)
 const hasError = reactive({
@@ -140,16 +138,37 @@ const isLoading = ref(false)
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
     // last_name: { value: '', hasError: false, errorMessage: '' },
-    email: { value: '', hasError: false, errorMessage: '' },
+    email: { value: 'test@user.com', hasError: false, errorMessage: '' },
     // email_confirmation: { value: '', hasError: false, errorMessage: '' },
-    password: { value: '', hasError: false, errorMessage: '' },
+    password: { value: 'testing123', hasError: false, errorMessage: '' },
     // password_confirmation: { value: 'testing123', hasError: false, errorMessage: '' },
     // confirmation_code: { value: '', hasError: false, errorMessage: '' },
 })
 
+const handleUserLogin = async (uid) => {
+    isLoading.value = true;
+    try {
+        const docRef = doc(db, "users", uid)
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+            isLoading.value = false;
+            redirectTo('Landing');
+        } else {
+            // docSnap.data() will be undefined in this case
+            isLoading.value = false;
+            console.log("No such document!");
+            toast('Account is not registered, finish quick setup. Thank you!', "top", "5000")
+            redirectTo('Profile');
+        }
+    } catch (error) {
+        isLoading.value = false;
+        hasError.value = true;
+    }
+}
+
 const router = useRouter()
-const redirectToLanding= () => {
-    router.push({ name: "Landing" })
+const redirectTo = (route) => {
+    router.push({ name: route })
 }
   
 const login = () => {
@@ -157,9 +176,9 @@ const login = () => {
     signInWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((userCredential) => {
         // Signed in 
+
         isLoading.value = false;
-        thisUser.setDisplayName(userCredential.user.displayName)
-        redirectToLanding()
+        redirectTo('Landing')
         // ...
     })
     .catch((error) => {
@@ -174,13 +193,7 @@ const login = () => {
     });
 }
 
-const setUserPhotoURL = (url) => {
-    sessionUser.photoURL = url
-    localStorage.setItem('sessionUser', url)
-}
-import { userState } from '../store/authState'
-const thisUser = userState()
-const loginGoogle = () => {
+const loginGoogle = async () => {
 
     signInWithPopup(auth, google)
     .then((result) => {
@@ -191,7 +204,8 @@ const loginGoogle = () => {
         // const user = result.user;
         // alert(result.user.displayName)
         // sessionUser.setUserPhotoURLsetUserPhotoURL
-        redirectToLanding();
+        const userId = result.user.uid
+        handleUserLogin(userId)
         // thisUser.setDisplayName(result.user.displayName)
         // redirectToDashboard();
         // IdP data available using getAdditionalUserInfo(result)
@@ -221,7 +235,8 @@ const loginGithub = () => {
         // // const token = credential.accessToken;
         // console.log(result)
         // thisUser.setDisplayName(result.user.email)
-        redirectToLanding();
+        const userId = result.user.uid;
+        handleUserLogin(userId);
         // console.log(result)
         // The signed-in user info.
         // const user = result.user;
@@ -304,7 +319,7 @@ const getErrorMessage = (error) => {
       return 'An error occurred please try again.';
   }
 }
-const handleReset = () => {
+const handleResetPassword = () => {
     validateInput('email')
     setTimeout(() => {
         if(!user.email.hasError) {
