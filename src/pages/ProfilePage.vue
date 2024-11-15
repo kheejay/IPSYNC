@@ -130,7 +130,7 @@
         <div v-for="skill, index in userInfo.skills.value" :key="index"
             class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 border-b-2 border-b-black">
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
-                sm:text-start mb-2" placeholder="Showcase your skills to demonstrate your suitability for new opportunities"
+                sm:text-start" placeholder="Showcase your skills to demonstrate your suitability for new opportunities"
                 v-model="userInfo.skills.value[index-1]">
         </div>
         <div class="py-4 w-full flex justify-center">
@@ -163,11 +163,36 @@
         <div v-for="interest, index in userInfo.interest.value" :key="index" 
             class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 border-b-2 border-b-black">
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
-                sm:text-start mb-2" placeholder="Share your hobbies and interests to help others find common ground with you."
+                sm:text-start" placeholder="Share your hobbies and interests to help others find common ground with you."
                 v-model="userInfo.interest.value[index-1]">
         </div>
         <div class="py-4 w-full flex justify-center">
             <PlusIcon @click="addCount('interest')" class="w-[2.4rem] h-[2.4rem] opacity-45 cursor-pointer hover:opacity-100" />
+        </div>
+    </div>
+
+    <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
+         border-black">
+        <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
+            Contacts
+        </div> 
+        <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 border-b-2 border-b-black flex items-center mb-2">
+            <span class="pl-2">Facebook:</span>
+            <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
+                sm:text-start" placeholder="Facebook account"
+                v-model="userInfo.facebook.value">
+        </div>
+        <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 border-b-2 border-b-black flex items-center mb-2">
+            <span class="pl-2">Gmail:</span>
+            <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
+                sm:text-start" placeholder="Gmail account"
+                v-model="userInfo.gmail.value">
+        </div>
+        <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 border-b-2 border-b-black flex items-center">
+            <span class="pl-2 flex-grow">Mobile:</span>
+            <input type="number" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
+                sm:text-start" placeholder="Mobile number"
+                v-model="userInfo.mobileNumber.value">
         </div>
     </div>
 
@@ -206,6 +231,9 @@ const userInfo = reactive({
     skills: {value: [''], hasError: false, errorMessage: ''},
     education: {value: {school_name: '', time_span: ''}, hasError: false, errorMessage: ''},
     interest: {value: [''], hasError: false, errorMessage: ''},
+    facebook: {value: '', hasError: false, errorMessage: ''},
+    gmail: {value: '', hasError: false, errorMessage: ''},
+    mobileNumber: {value: '', hasError: false, errorMessage: ''},
 })
 
 const skillsCount = ref(0)

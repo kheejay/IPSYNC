@@ -9,19 +9,8 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount, onUnmounted, ref, } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
 import Footer from './components/Footer.vue';
-import { useRoute } from 'vue-router';
-
-const route = useRoute()
-
-const isAuthPage = computed(() => route.meta.isAuthPage)
-
-onBeforeMount(() => {
-    // listenAuth();
-})
-
 </script>
 
 <style lang="css" scoped>
