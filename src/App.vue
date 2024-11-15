@@ -9,8 +9,16 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
 import Footer from './components/Footer.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
+
+const isAuthPage = computed(() => route.meta.isAuthPage)
+
+
 </script>
 
 <style lang="css" scoped>
