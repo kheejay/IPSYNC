@@ -16,8 +16,8 @@
             <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-black px-4 lg:p-4">
                 <div class="w-full flex flex-col-reverse sm:flex-col">
                     <div class="w-full flex justify-end items-center gap-4 mt-4 sm:mt-0">
-                        <button class="rounded-full bg-c1 text-white py-[0.2rem] md:py-[0.4rem]
-                            my-3 px-2 sm:px-0 sm:w-[10rem] text-[0.80rem] sm:text-[1rem] active:scale-[99%]">
+                        <button class="rounded-full bg-c1 text-white sm:py-[0.4rem]
+                            my-3 py-1.5 px-6 sm:px-0 sm:w-[10rem] text-[1rem] active:scale-[99%]">
                             Save Changes
                         </button>
                         <EditProfileInfo class="w-[2rem] h-[2rem] cursor-pointer 
@@ -35,8 +35,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full font-bold text-c1 text-[1.75rem] sm:mt-[3.5rem] sm:pl-2">About Me</div>
-                <div class="w-full sm:h-[9rem] grid gap-4 sm:flex items-center mt-[2rem] text-c1">
+                <div class="w-full font-bold text-c1 text-[1.75rem] mt-[3rem] sm:mt-[3.5rem] sm:pl-2">About Me</div>
+                <div class="w-full sm:h-[9rem] grid gap-4 sm:flex items-center sm:mt-[2rem] text-c1">
                     <div class="w-full sm:w-[40%] grid gap-4 py-2 border-b-2 sm:border-b-0 sm:border-r-2 border-black pr-4">
                         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
                             <input type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 text-c1 focus:outline-none" 
