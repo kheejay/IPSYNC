@@ -238,7 +238,6 @@
 import EditProfileInfo from '../components/icons/EditProfileInfo.vue';
 import JobTitleModal from '../components/modals/JobTitleModal.vue';
 import PlusIcon from '../components/icons/PlusIcon.vue';
-import IPStamp from '../components/icons/IPStamp.vue';
 import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
 import * as yup from 'yup';
 import { inject, reactive, ref, } from 'vue';
