@@ -212,7 +212,7 @@ const createUserAccount = () => {
     .then((result) => {
         // Signed up 
         isLoading.value = false;
-        handleNewUser(result.user.uid);
+        handleNewUser(result);
         // ...
     })
     .catch((error) => {
