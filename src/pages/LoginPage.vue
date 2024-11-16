@@ -135,7 +135,7 @@ const buttonLock = ref(false)
 const resetPassword = ref(false)
 const isLoading = ref(false)
 
-const { genericProfile, userGmailName, setUserData } = inject('userData')
+const { genericProfile, userGmailName, setUserData, currentUserId } = inject('userData')
 
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
@@ -154,6 +154,8 @@ const handleUserLogin = async (result) => {
         const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
             isLoading.value = false;
+            localStorage.setItem('userId', result.user.uid)
+            currentUserId.value = result.user.uid;
             setUserData();
             redirectTo('Landing');
         } else {
@@ -162,6 +164,7 @@ const handleUserLogin = async (result) => {
             localStorage.setItem('userId', result.user.uid)
             genericProfile.value = result.user.photoURL;
             userGmailName.value = result.user.displayName;
+            currentUserId.value = result.user.uid
             console.log(result.user.displayName)
             console.log("No such document!");
             toast('Account is not registered, finish quick setup. Thank you!', "top", "5000")
@@ -184,6 +187,7 @@ const login = () => {
     .then((result) => {
         // Signed in 
         localStorage.setItem('userId', result.user.uid)
+        currentUserId.value = result.user.uid
         isLoading.value = false;
         setUserData();
         redirectTo('Landing')
@@ -314,7 +318,7 @@ const getErrorMessage = (error) => {
     case 'auth/missing-password':
       return 'Missing password';
     case 'auth/email-already-in-use':
-      return 'Email already in use';
+      return 'Email already in use. Please sign in.';
     case 'auth/account-exists-with-different-credential':
       return 'Account exists with different credential';
     case 'auth/invalid-credential':

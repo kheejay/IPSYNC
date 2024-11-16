@@ -100,7 +100,7 @@ import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
 import LoadingScreen from '../components/LoadingScreen.vue';
 
 import { toast } from "../functions/toast";
-const { genericProfile, userGmailName } = inject('userData')
+const { genericProfile, userGmailName, currentUserId } = inject('userData')
 
 const showPass = ref(false)
 const hasError = reactive({
@@ -131,6 +131,8 @@ const handleNewUser = async (result) => {
         const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
             isLoading.value = false;
+            localStorage.setItem('userId', result.user.uid);
+            currentUserId.value = result.user.uid;
             toast('Account already registered, Welcome Back!', "top")
             redirectTo('Landing');
         } else {
@@ -139,6 +141,7 @@ const handleNewUser = async (result) => {
             localStorage.setItem('userId', result.user.uid)
             genericProfile.value = result.user.photoURL;
             userGmailName.value = result.user.displayName;
+            currentUserId.value = result.user.uid
             console.log("No such document!");
             toast('Welcome! Let\'s get you set up with just a few quick details.', "top", "5000")
             redirectTo('Profile');
@@ -209,8 +212,7 @@ const createUserAccount = () => {
     .then((result) => {
         // Signed up 
         isLoading.value = false;
-        const userId = result.user.uid;
-        handleNewUser(userId);
+        handleNewUser(result.user.uid);
         // ...
     })
     .catch((error) => {
@@ -279,7 +281,7 @@ const getErrorMessage = (error) => {
     case 'auth/missing-password':
       return 'Missing password';
     case 'auth/email-already-in-use':
-      return 'Email already in use';
+      return 'Email already in use. Please sign in.';
     case 'auth/account-exists-with-different-credential':
       return 'Account exists with different credential';
     case 'auth/invalid-credential':
