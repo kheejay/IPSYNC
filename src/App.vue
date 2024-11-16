@@ -22,8 +22,8 @@ const isAuthPage = computed(() => route.meta.isAuthPage)
 
 // USER
 const genericProfile = ref('https://i.ibb.co/LJPrkjQ/np.png')
-const userGmailName = ref('USER FULLNAME')
-const currentUserId =  computed(() => localStorage.getItem('userId'))
+const userGmailName = ref('User Fullname')
+const currentUserId =  ref(localStorage.getItem('userId'))
 const authenticatingUser = ref(false)
 const users = ref([])
 const userData = reactive({
@@ -47,6 +47,7 @@ const userData = reactive({
 const unsubscribeUser = ref(null)
 
 const setUserData = () => {
+    console.log('setUserData', currentUserId.value)
     const foundUser = users.value.find((user) => user.uid === currentUserId.value);
     if (foundUser) {
         for (const key in userData) {
@@ -60,7 +61,6 @@ const setUserData = () => {
                 }
             }
         }
-        console.log(userData.photoURL);
     }
 }
 
@@ -72,7 +72,7 @@ const fetchUsers = () =>  {
       console.log('user snapshot', snapshot);
 
       if (!changes.length) {
-        console.log('Unexpected error: No users was found')
+        //
       } else {
         changes.forEach((change) => {
             if(change.type === 'added') {
