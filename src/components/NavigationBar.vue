@@ -53,7 +53,7 @@
                         <p @click="goToProfile"
                             class="text-[1rem]m py-1 cursor-pointer w-full mt-1">VIEW PROFILE</p>
                         <p @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer 
-                            pb-1 text-red-500 w-max mt-1">SIGN OUT</p>
+                            pb-1 text-red-500 w-max mt-1.5">SIGN OUT</p>
                     </div>
                 </div>
             </div>
