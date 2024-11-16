@@ -34,14 +34,14 @@
         <div v-if="isAuthenticated"
             class="w-[2.5rem] md:w-[9rem] hidden md:flex justify-center items-center relative">
             <div @mouseup="showDropDown = !showDropDown" class="relative">
-                <img :src="genericProfile" alt="profile" 
+                <img :src="userData.photoURL.value" alt="profile" 
                     class="bg-black w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
                 <ArrowDown  class="absolute top-1/2 -right-1"/> 
             </div>
             <div  v-if="showDropDown" ref="target"
                 class="absolute -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-[9.5rem] w-[14rem] bg-white rounded-[0.625rem] p-2">
                 <div class="flex p-2">
-                    <img :src="genericProfile" alt="" 
+                    <img :src="userData.photoURL.value" alt="" 
                         class="bg-black w-11 h-11 rounded-full border-2 border-c1">
                     <div class=" flex-grow flex flex-col justify-center px-2">
                         <p class="font-bold text-[1rem]">Chicken Bilog</p>
@@ -87,7 +87,7 @@
                     <div v-if="isAuthenticated" 
                         @mousedown="goToProfile" :class="`w-full active:bg-c4 rounded ${ $route.name === 'Profile' && 'bg-c4'}`">
                         <div class="flex p-2">
-                            <img src="../assets/images/jacquard.png" alt="" 
+                            <img :src="userData.photoURL.value" alt="" 
                                 class="bg-black w-11 h-11 rounded-full border-2 border-c1">
                             <div class=" flex-grow flex flex-col justify-center px-2">
                                 <p class="font-bold text-[1rem]">Chicken Bilog</p>
@@ -178,7 +178,7 @@ import ConfirmationModal from "./modals/ConfirmationModal.vue";
 import { RouterLink, useRouter } from "vue-router";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { toast } from "../functions";
+import { toast } from "../functions/toast";
 
 const showDropDown = ref(false)
 
@@ -204,6 +204,7 @@ const goTo = (name) => {
 const handleLogout = () => {
     signOut(auth).then(() => {
     // Sign-out successful.
+    localStorage.setItem('userId', null)
     toast("Logout successful!")
     router.push({ name: 'Landing' })
     confirmLogout.value = false;
@@ -249,5 +250,5 @@ onUnmounted(() => {
     }
 })
 
-const { genericProfile } = inject('userData')
+const { userData, emptyUserData } = inject('userData')
 </script>

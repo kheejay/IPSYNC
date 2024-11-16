@@ -231,6 +231,7 @@
             </div>
         </div>
     </transition> 
+    <LoadingScreen :loadingPrompt="loadingPrompt" v-if="isLoading" />
 </div>
 </template>
 
@@ -239,8 +240,13 @@ import EditProfileInfo from '../components/icons/EditProfileInfo.vue';
 import JobTitleModal from '../components/modals/JobTitleModal.vue';
 import PlusIcon from '../components/icons/PlusIcon.vue';
 import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
-import * as yup from 'yup';
 import { inject, reactive, ref, } from 'vue';
+import * as yup from 'yup';
+import { toast } from '../functions/toast';
+import LoadingScreen from '../components/LoadingScreen.vue'
+import uploadPhoto from '../functions/uploadPhoto';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 const { textarea, input } = useTextareaAutosize()
 
 const fullName = ref()
@@ -250,6 +256,9 @@ const isEditMode = ref(false);
 const turnEditModeOn = () => isEditMode.value = true;
 const turnEditModeOff = () => isEditMode.value = false;
 const previewProfile = ref(false)
+const newProfileBucket = ref(null)
+const isLoading = ref(false)
+const loadingPrompt = ref('')
 
 const showProfile = () => {
     if(!isEditMode.value) {
@@ -266,30 +275,15 @@ const handleEdit = () => {
 const target = ref(null)
 onClickOutside(target, event => hideProfile())
 
-const { genericProfile, userGmailName } = inject('userData') 
+const { genericProfile, userData } = inject('userData') 
 
-const userInfo = reactive({
-    full_name: {value: userGmailName.value, hasError: false, errorMessage: ''},
-    department: {value: '', hasError: false, errorMessage: ''},
-    degree_program: {value: '', hasError: false, errorMessage: ''},
-    year_level: {value: '', hasError: false, errorMessage: ''},
-    student_id: {value: '', hasError: false, errorMessage: ''},
-    personal_description: {value: '', hasError: false, errorMessage: ''},
-    experience: {value: [{jobTitle: '', org: '', time_span: ''}], hasError: false, errorMessage: ''},
-    skills: {value: [''], hasError: false, errorMessage: ''},
-    education: {value: {school_name: '', time_span: ''}, hasError: false, errorMessage: ''},
-    interest: {value: [''], hasError: false, errorMessage: ''},
-    facebook: '',
-    gmail: '',
-    mobileNumber: '',
-    uid: '',
-    photoURL: { value: genericProfile.value, scale: 100}
-})
+const userInfo = reactive( userData )
 
 const updateProfile = (event) => {
     const file = event.target.files[0]
     if (file) {
         userInfo.photoURL.value = URL.createObjectURL(file);
+        newProfileBucket.value = file;
     }
 }
 
@@ -373,16 +367,12 @@ const incrementPhotoScale = () => {
         scaleCount.value++;
         userInfo.photoURL.scale = getPhotoScale(scaleCount.value);
     }
-    console.log(scaleCount.value)
-    console.log(userInfo.photoURL.scale)
 }
 const decrementPhotoScale = () => {
     if(scaleCount.value - 1 >= -3) {
         scaleCount.value--;
         userInfo.photoURL.scale = getPhotoScale(scaleCount.value);
     }
-    console.log(scaleCount.value)
-    console.log(userInfo.photoURL.scale)
 }
 
 const getPhotoScale = (scaleCount) => {
@@ -406,14 +396,63 @@ const getPhotoScale = (scaleCount) => {
     }
 } 
 
-import { toast } from '../functions';
+const setNewUserData = async () => {
+    if(userInfo.uid == null || userInfo.uid == false) {
+        toast('User identity is missing')
+        isLoading.value = false;
+        return
+    }
+    try {
+        loadingPrompt.value = 'Updating User Data';
+        const userRef = doc(db, 'users', userInfo.uid);
+        await setDoc(userRef, { 
+            full_name: userInfo.full_name.value,
+            department: userInfo.department.value,
+            degree_program: userInfo.degree_program.value,
+            year_level: userInfo.year_level.value,
+            student_id: userInfo.student_id.value,
+            personal_description: userInfo.personal_description.value,
+            experience: userInfo.experience.value,
+            skills: userInfo.skills.value,
+            education: userInfo.education.value,
+            interest: userInfo.interest.value,
+            facebook: userInfo.facebook,
+            gmail: userInfo.gmail,
+            mobileNumber: userInfo.mobileNumber,
+            uid: userInfo.uid,
+            photoURL: userInfo.photoURL
+        }, { merge: true });
+        isLoading.value = false;
+        toast('Information updated successfully!')
+    } catch (error) {
+        isLoading.value = false;
+        toast(error)
+        toast('Error occurred while updating user data.', "top", 1500)
+    }
+}
 
-const handleSubmit = () => {
-    if(validateValues()) {
+const handleSubmit = async () => {
+    isEditMode.value = false;
+    if(validateValues() && newProfileBucket.value != null) {
         turnEditModeOff();
-        alert('truthy')
+        // alert('truthy')
+        isLoading.value = true;
+        loadingPrompt.value = 'Uploading user photo'
+        const photoURL = await uploadPhoto(newProfileBucket.value);
+        if(photoURL != false) {
+            userInfo.photoURL.value = photoURL;
+            setNewUserData();
+        } else {
+            isLoading.value = false;
+            alert('error')
+            toast('Error occurred. Please try again.')
+        }
+    } else if(validateValues()) {
+        isLoading.value = true;
+        setNewUserData();
     } else {
-        toast('Opps, basic information is not filled out', "top", "1500")
+        toast('Opps, basic information is not filled out', "top", "1500");
+        userInfo.photoURL.value = genericProfile.value;
         turnEditModeOff();
     }
 }

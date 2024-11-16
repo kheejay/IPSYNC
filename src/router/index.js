@@ -85,7 +85,7 @@ const getCurrentUser = () => {
         const unsubscribe = onAuthStateChanged(
             auth,
             (user) => {
-                console.log(user)
+                // console.log(user)
                 unsubscribe()
                 resolve(user)
             },

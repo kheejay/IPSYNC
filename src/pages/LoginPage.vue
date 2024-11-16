@@ -125,7 +125,7 @@ import VisibilityOutline from '../components/icons/VisibilityOutline.vue'
 import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
 import LoadingScreen from '../components/LoadingScreen.vue'
 
-import { toast } from "../functions";
+import { toast } from "../functions/toast";
 
 const showPass = ref(false)
 const hasError = reactive({
@@ -135,7 +135,7 @@ const buttonLock = ref(false)
 const resetPassword = ref(false)
 const isLoading = ref(false)
 
-const { genericProfile, userGmailName } = inject('userData')
+const { genericProfile, userGmailName, setUserData } = inject('userData')
 
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
@@ -154,10 +154,12 @@ const handleUserLogin = async (result) => {
         const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
             isLoading.value = false;
+            setUserData();
             redirectTo('Landing');
         } else {
             // docSnap.data() will be undefined in this case
             isLoading.value = false;
+            localStorage.setItem('userId', result.user.uid)
             genericProfile.value = result.user.photoURL;
             userGmailName.value = result.user.displayName;
             console.log(result.user.displayName)
@@ -179,9 +181,11 @@ const redirectTo = (route) => {
 const login = () => {
     isLoading.value = true;
     signInWithEmailAndPassword(auth, user.email.value, user.password.value)
-    .then((userCredential) => {
+    .then((result) => {
         // Signed in 
+        localStorage.setItem('userId', result.user.uid)
         isLoading.value = false;
+        setUserData();
         redirectTo('Landing')
         // ...
     })

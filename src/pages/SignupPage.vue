@@ -99,8 +99,8 @@ import VisibilityOutline from '../components/icons/VisibilityOutline.vue'
 import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
 import LoadingScreen from '../components/LoadingScreen.vue';
 
-import { toast } from "../functions";
-const { genericProfile, userGmailName} = inject('userData')
+import { toast } from "../functions/toast";
+const { genericProfile, userGmailName } = inject('userData')
 
 const showPass = ref(false)
 const hasError = reactive({
@@ -136,6 +136,7 @@ const handleNewUser = async (result) => {
         } else {
             // docSnap.data() will be undefined in this case
             isLoading.value = false;
+            localStorage.setItem('userId', result.user.uid)
             genericProfile.value = result.user.photoURL;
             userGmailName.value = result.user.displayName;
             console.log("No such document!");
