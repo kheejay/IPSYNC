@@ -24,7 +24,7 @@
                 <div class="w-full flex flex-col-reverse sm:flex-col">
                     <div class="w-full grid md:flex justify-end items-center gap-4 mt-4 sm:mt-0 py-6">
                         <div v-if="isEditMode" class="flex-col md:flex gap-2 text-c5">
-                            <input type="file" class="border w-[16rem]">
+                            <input type="file" class="border w-[16rem]" accept="image/*" @change="updateProfile">
                             <div class="w-full">
                                 <button class="border w-1/2 bg-c2 h-full" @mousedown="decrementPhotoScale">Scale-</button>
                                 <button class="border w-1/2 bg-c1 h-full" @mousedown="incrementPhotoScale">Scale+</button>
@@ -219,13 +219,14 @@
     </div>
     <transition name="fade" mode="out-in">
         <div v-if="previewProfile" 
-            class="w-screen h-screen fixed top-0 left-0 z-[5] flex items-center justify-center shadow">
+            class="w-screen h-screen fixed top-0 left-0 z-[5] flex items-center justify-center shadow px-12 sm:px-0">
             <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
-            <div ref="target" class="h-[40rem] w-[64rem] z-[1] bg-c5 flex justify-center relative py-8 rounded-lg overflow-hidden">
-                <IPStamp class="absolute left-4 scale-[250%] -rotate-45 opacity-45" />
-                <IPStamp class="absolute left-4 bottom-4 scale-[250%] -rotate-45 opacity-45" />
-                <IPStamp class="absolute right-4 scale-[250%] -rotate-45 opacity-45" />
-                <IPStamp class="absolute right-4 bottom-4 scale-[250%] -rotate-45 opacity-45" />
+            <div ref="target" 
+                class="w-full h-auto sm:h-[30rem] sm:w-[44rem] lg:h-[40rem] lg:w-[64rem] z-[1] bg-c5 flex justify-center relative py-8 rounded-lg overflow-hidden">
+                <!-- <IPStamp class="absolute -left-2 top-4 sm:scale-[250%] lg:scale-[150%] -rotate-45 opacity-45" /> -->
+                <!-- <IPStamp class="absolute left-8 bottom-4 sm:scale-[150%] lg:scale-[250%] -rotate-45 opacity-45" />
+                <IPStamp class="absolute right-2 -top-4 sm:scale-[150%] lg:scale-[250%] -rotate-45 opacity-45" />
+                <IPStamp class="absolute right-4 -bottom-4 sm:scale-[150%] lg:scale-[250%] -rotate-45 opacity-45" /> -->
                 <img :src="userInfo.photoURL.value" alt="profile" class="h-full w-auto z-[5]">
             </div>
         </div>
@@ -240,7 +241,7 @@ import PlusIcon from '../components/icons/PlusIcon.vue';
 import IPStamp from '../components/icons/IPStamp.vue';
 import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
 import * as yup from 'yup';
-import { inject, reactive, ref } from 'vue';
+import { inject, reactive, ref, } from 'vue';
 const { textarea, input } = useTextareaAutosize()
 
 const fullName = ref()
@@ -285,6 +286,13 @@ const userInfo = reactive({
     uid: '',
     photoURL: { value: genericProfile.value, scale: 100}
 })
+
+const updateProfile = (event) => {
+    const file = event.target.files[0]
+    if (file) {
+        userInfo.photoURL.value = URL.createObjectURL(file);
+    }
+}
 
 const skillsCount = ref(0)
 const interestCount = ref(0)

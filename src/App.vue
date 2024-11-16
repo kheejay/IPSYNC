@@ -20,7 +20,7 @@ const isAuthPage = computed(() => route.meta.isAuthPage)
 
 // USER
 const userData = ref({})
-const genericProfile = ref('/src/assets/images/np.svg')
+const genericProfile = ref('/src/assets/images/np.png')
 const userGmailName = ref('USER FULLNAME')
 
 provide('userData', {
