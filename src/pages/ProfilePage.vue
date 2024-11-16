@@ -293,7 +293,9 @@ const skillsCount = ref(0)
 const interestCount = ref(0)
 
 const addCount = (type) => {
-    if(!isEditMode.value) return;
+    if(!isEditMode.value) {
+        isEditMode.value = true;
+    };
     switch(type) {
         case 'skills': {
             userInfo.skills.value.push('')
