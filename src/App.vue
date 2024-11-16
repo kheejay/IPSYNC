@@ -2,19 +2,22 @@
     <NavigationBar v-if="(!isAuthPage  && !authenticatingUser)" />
     <router-view class="max-w-[100rem] mx-auto" v-slot="{ Component }">
         <transition :name="`${ !isAuthPage && 'fade' }`" mode="out-in">
-            <component :is="Component" :class="`${ !isAuthPage && 'bg-c4' }`" />
+            <component v-if="!authenticatingUser" :is="Component" :class="`${ !isAuthPage && 'bg-c4' }`" />
         </transition>
     </router-view>
     <Footer v-if="!isAuthPage && !authenticatingUser" />
+    <LoadingScreen v-if="authenticatingUser" :loadingPrompt="'Page is Loading'" />
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, provide, reactive, ref } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
+import LoadingScreen from './components/LoadingScreen.vue';
 import Footer from './components/Footer.vue';
 import { useRoute } from 'vue-router';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from './firebase';
+import { authenticatingUser } from './router';
 
 const route = useRoute()
 
@@ -23,7 +26,6 @@ const isAuthPage = computed(() => route.meta.isAuthPage)
 // USER
 const genericProfile = ref('https://i.ibb.co/LJPrkjQ/np.png')
 const userGmailName = ref('User fullname')
-const authenticatingUser = ref(false)
 const users = ref([])
 const userData = reactive({
     full_name: {value: userGmailName.value, hasError: false, errorMessage: ''},
@@ -113,7 +115,7 @@ provide('userData', {
     userGmailName,
     authenticatingUser,
     setUserData,
-    emptyUserData
+    emptyUserData,
 })
 
 onMounted(() => {

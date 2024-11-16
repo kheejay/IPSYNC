@@ -9,6 +9,7 @@ import ProfilePage from '../pages/ProfilePage.vue'
 import LandingPage from '../pages/LandingPage.vue'
 import AboutUs from '../pages/AboutUs.vue'
 import ContactUs from '../pages/ContactUs.vue'
+import { ref } from 'vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -80,24 +81,28 @@ const router = createRouter({
 
 })
 
+const authenticatingUser = ref(false)
+
 const getCurrentUser = () => {
+    authenticatingUser.value = true
     return new Promise((resolve, reject) => {
         const unsubscribe = onAuthStateChanged(
             auth,
             (user) => {
                 // console.log(user)
                 unsubscribe()
+                authenticatingUser.value = false;
                 resolve(user)
             },
             reject
         ) 
     })
 }
-  
+
 router.beforeEach(async (to) => {
     if (to.meta.requiresAuth && !(await getCurrentUser())) {
         return '/'
     }
 })
 
-export default router
+export {router, authenticatingUser }
