@@ -135,7 +135,7 @@ const buttonLock = ref(false)
 const resetPassword = ref(false)
 const isLoading = ref(false)
 
-const { genericProfile, userGmailName, setUserData, currentUserId } = inject('userData')
+const { userData, setUserData } = inject('userData')
 
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
@@ -155,19 +155,18 @@ const handleUserLogin = async (result) => {
         if (docSnap.exists()) {
             isLoading.value = false;
             localStorage.setItem('userId', result.user.uid)
-            currentUserId.value = result.user.uid;
+            userData.uid = result.user.uid
             setUserData();
             redirectTo('Landing');
         } else {
             // docSnap.data() will be undefined in this case
             isLoading.value = false;
-            localStorage.setItem('userId', result.user.uid)
-            genericProfile.value = result.user.photoURL;
-            userGmailName.value = result.user.displayName;
-            currentUserId.value = result.user.uid
-            console.log(result.user.displayName)
+            localStorage.setItem('userId', result.user.uid) 
+            userData.photoURL.value = result.user.photoURL;
+            userData.full_name.value = result.user.displayName;
+            userData.uid = result.user.uid
             console.log("No such document!");
-            toast('Account is not registered, finish quick setup. Thank you!', "top", "5000")
+            toast('Account is not registered finish quick setup. Thank you!', "top", "5000")
             redirectTo('Profile');
         }
     } catch (error) {
@@ -187,8 +186,8 @@ const login = () => {
     .then((result) => {
         // Signed in 
         localStorage.setItem('userId', result.user.uid)
-        currentUserId.value = result.user.uid
         isLoading.value = false;
+        userData.uid = result.user.uid
         setUserData();
         redirectTo('Landing')
         // ...

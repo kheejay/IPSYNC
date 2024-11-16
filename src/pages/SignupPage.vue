@@ -100,7 +100,7 @@ import VisibilityOffOutline from '../components/icons/VisibilityOffOutline.vue'
 import LoadingScreen from '../components/LoadingScreen.vue';
 
 import { toast } from "../functions/toast";
-const { genericProfile, userGmailName, currentUserId } = inject('userData')
+const { genericProfile, userGmailName, userData } = inject('userData')
 
 const showPass = ref(false)
 const hasError = reactive({
@@ -132,8 +132,8 @@ const handleNewUser = async (result) => {
         if (docSnap.exists()) {
             isLoading.value = false;
             localStorage.setItem('userId', result.user.uid);
-            currentUserId.value = result.user.uid;
-            toast('Account already registered, Welcome Back!', "top")
+            userData.uid = result.user.uid;
+            toast('Account already registered, Welcome back!', "top")
             redirectTo('Landing');
         } else {
             // docSnap.data() will be undefined in this case
@@ -141,7 +141,7 @@ const handleNewUser = async (result) => {
             localStorage.setItem('userId', result.user.uid)
             genericProfile.value = result.user.photoURL;
             userGmailName.value = result.user.displayName;
-            currentUserId.value = result.user.uid
+            userData.uid = result.user.uid;
             console.log("No such document!");
             toast('Welcome! Let\'s get you set up with just a few quick details.', "top", "5000")
             redirectTo('Profile');

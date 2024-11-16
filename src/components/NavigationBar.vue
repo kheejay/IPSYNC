@@ -179,7 +179,7 @@ import { RouterLink, useRouter } from "vue-router";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { toast } from "../functions/toast";
-
+const { userData, emptyUserData } = inject('userData')
 const showDropDown = ref(false)
 
 const router = useRouter()
@@ -205,8 +205,7 @@ const handleLogout = () => {
     signOut(auth).then(() => {
     // Sign-out successful.
     toast("Logout successful!")
-    currentUserId.value = null
-    localStorage.setItem('userID', null)
+    emptyUserData()
     router.push({ name: 'Landing' })
     confirmLogout.value = false;
     }).catch((error) => {
@@ -250,6 +249,4 @@ onUnmounted(() => {
         unsubscribeAuth.value()
     }
 })
-
-const { userData, currentUserId } = inject('userData')
 </script>

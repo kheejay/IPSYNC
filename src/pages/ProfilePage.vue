@@ -277,7 +277,7 @@ const handleEdit = () => {
 const target = ref(null)
 onClickOutside(target, event => hideProfile())
 
-const { genericProfile, userData } = inject('userData') 
+const { userData } = inject('userData') 
 
 const userInfo = reactive( userData )
 
@@ -405,6 +405,8 @@ const setNewUserData = async () => {
         return
     }
     try {
+        console.log('topid', userInfo.uid)
+        console.log('topuser', userInfo)
         loadingPrompt.value = 'Updating User Data';
         const userRef = doc(db, 'users', userInfo.uid);
         await setDoc(userRef, { 
@@ -425,6 +427,8 @@ const setNewUserData = async () => {
             photoURL: userInfo.photoURL
         }, { merge: true });
         isLoading.value = false;
+        console.log('bottm', userInfo.uid)
+        console.log('btm', userInfo)
         toast('Information updated successfully!')
     } catch (error) {
         isLoading.value = false;
@@ -454,7 +458,7 @@ const handleSubmit = async () => {
         setNewUserData();
     } else {
         toast('Opps, basic information is not filled out', "top", "1500");
-        userInfo.photoURL.value = genericProfile.value;
+        userInfo.photoURL.value = userInfo.photoURL.value;
         turnEditModeOff();
     }
 }

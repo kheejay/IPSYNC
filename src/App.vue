@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount, onUnmounted, provide, reactive, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
 import Footer from './components/Footer.vue';
 import { useRoute } from 'vue-router';
@@ -22,8 +22,7 @@ const isAuthPage = computed(() => route.meta.isAuthPage)
 
 // USER
 const genericProfile = ref('https://i.ibb.co/LJPrkjQ/np.png')
-const userGmailName = ref('User Fullname')
-const currentUserId =  ref(localStorage.getItem('userId'))
+const userGmailName = ref('User fullname')
 const authenticatingUser = ref(false)
 const users = ref([])
 const userData = reactive({
@@ -40,15 +39,15 @@ const userData = reactive({
     facebook: '',
     gmail: '',
     mobileNumber: '',
-    uid: currentUserId.value,
+    uid: localStorage.getItem('userId'),
     photoURL: { value: genericProfile.value, scale: 100}
 })
 
 const unsubscribeUser = ref(null)
 
 const setUserData = () => {
-    console.log('setUserData', currentUserId.value)
-    const foundUser = users.value.find((user) => user.uid === currentUserId.value);
+    console.log('setUserData', userData.uid)
+    const foundUser = users.value.find((user) => user.uid === userData.uid);
     if (foundUser) {
         for (const key in userData) {
             if (userData.hasOwnProperty(key) && foundUser.hasOwnProperty(key)) {
@@ -80,7 +79,7 @@ const fetchUsers = () =>  {
             } 
             if(change.type == 'modified') {
               users.value = users.value.map(user => 
-                user.uid === currentUserId.value ? {...change.doc.data()} : user
+                user.uid === userData.uid ? {...change.doc.data()} : user
               );
             }
         });
@@ -89,20 +88,37 @@ const fetchUsers = () =>  {
     });
 }
 
+const emptyUserData = () => {
+    localStorage.setItem('userId', null)
+    userData.full_name = { value: userGmailName.value, hasError: false, errorMessage: '' };
+    userData.department = { value: '', hasError: false, errorMessage: '' };
+    userData.degree_program = { value: '', hasError: false, errorMessage: '' };
+    userData.year_level = { value: '', hasError: false, errorMessage: '' };
+    userData.student_id = { value: '', hasError: false, errorMessage: '' };
+    userData.personal_description = { value: '', hasError: false, errorMessage: '' };
+    userData.experience = { value: [{ jobTitle: '', org: '', time_span: '' }], hasError: false, errorMessage: '' };
+    userData.skills = { value: [''], hasError: false, errorMessage: '' };
+    userData.education = { value: { school_name: '', time_span: '' }, hasError: false, errorMessage: '' };
+    userData.interest = { value: [''], hasError: false, errorMessage: '' };
+    userData.facebook = '';
+    userData.gmail = '';
+    userData.mobileNumber = '';
+    userData.uid = null;
+    userData.photoURL = { value: genericProfile.value, scale: 100 };
+}
+
 provide('userData', {
     userData,
     genericProfile,
     userGmailName,
-    currentUserId,
     authenticatingUser,
     setUserData,
+    emptyUserData
 })
 
-onBeforeMount(() => {
+onMounted(() => {
     fetchUsers();
 })
-
-watch(currentUserId, () => setUserData())
 
 onUnmounted(() => {
     if(unsubscribeUser.value) {
