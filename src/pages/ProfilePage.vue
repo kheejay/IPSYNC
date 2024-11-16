@@ -16,13 +16,21 @@
                     :class="`w-full h-full border-[0.2rem] rounded-full border-white z-[2] absolute 
                     ${ !isEditMode ? 'hover:bg-c1 opacity-20 cursor-pointer' : 'cursor-default' }`">
                 </div>
-                <img :src="userInfo.photoURL" alt="user photo" class="w-full h-auto border-0">
+                <img :src="userInfo.photoURL.value" alt="user photo" 
+                    :class="`w-full h-auto border-0 ${'scale-' + userInfo.photoURL.scale}`">
             </div>
             <div class="w-full h-[30%] lg:h-[40%] bg-transparent bg-black"></div>
             <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4">
                 <div class="w-full flex flex-col-reverse sm:flex-col">
-                    <div class="w-full flex justify-end items-center gap-4 mt-4 sm:mt-0 py-6">
-                        <button v-if="isEditMode" @click="turnEditModeOff" class="rounded-full bg-c1 text-white h-[2.2rem]
+                    <div class="w-full grid md:flex justify-end items-center gap-4 mt-4 sm:mt-0 py-6">
+                        <div v-if="isEditMode" class="flex-col md:flex gap-2 text-c5">
+                            <input type="file" class="border w-[16rem]">
+                            <div class="w-full">
+                                <button class="border w-1/2 bg-c2 h-full" @mousedown="decrementPhotoScale">Scale-</button>
+                                <button class="border w-1/2 bg-c1 h-full" @mousedown="incrementPhotoScale">Scale+</button>
+                            </div>
+                        </div>
+                        <button v-if="isEditMode" @click="handleSubmit" class="rounded-full bg-c1 text-white h-[2.2rem]
                             sm:h-[2.5rem] px-6 sm:px-0 sm:w-[10rem] text-[1rem] active:scale-[99%]">
                             Save Changes
                         </button>
@@ -110,7 +118,7 @@
     <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
          border-black flex flex-col md:grid md:grid-cols-2">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
-            Experience
+            Experience <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
         </div>
         <JobTitleModal />
         <JobTitleModal />
@@ -132,7 +140,7 @@
     <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
          border-black">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
-            Skills
+            Skills <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
         </div>
         <div v-for="skill, index in userInfo.skills.value" :key="index"
             :class="`w-full border-b-2 border-b-black mb-2
@@ -150,7 +158,7 @@
     <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
          border-black">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
-            Education
+            Education <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
         </div>
         <div class="w-full border-b-2 border-b-black">
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1
@@ -167,7 +175,7 @@
     <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
          border-black">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
-            Interest
+            Interest <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
         </div> 
         <div v-for="interest, index in userInfo.interest.value" :key="index" 
             class="w-full border-b-2 border-b-black">
@@ -183,43 +191,53 @@
     <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
          border-black">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
-            Contacts
+            Contacts <span v-if="isEditMode" class="text-font text-base font-light">(Give at least one)</span>
         </div> 
         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 flex items-center mb-1 rounded">
             <span class="pl-2">Facebook:</span>
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
                 sm:text-start" placeholder="Facebook account" :disabled="!isEditMode"
-                v-model="userInfo.facebook.value">
+                v-model="userInfo.facebook"
+                @blur="validateContacts">
         </div>
         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 flex items-center mb-1 rounded">
             <span class="pl-2">Gmail:</span>
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
                 sm:text-start" placeholder="Gmail account" :disabled="!isEditMode"
-                v-model="userInfo.gmail.value">
+                v-model="userInfo.gmail"
+                @blur="validateContacts">
         </div>
         <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 flex items-center rounded">
         <span class="pl-2 flex-grow">Mobile:</span>
             <input type="number" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
                 sm:text-start" placeholder="Mobile number" :disabled="!isEditMode"
-                v-model="userInfo.mobileNumber.value">
+                v-model="userInfo.mobileNumber"
+                @blur="validateContacts">
         </div>
+        <span v-if="contacts.hasError" class="text-red-500 text-xs w-full text-start">
+            {{ contacts.errorMessage }}</span>
     </div>
     <transition name="fade" mode="out-in">
         <div v-if="previewProfile" 
             class="w-screen h-screen fixed top-0 left-0 z-[5] flex items-center justify-center shadow">
             <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
-            <div ref="target" class="h-[40rem] w-[64rem] z-[1] bg-c5 flex justify-center relative py-8 rounded-lg">
-                <img :src="userInfo.photoURL" alt="profile" class="h-full w-auto">
+            <div ref="target" class="h-[40rem] w-[64rem] z-[1] bg-c5 flex justify-center relative py-8 rounded-lg overflow-hidden">
+                <IPStamp class="absolute left-4 scale-[250%] -rotate-45 opacity-45" />
+                <IPStamp class="absolute left-4 bottom-4 scale-[250%] -rotate-45 opacity-45" />
+                <IPStamp class="absolute right-4 scale-[250%] -rotate-45 opacity-45" />
+                <IPStamp class="absolute right-4 bottom-4 scale-[250%] -rotate-45 opacity-45" />
+                <img :src="userInfo.photoURL.value" alt="profile" class="h-full w-auto z-[5]">
             </div>
         </div>
-    </transition>    
+    </transition> 
 </div>
 </template>
 
 <script setup>
 import EditProfileInfo from '../components/icons/EditProfileInfo.vue';
 import JobTitleModal from '../components/modals/JobTitleModal.vue';
-import PlusIcon from '../components/icons/PlusIcon.vue'
+import PlusIcon from '../components/icons/PlusIcon.vue';
+import IPStamp from '../components/icons/IPStamp.vue';
 import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
 import * as yup from 'yup';
 import { inject, reactive, ref } from 'vue';
@@ -261,11 +279,11 @@ const userInfo = reactive({
     skills: {value: [''], hasError: false, errorMessage: ''},
     education: {value: {school_name: '', time_span: ''}, hasError: false, errorMessage: ''},
     interest: {value: [''], hasError: false, errorMessage: ''},
-    facebook: {value: '', hasError: false, errorMessage: ''},
-    gmail: {value: '', hasError: false, errorMessage: ''},
-    mobileNumber: {value: '', hasError: false, errorMessage: ''},
+    facebook: '',
+    gmail: '',
+    mobileNumber: '',
     uid: '',
-    photoURL: genericProfile.value
+    photoURL: { value: genericProfile.value, scale: 100}
 })
 
 const skillsCount = ref(0)
@@ -299,7 +317,7 @@ const validationSchema = yup.object().shape({
     year_level: yup.string().required('Year level is required'),
     student_id: yup.string().required('Student ID is required'),
     personal_description: yup.string().required('Personal description is required')
-            .matches(/^[A-Za-z].*$/, 'This field must start with a letter'),
+            .matches(/^[A-Za-z].*$/, 'This field must start with a letter')
 });
 
 const validateInput = (name) => {
@@ -313,6 +331,84 @@ const validateInput = (name) => {
             userInfo[name].hasError = true;
             userInfo[name].errorMessage = err.message;
         });
+}
+
+const contacts = reactive({
+    hasError: false, errorMessage: 'At least one contact information is required'
+})
+
+const validateContacts = () => {
+    if(userInfo.facebook == false && userInfo.gmail == false && userInfo.mobileNumber == false) {
+        contacts.hasError = true;
+    } else {
+        contacts.hasError = false;
+    }
+}
+
+const validateValues = () => {
+    if(
+        userInfo.full_name.value != false &&
+        userInfo.department.value != false &&
+        userInfo.degree_program.value != false && 
+        userInfo.year_level.value != false &&
+        userInfo.student_id.value != false &&
+        (userInfo.facebook != false || userInfo.gmail != false || userInfo.mobileNumber != false)
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const scaleCount = ref(0)
+const incrementPhotoScale = () => {
+    if(scaleCount.value + 1 <= 3) {
+        scaleCount.value++;
+        userInfo.photoURL.scale = getPhotoScale(scaleCount.value);
+    }
+    console.log(scaleCount.value)
+    console.log(userInfo.photoURL.scale)
+}
+const decrementPhotoScale = () => {
+    if(scaleCount.value - 1 >= -3) {
+        scaleCount.value--;
+        userInfo.photoURL.scale = getPhotoScale(scaleCount.value);
+    }
+    console.log(scaleCount.value)
+    console.log(userInfo.photoURL.scale)
+}
+
+const getPhotoScale = (scaleCount) => {
+    switch(scaleCount) {
+        case -3: 
+            return 75;
+        case -2: 
+            return 90;
+        case -1: 
+            return 95;
+        case -0: 
+            return 100;
+        case 1: 
+            return 105;
+        case 2: 
+            return 110;
+        case 3: 
+            return 125;
+        default:
+            return userInfo.photoURL.scale;
+    }
+} 
+
+import { toast } from '../functions';
+
+const handleSubmit = () => {
+    if(validateValues()) {
+        turnEditModeOff();
+        alert('truthy')
+    } else {
+        toast('Opps, basic information is not filled out', "top", "1500")
+        turnEditModeOff();
+    }
 }
 </script>
 
