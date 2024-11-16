@@ -44,8 +44,8 @@
                     <img :src="userData.photoURL.value" alt="" 
                         class="bg-black w-11 h-11 rounded-full border-2 border-c1">
                     <div class=" flex-grow flex flex-col justify-center px-2">
-                        <p class="font-bold text-[1rem]">Chicken Bilog</p>
-                        <p class="text-[0.90rem]">STUDENT</p>
+                        <p class="font-bold text-[1rem]">{{ userData.full_name.value }}</p>
+                        <p class="text-[0.90rem]">{{ userData.department.value }}</p>
                     </div>
                 </div>
                 <div class="w-11/12 mx-auto border-t border-black p-2">
@@ -204,8 +204,9 @@ const goTo = (name) => {
 const handleLogout = () => {
     signOut(auth).then(() => {
     // Sign-out successful.
-    localStorage.setItem('userId', null)
     toast("Logout successful!")
+    currentUserId.value = null
+    localStorage.setItem('userID', null)
     router.push({ name: 'Landing' })
     confirmLogout.value = false;
     }).catch((error) => {
@@ -250,5 +251,5 @@ onUnmounted(() => {
     }
 })
 
-const { userData, emptyUserData } = inject('userData')
+const { userData, currentUserId } = inject('userData')
 </script>
