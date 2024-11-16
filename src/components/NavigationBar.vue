@@ -36,23 +36,25 @@
             <div @mouseup="showDropDown = !showDropDown" class="relative">
                 <img :src="userData.photoURL.value" alt="profile" 
                     class="bg-black w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
-                <ArrowDown  class="absolute top-1/2 -right-1"/> 
+                <ArrowDown  class="absolute top-[65%] -right-[7%]"/> 
             </div>
-            <div  v-if="showDropDown" ref="target"
-                class="absolute -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-[9.5rem] w-[14rem] bg-white rounded-[0.625rem] p-2">
-                <div class="flex p-2">
-                    <img :src="userData.photoURL.value" alt="" 
-                        class="bg-black w-11 h-11 rounded-full border-2 border-c1">
-                    <div class=" flex-grow flex flex-col justify-center px-2">
-                        <p class="font-bold text-[1rem]">{{ userData.full_name.value }}</p>
-                        <p class="text-[0.90rem]">{{ userData.department.value }}</p>
+            <div class="absolute right-0 top-[3.4rem] h-[30rem] w-[21rem]">
+                <div  v-if="showDropDown" ref="target"
+                    class="ml-[1.5rem] -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-max w-[16rem] bg-white rounded-[0.625rem] p-2">
+                    <div class="flex p-2 items-center">
+                        <img :src="userData.photoURL.value" alt="" 
+                            class="w-11 h-11 rounded-full border-2 border-c1">
+                        <div class=" flex-grow flex flex-col justify-center pl-2">
+                            <p class="font-bold text-[1rem] ">{{ userData.full_name.value }}</p>
+                            <p class="text-[0.90rem]">{{ userData.department.value }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="w-11/12 mx-auto border-t border-black p-2">
-                     <p @click="goToProfile"
-                        class="text-[1rem]m py-1 cursor-pointer w-max">VIEW PROFILE</p>
-                     <p @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer 
-                        pb-1 text-red-500 w-max">SIGN OUT</p>
+                    <div class="w-11/12 mx-auto border-t border-black py-2">
+                        <p @click="goToProfile"
+                            class="text-[1rem]m py-1 cursor-pointer w-full mt-1">VIEW PROFILE</p>
+                        <p @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer 
+                            pb-1 text-red-500 w-max mt-1">SIGN OUT</p>
+                    </div>
                 </div>
             </div>
         </div>
