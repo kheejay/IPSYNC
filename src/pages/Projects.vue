@@ -46,16 +46,16 @@
             </div>
         </div>
 
-        <div class="mt-28 w-full px-[6rem] h-[40rem]">
-            <div class="w-full flex gap-9 justify-between">
-                <div class="flex-grow h-[3.2rem] border-2 border-black flex">
-                    <input type="text" class="focus:outline-none w-full h-full px-8 placeholder:italic" 
+        <div class="mt-28 w-full md:px-[4rem] xl:px-[6rem] h-[40rem]">
+            <div class="w-full items-end flex-col sm:flex-row flex gap-2 md:gap-4 lg:gap-9 justify-between">
+                <div class="flex-grow w-full h-[3.2rem] border-2 border-black flex">
+                    <input type="text" class="focus:outline-none w-full h-full px-2 sm:px-4 md:px-8 placeholder:italic" 
                     placeholder="Search...">
                     <div class="w-max h-full bg-c1 flex items-center justify-center">
                         <MagnifyingGlass class="text-white w-[2.8rem] h-[2.8rem] mx-2" />
                     </div>
                 </div>
-                <div class="h-[3.2rem] w-max bg-white flex items-center gap-6 border-2 border-c1 text-c1 px-4">
+                <div class="h-[3.2rem] w-max bg-white flex items-center gap-2 md:gap-6 border-2 border-c1 text-c1 px-4">
                     <FilterSort class="w-7 h-7" />
                     <span class="text-[1rem] font-bold">Filter & Sort</span>
                     <ArrowDownNoBg class="w-7 h-7 bg-white text-c1" />
