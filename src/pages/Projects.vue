@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full h-fit max-h-[100rem px-[1.5rem] sm:px-[2rem] lg:px-[2.8rem] bg-image bg-white pt-10 pb-[10rem]">
+    <div class="w-full px-[1.5rem] sm:px-[2rem] lg:px-[2.8rem] bg-image bg-white pt-10 pb-[12rem]">
 
         <div class="w-full">
 
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div class="mt-28 w-full md:px-[4rem] xl:px-[6rem] h-[40rem]">
+        <div class="mt-32 w-full md:px-[4rem] xl:px-[6rem]">
             <div class="w-full items-end flex-col sm:flex-row flex gap-2 md:gap-4 lg:gap-9 justify-between">
                 <div class="flex-grow w-full h-[3.2rem] border-2 border-black flex">
                     <input type="text" class="focus:outline-none w-full h-full px-2 sm:px-4 md:px-8 placeholder:italic" 
@@ -57,12 +57,14 @@
                 </div>
                 <div class="h-[3.2rem] w-max bg-white flex items-center gap-2 md:gap-6 border-2 border-c1 text-c1 px-4">
                     <FilterSort class="w-7 h-7" />
-                    <span class="text-[1rem] font-bold">Filter & Sort</span>
+                    <span class="text-[1rem] font-bold text-nowrap">Filter & Sort</span>
                     <ArrowDownNoBg class="w-7 h-7 bg-white text-c1" />
                 </div>
             </div>
-            <div class="py-16 w-full">
-                <PostComponent />
+        </div>
+        <div class="w-full bg-amber-200 flex justify-center py-20 ">
+            <div class="grid xl:grid-cols-2 gap-16">
+                <PostComponent v-for="x in 8" :key="x" />
             </div>
         </div>
     </div>
