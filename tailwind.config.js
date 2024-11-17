@@ -12,6 +12,7 @@ export default {
         c3: '#85AADD',
         c4: '#EBF1FD',
         c5: '#DFEAFF',
+        c6: '#325F9D',
         font: '#3A3A3A'
       },
     },

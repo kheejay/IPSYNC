@@ -14,8 +14,8 @@
                     hover:font-bold hover:underline w-[6rem] lg:w-[10rem] xl:w-[13rem] text-center`">
                 DASHBOARD
             </RouterLink>
-            <RouterLink v-if="isAuthenticated" :to="{ name: '' }"
-                :class="`text-[0.8rem] xl:text-[1rem] text-font ${ false ? 'font-bold  underline' : '' } 
+            <RouterLink v-if="isAuthenticated" :to="{ name: 'Projects' }"
+                :class="`text-[0.8rem] xl:text-[1rem] text-font ${ $route.name === 'Projects' ? 'font-bold  underline' : '' } 
                     hover:font-bold hover:underline w-[11.5rem] lg:w-[12rem] xl:w-[15rem] text-center`">
                 INTERNSHIPS AND PROJECTS
             </RouterLink>
@@ -35,14 +35,14 @@
             class="w-[2.5rem] md:w-[9rem] hidden md:flex justify-center items-center relative">
             <div @mouseup="showDropDown = !showDropDown" class="relative">
                 <img :src="userData.photoURL.value" alt="profile" 
-                    class="bg-black w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
+                    class="bg-white w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
                 <ArrowDown  class="absolute top-[65%] -right-[7%]"/> 
             </div>
             <div class="absolute right-0 top-[3.4rem] w-[21rem]">
                 <div v-if="showDropDown" ref="target"
                     class="ml-[1.5rem] -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-max w-[16rem] bg-white rounded-[0.625rem] p-2">
                     <div class="flex p-2 items-center">
-                        <img :src="userData.photoURL.value" alt="" 
+                        <img :src="userData.photoURL.value" alt="user" 
                             class="w-11 h-11 rounded-full border-2 border-c1">
                         <div class=" flex-grow flex flex-col justify-center pl-2">
                             <p class="font-bold text-[1rem] ">{{ userData.full_name.value }}</p>
@@ -120,10 +120,10 @@
                                 DASHBOARD
                             </div>
                         </div>
-                        <div @mousedown="goTo('')" 
+                        <div @mousedown="goTo('Projects')" 
                             v-if="isAuthenticated"
                             :class="`w-full flex h-[4rem] gap-4 items-center pl-4 active:bg-c4 rounded
-                                ${ $route.name === '' && 'bg-c4'}`">
+                                ${ $route.name === 'Projects' && 'bg-c4'}`">
                             <BaselineEngineering class="text-font w-7 h-7" />
                             <div :class="`text-[1rem] text-font ${ $route.name === '' ? 'font-bold underline' : '' } 
                                     hover:font-bold hover:underline text-shadow`">

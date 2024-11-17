@@ -10,6 +10,7 @@ import LandingPage from '../pages/LandingPage.vue'
 import AboutUs from '../pages/AboutUs.vue'
 import ContactUs from '../pages/ContactUs.vue'
 import { ref } from 'vue'
+import Projects from '../pages/Projects.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -34,6 +35,14 @@ const router = createRouter({
             path: '/dashboard',
             name: 'Dashboard',
             component: DashboardPage,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/projects',
+            name: 'Projects',
+            component: Projects,
             meta: {
                 requiresAuth: true
             }
