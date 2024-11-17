@@ -477,34 +477,26 @@ const validateValues = () => {
 
 const scaleCount = ref(0)
 const incrementPhotoScale = () => {
-    if(scaleCount.value + 1 <= 3) {
+    if(scaleCount.value + 1 <= 1) {
         scaleCount.value++;
-        userInfo.photoURL.scale = getPhotoScale(scaleCount.value);
-    }
+        userData.photoURL.scale = getPhotoScale(scaleCount.value);
+    } 
 }
 const decrementPhotoScale = () => {
-    if(scaleCount.value - 1 >= -3) {
+    if(scaleCount.value - 1 >= -1) {
         scaleCount.value--;
-        userInfo.photoURL.scale = getPhotoScale(scaleCount.value);
+        userData.photoURL.scale = getPhotoScale(scaleCount.value);
     }
 }
 
 const getPhotoScale = (scaleCount) => {
     switch(scaleCount) {
-        case -3: 
-            return 75;
-        case -2: 
-            return 90;
         case -1: 
-            return 95;
+            return '75';
         case 0: 
-            return 100;
+            return '100';
         case 1: 
-            return 105;
-        case 2: 
-            return 110;
-        case 3: 
-            return 125;
+            return '125';
         default:
             return userInfo.photoURL.scale;
     }
