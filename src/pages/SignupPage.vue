@@ -121,6 +121,7 @@ const user = reactive({
 
 const router = useRouter()
 const redirectTo = (route) => {
+    console.log(userData)
     router.push({ name: route });
 }
 

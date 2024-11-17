@@ -1,5 +1,5 @@
 <template>
-    <div class="z-[3] w-full max-w-[100rem] mx-auto flex justify-between items-center px-3 xl:px-12 sticky top-0 bg-white shadow">
+    <div class="z-[4] w-full max-w-[100rem] mx-auto flex justify-between items-center px-3 xl:px-12 sticky top-0 bg-white shadow">
         <div class="md:w-[9rem] h-[4rem] flex justify-center items-center">
             <IPSYNCLogo class="w-[3rem] md:w-[5rem]" />
         </div>
@@ -38,8 +38,8 @@
                     class="bg-black w-9 h-9 rounded-full border-2 border-c1 cursor-pointer">
                 <ArrowDown  class="absolute top-[65%] -right-[7%]"/> 
             </div>
-            <div class="absolute right-0 top-[3.4rem] h-[30rem] w-[21rem]">
-                <div  v-if="showDropDown" ref="target"
+            <div class="absolute right-0 top-[3.4rem] w-[21rem]">
+                <div v-if="showDropDown" ref="target"
                     class="ml-[1.5rem] -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-max w-[16rem] bg-white rounded-[0.625rem] p-2">
                     <div class="flex p-2 items-center">
                         <img :src="userData.photoURL.value" alt="" 
@@ -156,11 +156,11 @@
                 <div v-else @mousedown="goTo('Login')" class="w-full text-end text-c1 pr-4">SIGN IN</div>
             </div>
         </Transition>
+        <ConfirmationModal v-if="confirmLogout"
+            @confirm="handleLogout"
+            @cancel="confirmLogout = false"
+            :message="'Please confirm to logout.'" />
     </div>
-    <ConfirmationModal v-if="confirmLogout"
-        @confirm="handleLogout"
-        @cancel="confirmLogout = false"
-        :message="'Please confirm to logout.'" />
 </template>
 
 <script setup>

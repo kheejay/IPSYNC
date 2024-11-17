@@ -34,7 +34,7 @@ const userData = reactive({
     year_level: {value: '', hasError: false, errorMessage: ''},
     student_id: {value: '', hasError: false, errorMessage: ''},
     personal_description: {value: '', hasError: false, errorMessage: ''},
-    experience: {value: [{jobTitle: '', org: '', time_span: ''}], hasError: false, errorMessage: ''},
+    experience: {value: [], hasError: false, errorMessage: ''},
     skills: {value: [''], hasError: false, errorMessage: ''},
     education: {value: {school_name: '', time_span: ''}, hasError: false, errorMessage: ''},
     interest: {value: [''], hasError: false, errorMessage: ''},

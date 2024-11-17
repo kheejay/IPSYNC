@@ -8,7 +8,7 @@
             bg-c1 lg:bg-c4`">
             <div class="lg:w-[55rem] lg:h-[55rem] bg-c1 absolute rounded-full -top-[15rem] -left-[12.6rem]"></div>
             <div class="lg:w-[30rem] lg:h-[30rem] bg-[#4A658D] absolute top-0 rounded-lg -right-[17.2rem]"></div>
-            <div :class="`z-[2] absolute w-[11rem] h-[11rem] lg:w-[12rem] lg:h-[12rem] bg-white rounded-full left-1/2 
+            <div :class="`z-[3] absolute w-[11rem] h-[11rem] lg:w-[12rem] lg:h-[12rem] bg-white rounded-full left-1/2 
                 -translate-x-1/2 sm:-translate-x-0 sm:left-[3.5rem] lg:left-[2.7rem] top-[12.2rem] sm:top-[5.7rem] 
                 hover:cursor-pointer lg:top-[13.8rem] ${ isEditMode && 'top-[15.2rem] sm:top-[8rem] lg:top-[16.8rem]'} flex items-center 
                 justify-center border-0 overflow-hidden object-cover`">
@@ -19,8 +19,8 @@
                 <img :src="userInfo.photoURL.value" alt="user photo" 
                     :class="`w-full h-auto border-0 ${'scale-' + userInfo.photoURL.scale}`">
             </div>
-            <div class="w-full h-[30%] lg:h-[40%] bg-transparent bg-black"></div>
-            <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4">
+            <div class="w-full h-[30%] lg:h-[40%] bg-transparent"></div>
+            <div class="z-[2] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4">
                 <div class="w-full flex flex-col-reverse sm:flex-col">
                     <div class="w-full grid md:flex justify-end items-center gap-4 mt-4 sm:mt-0 py-6">
                         <div v-if="isEditMode" class="flex-col md:flex gap-2 text-c5">
@@ -34,9 +34,10 @@
                             sm:h-[2.5rem] px-6 sm:px-0 sm:w-[10rem] text-[1rem] active:scale-[99%]">
                             Save Changes
                         </button>
-                        <div v-else class="h-[2.2rem] sm:h-[2.5rem] flex items-center mr-2 gap-2">
-                            <EditProfileInfo @click="handleEdit"  class="w-[1.1rem] h-[1.1rem] hover:scale-125 cursor-pointer" />
-                            <span @click="handleEdit"  class="hover:underline cursor-pointer">edit info</span>
+                        <div v-if="!isEditMode"
+                            class="h-[2.2rem] sm:h-[2.5rem] flex items-center mr-2 gap-2">
+                            <EditProfileInfo @click="handleEdit" class="w-[1.1rem] h-[1.1rem] hover:scale-125 cursor-pointer" />
+                            <span @click="handleEdit" class="hover:underline cursor-pointer">edit info</span>
                         </div>  
                     </div>
                     <div class="w-full flex flex-col items-start pt-2 mt-[4.4rem] sm:mt-0">
@@ -61,8 +62,8 @@
                 </div>
                 <div class="w-full font-bold text-c1 text-[1.75rem] mt-[3rem] sm:mt-[3.5rem] sm:pl-2">About Me</div>
                 <div class="w-full sm:h-[9rem] grid gap-4 sm:flex items-center sm:mt-[2rem] text-c1">
-                    <div :class="`w-full sm:w-[40%] grid ${ !isEditMode && 'gap-2'} py-2 border-b-2 sm:border-b-0 
-                        sm:border-r-2 border-black pr-4`">
+                    <div :class="`w-full sm:w-[40%] grid ${ !isEditMode && 'gap-2'} border-b-2 sm:border-b-0 
+                        sm:border-r-2 border-black pr-4 gap-1.5`">
                         <div class="w-full">
                             <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
                                 <input :disabled="!isEditMode" v-model="userInfo.degree_program.value"
@@ -102,7 +103,7 @@
                             {{ userInfo.personal_description.errorMessage }}</span>
                         <textarea :disabled="!isEditMode"
                                 class="w-full min-h-[9rem] border p-2 focus:outline-none focus:border focus:border-c1
-                                resize-none max-h-[9rem] text-[1rem] placeholder:font-light placeholder:italic"
+                                resize-none max-h-[9rem] text-[1rem] placeholder:font-light placeholder:italic bg-transparent"
                                 ref="textarea" @blur="validateInput('personal_description')"
                                 v-model="userInfo.personal_description.value"
                                 placeholder="Write a brief description of yourself, including your academic goals, interests, and what you hope to gain from collaborative experiences."
@@ -120,15 +121,13 @@
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
             Experience <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
         </div>
-        <JobTitleModal />
-        <JobTitleModal />
-        <JobTitleModal />
-        <JobTitleModal />
-        <div class="flex items-center py-4 italic opacity-45 hover:opacity-100 duration-200 cursor-pointer">
+        <JobTitleModal v-for="experience, index in userInfo.experience.value" :key="index" 
+            :experience="experience" />
+        <div @click="showAddExperienceModal" class="flex items-center py-4 italic opacity-45 hover:opacity-100 duration-200 cursor-pointer">
             <div class="border border-black rounded-xl min-w-[5.1rem] min-h-[5rem] sm:min-w-[9rem] sm:w-[9rem] sm:h-[7rem] active:scale-95 flex items-center justify-center">
                 <PlusIcon class="w-[2rem] h-[2rem] sm:w-[3rem] sm:h-[3rem]" />
             </div>
-            <div class="flex justify-center pl-4 flex-col">
+            <div class="flex justify-center pl-4 flex-col overflow-hidden">
                 <p class="w-full text-[1.125rem] text-c1 font-bold uppercase">Job Title</p>
                 <p class="w-full text-[0.90rem] text-c1 uppercase">ORGANIZATION</p>
                 <p class="w-full text-[0.90rem] text-c1 uppercase">Start Date - End Date/Present</p>
@@ -221,7 +220,7 @@
     </div>
     <transition name="fade" mode="out-in">
         <div v-if="previewProfile" 
-            class="w-screen h-screen fixed top-0 left-0 z-[5] flex items-center justify-center shadow px-12 sm:px-0">
+            class="w-screen h-screen fixed top-0 left-0 z-[4] flex items-center justify-center shadow px-12 sm:px-0">
             <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
             <div ref="target" 
                 class="w-full h-auto sm:h-[30rem] sm:w-[44rem] lg:h-[40rem] lg:w-[64rem] z-[1] bg-c5 flex justify-center relative py-8 rounded-lg overflow-hidden">
@@ -233,6 +232,59 @@
             </div>
         </div>
     </transition> 
+    <transition name="fade" mode="out-in">
+        <div v-if="previewAddExperience" 
+            class="w-screen h-screen fixed top-0 left-0 z-[4] flex items-center justify-center shadow px-4 sm:px-0">
+            <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
+            <div ref="" 
+                class="w-full py-8 px-4 sm:w-[40rem] md:w-[45rem] z-[1] bg-white flex flex-col 
+                justify-center gap-2 relative rounded-sm sm:rounded-lg 
+                ">
+                <div class="w-full font-bold text-c1 text-[1rem] sm:text-[1.75rem]">
+                    Share your experience
+                </div>
+                <div class="focus-within:border-black duration-200 border w-full p-2 h-[4rem] sm:h-[5rem] flex flex-col mt-2">
+                    <span class="text-[0.6rem] sm:text-xs pr-1 w-full">Work Title</span>
+                    <input type="text" class="flex-grow focus:outline-none placeholder:font-extralight" 
+                    placeholder="Achievements, Leadership experience, Successful collaborations"
+                    v-model="tempExperienceHolder.job_title">
+                </div>
+                <div class="focus-within:border-black duration-200 border w-full p-2 h-[4rem] sm:h-[5rem] flex flex-col">
+                    <span class="text-[0.6rem] sm:text-xs pr-1 w-full">Organization</span>
+                    <input type="text" class="flex-grow focus:outline-none placeholder:font-extralight" 
+                    placeholder="Company or Anything might apply"
+                    v-model="tempExperienceHolder.org">
+                </div>
+                <div class="focus-within:border-black duration-200 border w-full p-2 h-[4rem] sm:h-[5rem] flex flex-col">
+                    <span class="text-[0.6rem] sm:text-xs pr-1 w-full">Milestone Duration</span>
+                    <input type="text" class="flex-grow focus:outline-none placeholder:font-extralight" 
+                    placeholder="2022 - 2023/PRESENT"
+                    v-model="tempExperienceHolder.time_span">
+                </div>
+                <div class="w-full flex-col sm:flex-row sm:flex sm:justify-between sm:items-center border mt-4">
+                    <div class="flex-grow flex justify-start gap-2">
+                        <JobTitleIcon @click="tempExperienceHolder.icon = 0"
+                            :class="`w-[2.5rem] h-[2.5rem] border cursor-pointer active:scale-95 
+                            ${tempExperienceHolder.icon == 0 ? 'bg-amber-200 px-2 rounded' : 'px-1'}`" />
+                        <EducationIcon @click="tempExperienceHolder.icon = 1"
+                            :class="`w-[2.5rem] h-[2.5rem] border cursor-pointer active:scale-95
+                            ${tempExperienceHolder.icon == 1 && 'bg-amber-200 px-2 rounded'}`" />
+                        <AwardIcon  @click="tempExperienceHolder.icon = 2" 
+                            :class="`w-[2.5rem] h-[2.5rem] border cursor-pointer active:scale-95
+                            ${tempExperienceHolder.icon == 2 && 'bg-amber-200 px-2 rounded'}`" />
+                        <ProjectIcon @click="tempExperienceHolder.icon = 3" 
+                            :class="`w-[2.5rem] h-[2.5rem] border cursor-pointer active:scale-95
+                            ${tempExperienceHolder.icon == 3 && 'bg-amber-200 px-2 rounded'}`" />
+                    </div>
+                    <button @click="handleAddExperience" 
+                        class="rounded-full bg-c1 text-white h-[2.2rem]
+                            sm:h-[2.5rem] w-full sm:w-[10rem] text-[1rem] active:scale-[99%]">
+                            Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    </transition>
     <LoadingScreen :loadingPrompt="loadingPrompt" v-if="isLoading" />
 </div>
 </template>
@@ -241,6 +293,10 @@
 import EditProfileInfo from '../components/icons/EditProfileInfo.vue';
 import JobTitleModal from '../components/modals/JobTitleModal.vue';
 import PlusIcon from '../components/icons/PlusIcon.vue';
+import JobTitleIcon from '../components/icons/JobTitleIcon.vue';
+import EducationIcon from '../components/icons/EducationIcon.vue';
+import AwardIcon from '../components/icons/AwardIcon.vue';
+import ProjectIcon from '../components/icons/ProjectIcon.vue';
 import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
 import { inject, reactive, ref, } from 'vue';
 import * as yup from 'yup';
@@ -258,16 +314,23 @@ const isEditMode = ref(false);
 const turnEditModeOn = () => isEditMode.value = true;
 const turnEditModeOff = () => isEditMode.value = false;
 const previewProfile = ref(false)
+const previewAddExperience = ref(false)
 const newProfileBucket = ref(null)
 const isLoading = ref(false)
 const loadingPrompt = ref('')
-
+const tempExperienceHolder = reactive({
+    job_title: '',
+    org: '',
+    time_span: '',
+    icon: 0
+})
 const showProfile = () => {
     if(!isEditMode.value) {
         previewProfile.value = true;
     }
 }
 const hideProfile = () => previewProfile.value = false;
+const showAddExperienceModal = () => previewAddExperience.value = true;
 
 const handleEdit = () => {
     turnEditModeOn();
@@ -310,6 +373,19 @@ const addCount = (type) => {
         default: 
         break;
     }
+}
+
+const handleAddExperience = () => {
+    console.log(tempExperienceHolder)
+    userData.experience.value.push({...tempExperienceHolder})
+    previewAddExperience.value = false;
+    setTimeout(() => {
+        tempExperienceHolder.job_title = ''
+        tempExperienceHolder.org = ''
+        tempExperienceHolder.time_span = ''
+        tempExperienceHolder.icon = 0
+    }, 50)
+    console.log(userData.experience.value)
 }
 
 const validationSchema = yup.object().shape({
@@ -407,8 +483,6 @@ const setNewUserData = async () => {
         return
     }
     try {
-        console.log('topid', userInfo.uid)
-        console.log('topuser', userInfo)
         loadingPrompt.value = 'Updating User Data';
         const userRef = doc(db, 'users', userInfo.uid);
         await setDoc(userRef, { 
@@ -429,8 +503,6 @@ const setNewUserData = async () => {
             photoURL: userInfo.photoURL
         }, { merge: true });
         isLoading.value = false;
-        console.log('bottm', userInfo.uid)
-        console.log('btm', userInfo)
         toast('Information updated successfully!')
     } catch (error) {
         isLoading.value = false;
