@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center justify-center w-screen h-screen bg-c1 overflow-auto px-4 sm:px-0">
-        <div class="shadow-[0rem_0.25rem_0.25rem_black] border border-black bg-white px-2 sm:px-4 sm: py-7 
+        <div class="drop-shadow border border-black bg-white px-2 sm:px-4 sm: py-7 
                 w-full sm:w-[80%] md:w-[68%] flex flex-col items-center justify-center max-w-[62rem]">
             <div class="w-full flex justify-start pl-2 pb-2">
                 <IPSYNCLogo class="w-14 h-9 md:w-20 md:h-12"/>

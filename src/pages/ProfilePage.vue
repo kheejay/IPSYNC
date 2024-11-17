@@ -3,8 +3,8 @@
     
     <div class="w-full lg:w-[60rem]">
         
-        <div :class="`w-full h-[64rem] sm:h-[42rem] lg:h-[53rem] ${ isEditMode && 'h-[74rem] sm:h-[49rem] lg:h-[60rem]'} 
-            flex flex-col shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] relative overflow-hidden 
+        <div :class="`drop-shadow w-full h-[64rem] sm:h-[42rem] lg:h-[53rem] ${ isEditMode && 'h-[74rem] sm:h-[49rem] lg:h-[60rem]'} 
+            flex flex-col rounded-[0.625rem] relative overflow-hidden 
             bg-c1 lg:bg-c4`">
             <div class="lg:w-[55rem] lg:h-[55rem] bg-c1 absolute rounded-full -top-[15rem] -left-[12.6rem]"></div>
             <div class="lg:w-[30rem] lg:h-[30rem] bg-[#4A658D] absolute top-0 rounded-lg -right-[17.2rem]"></div>
@@ -118,7 +118,7 @@
 
     </div>
 
-    <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
+    <div class="w-full lg:w-[60rem] drop-shadow rounded-[0.625rem] bg-white p-4 border
          border-black flex flex-col md:grid md:grid-cols-2">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
             Experience <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
@@ -139,7 +139,7 @@
     </div>
 
 
-    <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
+    <div class="w-full lg:w-[60rem] drop-shadow rounded-[0.625rem] bg-white p-4 border
          border-black">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
             Skills <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
@@ -161,7 +161,7 @@
     </div>
 
 
-    <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
+    <div class="w-full lg:w-[60rem] drop-shadow rounded-[0.625rem] bg-white p-4 border
          border-black">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
             Education <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
@@ -180,7 +180,7 @@
     </div>
 
 
-    <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
+    <div class="w-full lg:w-[60rem] drop-shadow rounded-[0.625rem] bg-white p-4 border
          border-black">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
             Interest <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
@@ -200,7 +200,7 @@
         </div>
     </div>
 
-    <div class="w-full lg:w-[60rem] shadow-[0rem_0.25rem_0.25rem_rgba(0,0,0,0.25)] rounded-[0.625rem] bg-white p-4 border
+    <div class="w-full lg:w-[60rem] drop-shadow rounded-[0.625rem] bg-white p-4 border
          border-black">
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
             Contacts <span v-if="isEditMode" class="text-font text-base font-light">(Give at least one)</span>

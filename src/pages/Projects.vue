@@ -17,9 +17,9 @@
                             Have an internship or project that needs fresh talent? Post it here to connect with skilled and enthusiastic candidates ready to make a difference!
                         </div>
                         <div class="w-full">
-                        <button  @click="y += 1500"
-                            class="flex justify-between items-center w-[15.25rem] sm:w-[19rem] xl:w-[23rem] py-[.9rem]
-                            sm:py-[1.15rem] px-5 sm:px-7 border border-black rounded-[2.25rem] shadow-[0rem_0.25rem_0.25rem_black] active:translate-y-[0.25rem] active:shadow-none duration-200 mt-5 xl:mt-7 ">
+                        <button 
+                            class="drop-shadow flex justify-between items-center w-[15.25rem] sm:w-[19rem] xl:w-[23rem] py-[.9rem]
+                            sm:py-[1.15rem] px-5 sm:px-7 border border-black rounded-[2.25rem] active:translate-y-[0.25rem] active:shadow-none duration-200 mt-5 xl:mt-7">
                             <span class="text-[1.125rem] sm:text-[1.25rem] xl:text-[1.50rem] font-bold text-c1">Post a project!</span>
                             <EditPen class="h-6 w-6" />
                         </button>
@@ -61,6 +61,9 @@
                     <ArrowDownNoBg class="w-7 h-7 bg-white text-c1" />
                 </div>
             </div>
+            <div class="py-16 w-full">
+                <PostComponent />
+            </div>
         </div>
     </div>
 </template>
@@ -70,9 +73,10 @@ import EditPen from '../components/icons/EditPen.vue';
 import MagnifyingGlass from '../components/icons/MagnifyingGlass.vue';
 import FilterSort from '../components/icons/FilterSort.vue';
 import ArrowDownNoBg from '../components/icons/ArrowDownNoBg.vue'
-import { useWindowScroll } from '@vueuse/core';
+import PostComponent from '../components/PostComponent.vue'
+// import { useWindowScroll } from '@vueuse/core';
 
-const { y } = useWindowScroll({ behavior: 'smooth' });
+// const { y } = useWindowScroll({ behavior: 'smooth' });
 </script>
 
 <style scoped>
