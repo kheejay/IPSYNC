@@ -26,8 +26,10 @@
                         <div v-if="isEditMode" class="flex-col md:flex gap-2 text-c5">
                             <input type="file" class="border w-[16rem]" accept="image/*" @change="updateProfile">
                             <div class="w-full">
-                                <button class="border w-1/2 bg-c2 h-full" @mousedown="decrementPhotoScale">Scale-</button>
-                                <button class="border w-1/2 bg-c1 h-full" @mousedown="incrementPhotoScale">Scale+</button>
+                                <button class="border w-1/2 bg-c2 h-full active:scale-105 duration-200 cursor-pointer" 
+                                    @mousedown="decrementPhotoScale">Scale-</button>
+                                <button class="border w-1/2 bg-c1 h-full active:scale-105 duration-200 cursor-pointer" 
+                                    @mousedown="incrementPhotoScale">Scale+</button>
                             </div>
                         </div>
                         <button v-if="isEditMode" @click="handleSubmit" class="rounded-full bg-c1 text-white h-[2.2rem]
@@ -495,7 +497,7 @@ const getPhotoScale = (scaleCount) => {
             return 90;
         case -1: 
             return 95;
-        case -0: 
+        case 0: 
             return 100;
         case 1: 
             return 105;
