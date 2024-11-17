@@ -1,10 +1,10 @@
 <template>
-    <div class="w-full h-fit max-h-[100rem px-[2.8rem] bg-image bg-white pt-10 pb-[10rem]">
+    <div class="w-full h-fit max-h-[100rem px-[1.5rem] sm:px-[2rem] lg:px-[2.8rem] bg-image bg-white pt-10 pb-[10rem]">
 
         <div class="w-full">
 
             <div class="w-full flex flex-col-reverse md:flex-row">
-                <img src="/src/assets/images/WestPeople.svg" alt="Group Photo" class="w-[30rem] md:w-1/2 h-auto">
+                <img src="/src/assets/images/WestPeople.svg" alt="Group Photo" class="w-full md:w-1/2 h-auto">
                 <div class="flex-grow flex items-center pb-[3rem]">
                     <div class="w-full flex flex-col items-center xl:max-w-[42rem]">
                         <div class="w-full text-[1.75rem] xl:text-[2rem] font-extrabold text-c1">
@@ -17,7 +17,8 @@
                             Have an internship or project that needs fresh talent? Post it here to connect with skilled and enthusiastic candidates ready to make a difference!
                         </div>
                         <div class="w-full">
-                            <button class="flex justify-between items-center w-[15.25rem] sm:w-[19rem] xl:w-[23rem] py-[.9rem]
+                        <button  @click="y += 1500"
+                            class="flex justify-between items-center w-[15.25rem] sm:w-[19rem] xl:w-[23rem] py-[.9rem]
                             sm:py-[1.15rem] px-5 sm:px-7 border border-black rounded-[2.25rem] shadow-[0rem_0.25rem_0.25rem_black] active:translate-y-[0.25rem] active:shadow-none duration-200 mt-5 xl:mt-7 ">
                             <span class="text-[1.125rem] sm:text-[1.25rem] xl:text-[1.50rem] font-bold text-c1">Post a project!</span>
                             <EditPen class="h-6 w-6" />
@@ -43,16 +44,35 @@
                 </div>
                 <img src="/src/assets/images/ElsReycel.svg" alt="Group Photo" class="w-full md:w-1/2 h-auto">
             </div>
-
-            <img src="/src/assets/images/ElsReycel.svg" alt="Photo">
-            <img src="/src/assets/images/ElsReycel.svg" alt="Photo">
         </div>
 
+        <div class="mt-28 w-full px-[6rem] h-[40rem]">
+            <div class="w-full flex gap-9 justify-between">
+                <div class="flex-grow h-[3.2rem] border-2 border-black flex">
+                    <input type="text" class="focus:outline-none w-full h-full px-8 placeholder:italic" 
+                    placeholder="Search...">
+                    <div class="w-max h-full bg-c1 flex items-center justify-center">
+                        <MagnifyingGlass class="text-white w-[2.8rem] h-[2.8rem] mx-2" />
+                    </div>
+                </div>
+                <div class="h-[3.2rem] w-max bg-white flex items-center gap-6 border-2 border-c1 text-c1 px-4">
+                    <FilterSort class="w-7 h-7" />
+                    <span class="text-[1rem] font-bold">Filter & Sort</span>
+                    <ArrowDownNoBg class="w-7 h-7 bg-white text-c1" />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-import EditPen from '../components/icons/EditPen.vue'
+import EditPen from '../components/icons/EditPen.vue';
+import MagnifyingGlass from '../components/icons/MagnifyingGlass.vue';
+import FilterSort from '../components/icons/FilterSort.vue';
+import ArrowDownNoBg from '../components/icons/ArrowDownNoBg.vue'
+import { useWindowScroll } from '@vueuse/core';
+
+const { y } = useWindowScroll({ behavior: 'smooth' });
 </script>
 
 <style scoped>
