@@ -122,7 +122,8 @@
             Experience <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
         </div>
         <JobTitleModal v-for="experience, index in userInfo.experience.value" :key="index" 
-            :experience="experience" />
+            :experience="experience" @remove="shoRemoveExperienceConfirmation" :index="index"
+            :isEditMode="isEditMode"/>
         <div @click="showAddExperienceModal" class="flex items-center py-4 italic opacity-45 hover:opacity-100 duration-200 cursor-pointer">
             <div class="border border-black rounded-xl min-w-[5.1rem] min-h-[5rem] sm:min-w-[9rem] sm:w-[9rem] sm:h-[7rem] active:scale-95 flex items-center justify-center">
                 <PlusIcon class="w-[2rem] h-[2rem] sm:w-[3rem] sm:h-[3rem]" />
@@ -143,10 +144,14 @@
         </div>
         <div v-for="skill, index in userInfo.skills.value" :key="index"
             :class="`w-full border-b-2 border-b-black mb-2
-                ${isEditMode && ''}`">
+                ${isEditMode && ''} relative`">
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
                 sm:text-start focus:rounded-lg" placeholder="Showcase your skills to demonstrate your suitability for new opportunities"
                 v-model="userInfo.skills.value[index]" :disabled="!isEditMode">
+            <Remove v-if="isEditMode" 
+                @click="handleRemoveSkill(index)"
+                class="absolute top-1/2 -translate-y-1/2 right-1 w-7 h-7 hover:scale-105 cursor-pointer 
+                active:scale-95 text-font" />
         </div>
         <div class="py-4 w-full flex justify-center">
             <PlusIcon @click="addCount('skills')" class="w-[2.4rem] h-[2.4rem] opacity-45 cursor-pointer hover:opacity-100" />
@@ -179,10 +184,14 @@
             Interest <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
         </div> 
         <div v-for="interest, index in userInfo.interest.value" :key="index" 
-            class="w-full border-b-2 border-b-black">
+            class="w-full border-b-2 border-b-black relative mb-2">
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
                 sm:text-start" placeholder="Share your hobbies and interests to help others find common ground with you."
                 v-model="userInfo.interest.value[index]" :disabled="!isEditMode">
+            <Remove v-if="isEditMode" 
+                @click="handleRemoveInterest(index)"
+                class="absolute top-1/2 -translate-y-1/2 right-1 w-7 h-7 hover:scale-105 cursor-pointer 
+                active:scale-95 text-font" />
         </div>
         <div class="py-4 w-full flex justify-center">
             <PlusIcon @click="addCount('interest')" class="w-[2.4rem] h-[2.4rem] opacity-45 cursor-pointer hover:opacity-100" />
@@ -236,7 +245,7 @@
         <div v-if="previewAddExperience" 
             class="w-screen h-screen fixed top-0 left-0 z-[4] flex items-center justify-center shadow px-4 sm:px-0">
             <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
-            <div ref="" 
+            <div ref="addExperience" 
                 class="w-full py-8 px-4 sm:w-[40rem] md:w-[45rem] z-[1] bg-white flex flex-col 
                 justify-center gap-2 relative rounded-sm sm:rounded-lg 
                 ">
@@ -261,19 +270,19 @@
                     placeholder="2022 - 2023/PRESENT"
                     v-model="tempExperienceHolder.time_span">
                 </div>
-                <div class="w-full flex-col sm:flex-row sm:flex sm:justify-between sm:items-center border mt-4">
+                <div class="w-full flex-col sm:flex-row sm:flex sm:justify-between sm:items-center mt-4">
                     <div class="flex-grow flex justify-start gap-2">
                         <JobTitleIcon @click="tempExperienceHolder.icon = 0"
-                            :class="`w-[2.5rem] h-[2.5rem] border cursor-pointer active:scale-95 
+                            :class="`w-[2.5rem] h-[2.5rem] cursor-pointer active:scale-95 duration-150 
                             ${tempExperienceHolder.icon == 0 ? 'bg-amber-200 px-2 rounded' : 'px-1'}`" />
                         <EducationIcon @click="tempExperienceHolder.icon = 1"
-                            :class="`w-[2.5rem] h-[2.5rem] border cursor-pointer active:scale-95
+                            :class="`w-[2.5rem] h-[2.5rem] cursor-pointer active:scale-95 duration-150
                             ${tempExperienceHolder.icon == 1 && 'bg-amber-200 px-2 rounded'}`" />
                         <AwardIcon  @click="tempExperienceHolder.icon = 2" 
-                            :class="`w-[2.5rem] h-[2.5rem] border cursor-pointer active:scale-95
+                            :class="`w-[2.5rem] h-[2.5rem] cursor-pointer active:scale-95 duration-150
                             ${tempExperienceHolder.icon == 2 && 'bg-amber-200 px-2 rounded'}`" />
                         <ProjectIcon @click="tempExperienceHolder.icon = 3" 
-                            :class="`w-[2.5rem] h-[2.5rem] border cursor-pointer active:scale-95
+                            :class="`w-[2.5rem] h-[2.5rem] cursor-pointer active:scale-95 duration-150
                             ${tempExperienceHolder.icon == 3 && 'bg-amber-200 px-2 rounded'}`" />
                     </div>
                     <button @click="handleAddExperience" 
@@ -285,6 +294,10 @@
             </div>
         </div>
     </transition>
+    <ConfirmationModal v-if="confirmRemoveExperience" 
+        @confirm="handleRemoveExperience"
+        @cancel="hideRemoveExperienceConfirmation"
+        :message="'Please confirm to remove item'" />
     <LoadingScreen :loadingPrompt="loadingPrompt" v-if="isLoading" />
 </div>
 </template>
@@ -297,6 +310,8 @@ import JobTitleIcon from '../components/icons/JobTitleIcon.vue';
 import EducationIcon from '../components/icons/EducationIcon.vue';
 import AwardIcon from '../components/icons/AwardIcon.vue';
 import ProjectIcon from '../components/icons/ProjectIcon.vue';
+import ConfirmationModal from '../components/modals/ConfirmationModal.vue';
+import Remove from '../components/icons/Remove.vue';
 import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
 import { inject, reactive, ref, } from 'vue';
 import * as yup from 'yup';
@@ -315,6 +330,7 @@ const turnEditModeOn = () => isEditMode.value = true;
 const turnEditModeOff = () => isEditMode.value = false;
 const previewProfile = ref(false)
 const previewAddExperience = ref(false)
+const confirmRemoveExperience = ref(false)
 const newProfileBucket = ref(null)
 const isLoading = ref(false)
 const loadingPrompt = ref('')
@@ -331,6 +347,9 @@ const showProfile = () => {
 }
 const hideProfile = () => previewProfile.value = false;
 const showAddExperienceModal = () => previewAddExperience.value = true;
+const hideAddExperienceModal = () => previewAddExperience.value = false;
+const shoRemoveExperienceConfirmation = () => confirmRemoveExperience.value = true;
+const hideRemoveExperienceConfirmation = () => confirmRemoveExperience.value = false;
 
 const handleEdit = () => {
     turnEditModeOn();
@@ -338,7 +357,9 @@ const handleEdit = () => {
 }
 
 const target = ref(null)
+const addExperience = ref(null)
 onClickOutside(target, event => hideProfile())
+onClickOutside(addExperience, event => hideAddExperienceModal())
 
 const { userData } = inject('userData') 
 
@@ -376,16 +397,27 @@ const addCount = (type) => {
 }
 
 const handleAddExperience = () => {
-    console.log(tempExperienceHolder)
     userData.experience.value.push({...tempExperienceHolder})
-    previewAddExperience.value = false;
+    hideAddExperienceModal();
     setTimeout(() => {
         tempExperienceHolder.job_title = ''
         tempExperienceHolder.org = ''
         tempExperienceHolder.time_span = ''
         tempExperienceHolder.icon = 0
     }, 50)
-    console.log(userData.experience.value)
+}
+
+const handleRemoveSkill = (index) => {
+    userData.skills.value.splice(index, 1)
+}
+
+const handleRemoveInterest = (index) => {
+    userData.interest.value.splice(index, 1)
+}
+
+const handleRemoveExperience = (index) => {
+    userData.experience.value.splice(index, 1)
+    hideRemoveExperienceConfirmation();
 }
 
 const validationSchema = yup.object().shape({
