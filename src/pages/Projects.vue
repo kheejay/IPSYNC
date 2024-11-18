@@ -76,6 +76,7 @@
             </div>
         </div>
         <PostAProjectModal v-if="0" />
+        <PreviewPostModal v-if="1" />
     </div>
 </template>
 
@@ -85,7 +86,8 @@ import MagnifyingGlass from '../components/icons/MagnifyingGlass.vue';
 import FilterSort from '../components/icons/FilterSort.vue';
 import ArrowDownNoBg from '../components/icons/ArrowDownNoBg.vue'
 import PostComponent from '../components/modals/PostComponent.vue'
-import PostAProjectModal from '../components/modals/PostAProjectModal.vue'
+import PostAProjectModal from '../components/modals/PostAProjectModal.vue';
+import PreviewPostModal from '../components/modals/PreviewPostModal.vue';
 // import { useWindowScroll } from '@vueuse/core';
 
 // const { y } = useWindowScroll({ behavior: 'smooth' });
