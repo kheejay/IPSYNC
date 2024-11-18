@@ -28,7 +28,7 @@
             </div>
             <div class="w-full flex justify-end details-wrapper">
                 <div @click="$emit('previewPost')"
-                    class="flex justify-center items-center text-nowrap details text-c1 opacity-70 border-b">
+                    class="flex justify-center items-center text-nowrap details text-c1 opacity-70 border-b cursor-pointer">
                     VIEW MORE DETAILS 
                     <ArrowDownNoBg class="arrow" />
                 </div>

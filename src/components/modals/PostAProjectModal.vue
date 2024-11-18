@@ -19,83 +19,135 @@
             <div class="w-full relative mt-[1.25rem] md:mt-[1.8rem] pb-6 md:pb-9 px-[1.5rem] md:px-[2.75rem] flex flex-col gap-2 sm:gap-4 md:gap-6">
 
                 <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
-                        <input type="text" placeholder="Project Title"
-                        class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
+                    <div class=w-full>
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                            <input type="text" placeholder="Project Title" v-model="postSchema.projectTitle.value"
+                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                            @blur="validateInput('projectTitle')">
+                        </div>
+                        <span v-if="postSchema.projectTitle.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                            {{ postSchema.projectTitle.errorMessage }}</span>
                     </div>
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
-                        <input type="text" placeholder="Number of Open Postions"
-                        class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
+                    <div class="w-full sm:w-[22rem]">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                            <input type="text" placeholder="Number of Open Postions" v-model="postSchema.numOfOpenPositions.value"
+                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                            @blur="validateInput('numOfOpenPositions')">
+                        </div>
+                        <span v-if="postSchema.numOfOpenPositions.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                            {{ postSchema.numOfOpenPositions.errorMessage }}</span>
                     </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-2 md:gap-6">
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
-                        <input type="text" placeholder="Company or Organization Name"
-                        class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
+                    <div class="flex-grow">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                            <input type="text" placeholder="Company or Organization Name" v-model="postSchema.orgName.value"
+                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                            @blur="validateInput('orgName')">
+                        </div>
+                        <span v-if="postSchema.orgName.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                            {{ postSchema.orgName.errorMessage }}</span>
                     </div>
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-[20rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
-                        <input type="text" placeholder="Role/Position"
-                        class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
+                    <div class=" w-full sm:w-[20rem]">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                            <input type="text" placeholder="Role/Position" v-model="postSchema.rolePosition.value"
+                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                            @blur="validateInput('rolePosition')">
+                        </div>
+                        <span v-if="postSchema.rolePosition.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                            {{ postSchema.rolePosition.errorMessage }}</span>
                     </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
                     <div class="flex flex-col sm:flex-row md:flex-col md:w-max gap-2 md:gap-6 w-full">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-1/2 md:w-[17rem] border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
-                            <input type="text" placeholder="Category/Tags"
-                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
-                            <div class="bg-transparent w-9 cursor-pointer relative">
-                                <ArrowDownNoBg class="text-black w-6 h-auto" />
-                                <div class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto gap-4 py-3 px-2.5 no-scrollbar">
+                        <div class="w-full sm:w-1/2 md:w-[17rem]">
+                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
+                                <input type="text" placeholder="Category/Tags" v-model="postSchema.categoryTags.value"
+                                class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                                @blur="validateInput('categoryTags')">
+                                <div class="bg-transparent w-9 cursor-pointer relative">
+                                    <ArrowDownNoBg class="text-black w-6 h-auto" />
+                                    <div v-if="0" 
+                                        class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto gap-4 py-3 px-2.5 no-scrollbar">
+                                        <div v-for="x in 20" :key="x" class="flex items-center gap-2">
+                                            <input type="checkbox" class="border my-2 mx-1.5">
+                                            Healthcare & Life Sciences  
+                                        </div>
+                                    </div>
+                                    <!-- <div class="absolute flex md:hidden -left-[17rem] sm:-left-[19.96rem] top-[2.4rem] w-[19rem] sm:w-[22rem] h-[18rem] bg-white border-2 overflow-y-auto">
+    
+                                    </div> -->
+                                </div>
+                                <div class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3 gap-3">
                                     <div v-for="x in 20" :key="x" class="flex items-center gap-2">
-                                        <input type="checkbox" class="border my-2 mx-1.5">
+                                        <input type="checkbox" class="border my-2 mx-1">
                                         Healthcare & Life Sciences  
                                     </div>
                                 </div>
-                                <!-- <div class="absolute flex md:hidden -left-[17rem] sm:-left-[19.96rem] top-[2.4rem] w-[19rem] sm:w-[22rem] h-[18rem] bg-white border-2 overflow-y-auto">
-
-                                </div> -->
                             </div>
-                            <div class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3 gap-3">
-                                <div v-for="x in 20" :key="x" class="flex items-center gap-2">
-                                    <input type="checkbox" class="border my-2 mx-1">
-                                    Healthcare & Life Sciences  
-                                </div>
-                            </div>
+                            <span v-if="postSchema.categoryTags.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                                {{ postSchema.categoryTags.errorMessage }}</span>
                         </div>
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-1/2 md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
-                            <input type="text" placeholder="Compensation (if applicable)"
-                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
+                        <div class="w-full sm:w-1/2">
+                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
+                                <input type="text" placeholder="Compensation (if applicable)" v-model="postSchema.compensation.value"
+                                class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                                @blur="validateInput('compensation')">
+                            </div>
+                            <span v-if="postSchema.compensation.hasError" class="text-red-500 text-xs w-full text-nowrap pl-2">
+                                {{ postSchema.compensation.errorMessage }}</span>
                         </div>
                     </div>
 
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
-                        <textarea type="text" placeholder="Project Description"
-                        class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent resize-none" />
+                    <div class="flex-grow">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full h-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                            <textarea type="text" placeholder="Project Description" v-model="postSchema.projDescription.value"
+                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent resize-none" @blur="validateInput('projDescription')" />
+                        </div>
+                        <span v-if="postSchema.projDescription.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                            {{ postSchema.projDescription.errorMessage }}</span>
                     </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
-                    <div class="flex flex-col sm:flex-row md:flex-col gap-2 md:gap-6">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[14rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
-                            <input type="text" placeholder="Application Deadline"
-                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
+                    <div class="flex flex-col sm:flex-row gap-2 md:gap-6">
+                        <div class="w-full md:w-[14rem]">
+                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                                <input type="text" placeholder="Application Deadline" v-model="postSchema.deadline.value"
+                                class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                                @blur="validateInput('deadline')">
+                            </div>
+                            <span v-if="postSchema.deadline.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                                {{ postSchema.deadline.errorMessage }}</span>
                         </div>
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[14rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
-                            <input type="text" placeholder="Project Timeline"
-                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
+                        
+                        <div class="w-full md:w-[14rem]">
+                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                                <input type="text" placeholder="Project Timeline" v-model="postSchema.projTimeline.value"
+                                class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                                @blur="validateInput('projTimeline')">
+                            </div>
+                            <span v-if="postSchema.projTimeline.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                                {{ postSchema.projTimeline.errorMessage }}</span>
                         </div>
                     </div>
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
-                        <input type="text" placeholder="Contact Information"
-                        class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
+                    <div class="w-full h-fit">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full h-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                            <input type="text" placeholder="Contact Information" v-model="postSchema.contactInformation.value"
+                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent" @blur="validateInput('contactInformation')">
+                        </div>
+                        <span v-if="postSchema.contactInformation.hasError" class="text-red-500 text-xs w-full text-start pl-2">
+                            {{ postSchema.contactInformation.errorMessage }}</span>
                     </div>
                 </div>
 
                 <div class="w-full flex justify-end py-2">
-                    <button class="drop-shadow font-[800] text-white bg-c1 px-11 py-[0.75rem] text-[1rem] rounded-[1rem] active:translate-y-[0.1rem] duration-75">
-                        SUBMIT</button>
+                    <button class="drop-shadow font-[800] text-white bg-c1 px-11 py-[0.75rem] text-[1rem] rounded-[1rem] active:translate-y-[0.1rem] duration-75 flex items-center justify-center gap-2">
+                        <BarsSpin v-if="0" />
+                        <span>SUBMIT</span>
+                    </button>
                 </div>
                 
             </div>
@@ -106,6 +158,48 @@
 <script setup>
 import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
 import XIcon from '../icons/XIcon.vue';
+import BarsSpin from '../icons/BarsSpin.vue'
+import { reactive } from 'vue';
+import * as yup from 'yup';
 
 const emit = defineEmits(['close'])
+
+const postSchema = reactive({
+    projectTitle: { value: '', hasError: false, errorMessage: '' },
+    numOfOpenPositions: { value: '', hasError: false, errorMessage: '' },
+    orgName: { value: '', hasError: false, errorMessage: '' },
+    rolePosition: { value: '', hasError: false, errorMessage: '' },
+    categoryTags: { value: '', hasError: false, errorMessage: '' },
+    compensation: { value: '', hasError: false, errorMessage: '' },
+    projDescription: { value: '', hasError: false, errorMessage: '' },
+    deadline: { value: '', hasError: false, errorMessage: '' },
+    projTimeline: { value: '', hasError: false, errorMessage: '' },
+    contactInformation: { value: '', hasError: false, errorMessage: '' } 
+})
+
+const validationSchema = yup.object().shape({
+    projectTitle: yup.string().required('Project title is required'),
+    numOfOpenPositions: yup.string().required('Number of positions is required'),
+    orgName: yup.string().required('Organization is required'),
+    rolePosition: yup.string().required('Role/Position is required'),
+    categoryTags: yup.string().required('Category/Tags is required'),
+    compensation: yup.string().required('Compensation is required'),
+    projDescription: yup.string().required('Project description is required'),
+    deadline: yup.string().required('Application deadline is required'),
+    projTimeline: yup.string().required('Project timeline is required'),
+    contactInformation: yup.string().required('Contact information is required') 
+});
+
+const validateInput = (name) => {
+    validationSchema
+        .validateAt(name, { ...postSchema, [name]: postSchema[name].value })
+        .then(() => {
+            postSchema[name].hasError = false;
+            postSchema[name].errorMessage = '';
+        })
+        .catch((err) => {
+            postSchema[name].hasError = true;
+            postSchema[name].errorMessage = err.message;
+        });
+}
 </script>
