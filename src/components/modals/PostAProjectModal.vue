@@ -18,22 +18,22 @@
             <div class="w-full relative mt-[1.25rem] md:mt-[1.8rem] pb-6 md:pb-9 px-[1.5rem] md:px-[2.75rem] flex flex-col gap-2 sm:gap-4 md:gap-6">
 
                 <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                         <input type="text" placeholder="Project Title"
                         class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                     </div>
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-[17rem] border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                         <input type="text" placeholder="Number of Open Postions"
                         class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                     </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-2 md:gap-6">
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                         <input type="text" placeholder="Company or Organization Name"
                         class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                     </div>
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-[20rem] border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-[20rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                         <input type="text" placeholder="Role/Position"
                         class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                     </div>
@@ -41,17 +41,17 @@
 
                 <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
                     <div class="flex flex-col sm:flex-row md:flex-col md:w-max gap-2 md:gap-6 w-full">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-1/2 md:w-[17rem] border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-1/2 md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
                             <input type="text" placeholder="Category/Tags"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                         </div>
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-1/2 md:w-[17rem] border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full sm:w-1/2 md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
                             <input type="text" placeholder="Compensation (if applicable)"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                         </div>
                     </div>
 
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                         <textarea type="text" placeholder="Project Description"
                         class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent resize-none" />
                     </div>
@@ -59,16 +59,16 @@
 
                 <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
                     <div class="flex flex-col sm:flex-row md:flex-col gap-2 md:gap-6">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[14rem] border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[14rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                             <input type="text" placeholder="Application Deadline"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                         </div>
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[14rem] border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[14rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                             <input type="text" placeholder="Project Timeline"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                         </div>
                     </div>
-                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                    <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                         <input type="text" placeholder="Contact Information"
                         class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent">
                     </div>
