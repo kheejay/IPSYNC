@@ -18,6 +18,7 @@
                         </div>
                         <div class="w-full">
                         <button 
+                            @click="showPostNewProject"
                             class="drop-shadow flex justify-between items-center w-[15.25rem] sm:w-[19rem] xl:w-[23rem] py-[.9rem]
                             sm:py-[1.15rem] px-5 sm:px-7 border border-black rounded-[2.25rem] active:translate-y-[0.25rem] active:shadow-none duration-200 mt-5 xl:mt-7">
                             <span class="text-[1.125rem] sm:text-[1.25rem] xl:text-[1.50rem] font-bold text-c1">Post a project!</span>
@@ -72,11 +73,15 @@
         </div>
         <div class="w-full flex justify-center py-11 sm:py-20">
             <div class="grid xl:grid-cols-2 gap-7 sm:gap-16">
-                <PostComponent v-for="x in 8" :key="x" />
+                <PostComponent 
+                    @previewPost="showPreviewPost"
+                    v-for="x in 8" :key="x" />
             </div>
         </div>
-        <PostAProjectModal v-if="0" />
-        <PreviewPostModal v-if="1" />
+        <PostAProjectModal v-if="postNewProject"
+            @close="hidePostNewProject" />
+        <PreviewPostModal v-if="previewPost" 
+            @click="hidePreviewPost"/>
     </div>
 </template>
 
@@ -88,9 +93,17 @@ import ArrowDownNoBg from '../components/icons/ArrowDownNoBg.vue'
 import PostComponent from '../components/modals/PostComponent.vue'
 import PostAProjectModal from '../components/modals/PostAProjectModal.vue';
 import PreviewPostModal from '../components/modals/PreviewPostModal.vue';
+import { ref } from 'vue';
 // import { useWindowScroll } from '@vueuse/core';
 
 // const { y } = useWindowScroll({ behavior: 'smooth' });
+const postNewProject = ref(false)
+const previewPost = ref(false)
+
+const showPostNewProject = () => postNewProject.value = true;
+const hidePostNewProject = () => postNewProject.value = false;
+const showPreviewPost = () => previewPost.value = true;
+const hidePreviewPost = () => previewPost.value = false;
 </script>
 
 <style scoped>

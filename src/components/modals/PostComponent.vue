@@ -27,7 +27,8 @@
                     class="shadow-lg sm:shadow-none sm:drop-shadow tags bg-c5 relative z-[2] text-center">TAGS</div>
             </div>
             <div class="w-full flex justify-end details-wrapper">
-                <div class="flex justify-center items-center text-nowrap details text-c1 opacity-70 border-b">
+                <div @click="$emit('previewPost')"
+                    class="flex justify-center items-center text-nowrap details text-c1 opacity-70 border-b">
                     VIEW MORE DETAILS 
                     <ArrowDownNoBg class="arrow" />
                 </div>
@@ -39,6 +40,7 @@
 
 <script setup>
 import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
+const emit = defineEmits(['previewPost'])
 </script>
 
 <style scoped>

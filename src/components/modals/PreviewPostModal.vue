@@ -8,7 +8,8 @@
             <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
                 class="absolute top-[0.65rem] sm:top-[0.98rem] -right-[0.75rem] sm:-right-[1.08rem] w-[17.5rem] sm:w-[25rem] h-auto rounded-[2.4rem] -rotate-[90deg] select-none">
 
-            <XIcon class="w-8 h-8 text-black absolute right-[1.25rem] top-[1.25rem] z-[2] cursor-pointer active:translate-y-[0.1rem]" />
+            <XIcon @click="$emit('close')" 
+                class="w-8 h-8 text-black absolute right-[1.25rem] top-[1.25rem] z-[2] cursor-pointer active:translate-y-[0.1rem]" />
 
             <div class="flex w-full border-b border-c1 relative">
                 <div class="flex xs:p-[0.75rem]">
@@ -54,6 +55,7 @@
 </template>
 
 <script setup>
-import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
 import XIcon from '../icons/XIcon.vue';
+
+const emit = defineEmits(['close'])
 </script>
