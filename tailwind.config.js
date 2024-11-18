@@ -15,6 +15,9 @@ export default {
         c6: '#325F9D',
         font: '#3A3A3A'
       },
+      screens: {
+        xs: '400px'
+      }
     },
   },
   plugins: [],
