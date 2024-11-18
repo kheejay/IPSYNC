@@ -46,8 +46,8 @@
             </div>
         </div>
 
-        <div class="mt-32 w-full md:px-[4rem] xl:px-[6rem]">
-            <div class="w-full items-end flex-col sm:flex-row flex gap-2 lg:gap-4 xl:gap-9 justify-between">
+        <div class="mt-20 sm:mt-32 w-full md:px-[4rem] xl:px-[6rem]">
+            <div class="w-full items-start flex-col sm:flex-row flex gap-2 lg:gap-4 xl:gap-9 justify-between">
                 <div class="flex-grow w-full h-[3rem] sm:h-[3.2rem] border-2 border-black flex">
                     <input type="text" class="focus:outline-none w-full h-full px-2 sm:px-4 md:px-8 placeholder:italic sm:text-[1.125rem]" 
                     placeholder="Search...">
