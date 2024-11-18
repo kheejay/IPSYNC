@@ -68,22 +68,26 @@
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                                 @blur="validateInput('categoryTags')">
                                 <div class="bg-transparent w-9 cursor-pointer relative">
-                                    <ArrowDownNoBg class="text-black w-6 h-auto" />
-                                    <div v-if="0" 
-                                        class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto gap-4 py-3 px-2.5 no-scrollbar">
-                                        <div v-for="x in 20" :key="x" class="flex items-center gap-2">
-                                            <input type="checkbox" class="border my-2 mx-1.5">
-                                            Healthcare & Life Sciences  
+                                    <ArrowDownNoBg class="text-black w-6 h-auto" @click="toggleCategoryTags" />
+                                    <div v-if="openCategoryTags" 
+                                        class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" >
+                                        <div v-for="tag, index in categoryTags" :key="index" 
+                                            @click="tag.selected = !tag.selected"
+                                            class="flex items-center gap-2 hover:bg-c5 duration-100 py-2">
+                                            <input v-model="tag.selected" type="checkbox" class="border ml-2 my-2 mx-1.5 w-4 h-4">
+                                            {{ tag.value }} 
                                         </div>
                                     </div>
                                     <!-- <div class="absolute flex md:hidden -left-[17rem] sm:-left-[19.96rem] top-[2.4rem] w-[19rem] sm:w-[22rem] h-[18rem] bg-white border-2 overflow-y-auto">
     
                                     </div> -->
                                 </div>
-                                <div class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3 gap-3">
-                                    <div v-for="x in 20" :key="x" class="flex items-center gap-2">
-                                        <input type="checkbox" class="border my-2 mx-1">
-                                        Healthcare & Life Sciences  
+                                <div v-if="openCategoryTags" 
+                                    class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3">
+                                    <div v-for="tag, index in categoryTags" :key="index" class="flex items-center hover:bg-c5 duration-100 py-2 gap-2" 
+                                        @click="tag.selected = !tag.selected">
+                                        <input v-model="tag.selected" type="checkbox" class="border ml-2 w-4 h-4 my-2 mx-1">
+                                        {{ tag.value }}  
                                     </div>
                                 </div>
                             </div>
@@ -159,10 +163,34 @@
 import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
 import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import * as yup from 'yup';
+// import { onClickOutside } from '@vueuse/core';
 
 const emit = defineEmits(['close'])
+
+const openCategoryTags = ref(false);
+
+const toggleCategoryTags = () => {
+    openCategoryTags.value = !openCategoryTags.value;
+}
+
+// const targetTags = ref(null)
+// onClickOutside(targetTags, () => openCategoryTags.value = false)
+
+const categoryTags = ref([
+    {value: 'Technology', selected: false},
+    {value: 'Business & Finance', selected: false},
+    {value: 'Healthcare & Life Sciences', selected: false},
+    {value: 'Creative Arts & Design', selected: false},
+    {value: 'Education & Research', selected: false},
+    {value: 'Social Impact & Non-profit', selected: false},
+    {value: 'Engineering & Manufacturing', selected: false},
+    {value: 'Media & Communications', selected: false},
+    {value: 'Science & Environment', selected: false},
+    {value: 'Law & Governance', selected: false},
+    {value: 'Technology', selected: false},
+])
 
 const postSchema = reactive({
     projectTitle: { value: '', hasError: false, errorMessage: '' },
