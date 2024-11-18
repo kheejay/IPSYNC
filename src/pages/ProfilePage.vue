@@ -8,7 +8,7 @@
             bg-c1 lg:bg-c4`">
             <div class="lg:w-[55rem] lg:h-[55rem] bg-c1 absolute rounded-full -top-[15rem] -left-[12.6rem]"></div>
             <div class="lg:w-[30rem] lg:h-[30rem] bg-[#4A658D] absolute top-0 rounded-lg -right-[17.2rem]"></div>
-            <div :class="`z-[3] absolute w-[11rem] h-[11rem] lg:w-[12rem] lg:h-[12rem] bg-white rounded-full left-1/2 
+            <div :class="`z-[2] absolute w-[11rem] h-[11rem] lg:w-[12rem] lg:h-[12rem] bg-white rounded-full left-1/2 
                 -translate-x-1/2 sm:-translate-x-0 sm:left-[3.5rem] lg:left-[2.7rem] top-[12.2rem] sm:top-[5.7rem] 
                 hover:cursor-pointer lg:top-[13.8rem] ${ isEditMode && 'top-[15.2rem] sm:top-[8rem] lg:top-[16.8rem]'} flex items-center 
                 justify-center border-0 overflow-hidden object-cover`">
@@ -20,7 +20,7 @@
                     :class="`w-full h-auto border-0 ${'scale-' + userInfo.photoURL.scale}`">
             </div>
             <div class="w-full h-[30%] lg:h-[40%] bg-transparent"></div>
-            <div class="z-[2] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4">
+            <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4">
                 <div class="w-full flex flex-col-reverse sm:flex-col">
                     <div class="w-full grid md:flex justify-end items-center gap-4 mt-4 sm:mt-0 py-6">
                         <div v-if="isEditMode" class="flex-col md:flex gap-2 text-c5">
