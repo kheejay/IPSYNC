@@ -43,7 +43,7 @@
                         </div>  
                     </div>
                     <div class="w-full flex flex-col items-start pt-2 mt-[4.4rem] sm:mt-0">
-                        <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
+                        <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 ${ isEditMode && 'ring-1 ring-c2 mb-1'}`">
                             <input :disabled="!isEditMode" type="text" ref="fullName"
                                 v-model="userInfo.full_name.value" placeholder="Full Name"
                                 @blur="validateInput('full_name')"
@@ -52,7 +52,7 @@
                         </div>
                             <span v-if="userInfo.full_name.hasError" class="text-red-500 text-xs w-full text-center sm:text-start">
                                 {{ userInfo.full_name.errorMessage }}</span>
-                        <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
+                        <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 ${ isEditMode && 'ring-1 ring-c2'}`">
                             <input :disabled="!isEditMode" type="text" placeholder="College or Department"
                                 v-model="userInfo.department.value" @blur="validateInput('department')"
                                 :class="`w-full bg-transparent px-2 ${ isEditMode && 'py-2'} text-[1rem] italic text-c1 focus:outline-none 
@@ -67,7 +67,7 @@
                     <div :class="`w-full sm:w-[40%] grid ${ !isEditMode && 'gap-2'} border-b-2 sm:border-b-0 
                         sm:border-r-2 border-black pr-4 gap-1.5`">
                         <div class="w-full">
-                            <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
+                            <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 ${ isEditMode && 'ring-1 ring-c2'}`">
                                 <input :disabled="!isEditMode" v-model="userInfo.degree_program.value"
                                     @blur="validateInput('degree_program')"
                                     type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 
@@ -78,7 +78,7 @@
                                     {{ userInfo.degree_program.errorMessage }}</span>
                         </div>
                         <div class="w-full">
-                            <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
+                            <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 ${ isEditMode && 'ring-1 ring-c2'}`">
                                 <input :disabled="!isEditMode" v-model="userInfo.year_level.value"
                                     @blur="validateInput('year_level')"
                                     type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 
@@ -89,7 +89,7 @@
                                     {{ userInfo.year_level.errorMessage }}</span>
                         </div>
                         <div class="w-full">
-                            <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1">
+                            <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 ${ isEditMode && 'ring-1 ring-c2'}`">
                                 <input :disabled="!isEditMode" v-model="userInfo.student_id.value"
                                     @blur="validateInput('student_id')"
                                     type="text" class="w-full bg-transparent text-[1.1rem] placeholder:italic p-2 
@@ -104,8 +104,7 @@
                         <span v-if="userInfo.personal_description.hasError" class="text-red-500 text-xs w-full text-start">
                             {{ userInfo.personal_description.errorMessage }}</span>
                         <textarea :disabled="!isEditMode"
-                                class="w-full min-h-[9rem] border p-2 focus:outline-none focus:border focus:border-c1
-                                resize-none max-h-[9rem] text-[1rem] placeholder:font-light placeholder:italic bg-transparent"
+                                :class="`w-full min-h-[9rem] border p-2 focus:outline-none focus:border-0 focus:ring-inset focus:ring-1 ring-c2 resize-none max-h-[9rem] text-[1rem] placeholder:font-light placeholder:italic bg-transparent ${ isEditMode && 'ring-1 ring-c2'}`"
                                 ref="textarea" @blur="validateInput('personal_description')"
                                 v-model="userInfo.personal_description.value"
                                 placeholder="Write a brief description of yourself, including your academic goals, interests, and what you hope to gain from collaborative experiences."
@@ -205,21 +204,21 @@
         <div class="w-full font-bold text-c1 text-[1.75rem] py-4 col-span-2">
             Contacts <span v-if="isEditMode" class="text-font text-base font-light">(Give at least one)</span>
         </div> 
-        <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 flex items-center mb-1">
+        <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 flex items-center ${ isEditMode && 'ring-1 ring-c2'} mb-1`">
             <span class="pl-2">Facebook:</span>
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
                 sm:text-start" placeholder="Facebook account" :disabled="!isEditMode"
                 v-model="userInfo.facebook"
                 @blur="validateContacts">
         </div>
-        <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 flex items-center mb-1">
+        <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 flex items-center ${ isEditMode && 'ring-1 ring-c2'} mb-1`">
             <span class="pl-2">Gmail:</span>
             <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
                 sm:text-start" placeholder="Gmail account" :disabled="!isEditMode"
                 v-model="userInfo.gmail"
                 @blur="validateContacts">
         </div>
-        <div class="w-full ring-inset focus-within:ring-1 focus-within:ring-c1 flex items-center">
+        <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 flex items-center ${ isEditMode && 'ring-1 ring-c2'}`">
         <span class="pl-2 flex-grow">Mobile:</span>
             <input type="number" class="w-full bg-transparent p-2 text-[1rem] italic text-c1 focus:outline-none text-center 
                 sm:text-start" placeholder="Mobile number" :disabled="!isEditMode"
