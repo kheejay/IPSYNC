@@ -20,11 +20,11 @@
                     <span class="uppercase">Department/Organization</span>
                 </div>
             </div>
-            <div class="uppercase font-bold text-c1 text-[2.25rem] relative pt-[1rem] pb-[0.25rem] leading-[2.85rem]">
+            <div class="uppercase font-bold text-c1 text-[2.25rem] relative pt-[1.5rem] sm:pt-[1rem] pb-[0.25rem] leading-[2.85rem]">
                 SOFTWARE ENGINEER
             </div>
             <div class="w-full pl-[0.75rem] sm:pl-[1.5rem] flex flex-col gap-2 relative">
-                <div class="uppercase font-bold text-c1 text-[1.125rem]">ECCOMERCE WEB APPLICATION</div>
+                <div class="uppercase font-bold text-c1 text-[1.125rem] pt-[0.75rem] sm:pt-[0.5rem]">ECCOMERCE WEB APPLICATION</div>
                 <div class="text-[0.90rem] flex flex-wrap gap-2 text-c6"><span class="uppercase text-nowrap">Contact Information:</span>  
                     <span class="font-semibold">www.facebook.com/mr.recruiter123</span>
                 </div>
