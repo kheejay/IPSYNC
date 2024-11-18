@@ -35,13 +35,41 @@
                 </div>
             </div>
         </div>
+        <div v-if="backToTopArrow" @click="handleBackToTop" @mouseover="promptToTop = true" @mouseleave="promptToTop = false"
+            class="drop-shadow flex items-center justify-center bg-c4 fixed bottom-[2rem] right-[2rem] rounded-full cursor-pointer opacity-70 w-[3rem] h-[3rem] hover:opacity-100 duration-200">
+            <ArrowToTop class="w-11 h-11 text-black" />
+            <div class="relative">
+                <span v-if="promptToTop" class="absolute  text-sm -left-[4rem] -top-[3.5rem] text-nowrap">Back to top</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
 import IPSYNCLogo from './IPSYNCLogo.vue';
 import fb from './icons/socmed/fb.vue';
 import ig from './icons/socmed/ig.vue';
 import x from './icons/socmed/x.vue';
 import yt from './icons/socmed/yt.vue';
+import ArrowToTop from './icons/ArrowToTop.vue'
+import { useWindowScroll } from '@vueuse/core';
+
+const { y } = useWindowScroll({ behavior: 'smooth' })
+
+const backToTopArrow = ref(false)
+const promptToTop = ref(false)
+
+const handleBackToTop = () => {
+    y.value = 0;
+}
+
+watch(y, (newValue) => {
+    if(newValue > 2000) {
+        backToTopArrow.value = true;
+    } else if(newValue < 2000) {
+        backToTopArrow.value = false;
+        promptToTop.value = false;
+    }
+})
 </script>

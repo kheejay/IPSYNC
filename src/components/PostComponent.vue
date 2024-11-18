@@ -1,5 +1,5 @@
 <template>
-    <div class="drop-shadow post-wrapper rounded-[1rem] border bg-white mx-2 p-4 relative overflow-hidden">
+    <div class="drop-shadow w-[36rem] h-[24rem] rounded-[1rem] border bg-white mx-2 p-4 relative overflow-hidden">
 
         <div class="z-[0] w-[17rem] h-[17rem] rounded-full bg-c3 -top-[3.3rem] -right-[3.3rem] absolute"></div>
         <div class="z-[2] drop-shadow w-[10.75rem] h-[10.75rem] rounded-full bg-c1 absolute -right-[4.5rem] -top-[1.80rem]"></div>
@@ -45,11 +45,4 @@ import ArrowDownNoBg from './icons/ArrowDownNoBg.vue';
 .shadow-subtle {
     box-shadow: -0.2rem 0.2rem 0.25rem 0rem rgba(0, 0, 0, 0.04);
 }
-
-.post-wrapper {
-    width: 36rem;
-    height: 24rem;
-}
-
-
 </style>

@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-full bg-amber-200 flex justify-center py-20 ">
+        <div class="w-full flex justify-center py-20 ">
             <div class="grid xl:grid-cols-2 gap-16">
                 <PostComponent v-for="x in 8" :key="x" />
             </div>
@@ -84,10 +84,22 @@ import PostComponent from '../components/PostComponent.vue'
 <style scoped>
 .bg-image {
     background-image: url('/src/assets/images/ProjectsBg.svg');
-    background-size: cover;
     background-repeat: no-repeat;
     background-position-y: bottom;
     background-position-x: 45rem;
     background-size: 50rem;
+}
+
+@media (max-width: 1280px) {
+    .bg-image {
+        background-position-x: 28rem;
+        background-size: 45rem;
+    }
+}
+@media (max-width: 768px) {
+    .bg-image {
+        background-position-x: 9rem;
+        background-size: 39rem;
+    }
 }
 </style>
