@@ -39,7 +39,7 @@
             class="drop-shadow flex items-center justify-center bg-c4 fixed bottom-[2rem] right-[2rem] rounded-full cursor-pointer opacity-70 w-[3rem] h-[3rem] hover:opacity-100 duration-200">
             <ArrowToTop class="w-11 h-11 text-black" />
             <div class="relative">
-                <span v-if="promptToTop" class="absolute  text-sm -left-[4rem] -top-[3.5rem] text-nowrap">Back to top</span>
+                <span v-if="promptToTop" class="absolute text-xs -left-[4.5725rem] -top-[4rem] text-nowrap bg-c4 rounded-full py-1 px-4">Back to top</span>
             </div>
         </div>
     </div>

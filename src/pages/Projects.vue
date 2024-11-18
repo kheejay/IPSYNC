@@ -67,6 +67,7 @@
                 <PostComponent v-for="x in 8" :key="x" />
             </div>
         </div>
+        <PostAProjectModal v-if="1" />
     </div>
 </template>
 
@@ -75,7 +76,8 @@ import EditPen from '../components/icons/EditPen.vue';
 import MagnifyingGlass from '../components/icons/MagnifyingGlass.vue';
 import FilterSort from '../components/icons/FilterSort.vue';
 import ArrowDownNoBg from '../components/icons/ArrowDownNoBg.vue'
-import PostComponent from '../components/PostComponent.vue'
+import PostComponent from '../components/modals/PostComponent.vue'
+import PostAProjectModal from '../components/modals/PostAProjectModal.vue'
 // import { useWindowScroll } from '@vueuse/core';
 
 // const { y } = useWindowScroll({ behavior: 'smooth' });
@@ -88,6 +90,7 @@ import PostComponent from '../components/PostComponent.vue'
     background-position-y: bottom;
     background-position-x: 45rem;
     background-size: calc(50rem / var(--scale-factor));
+    user-select: none;
 }
 
 @media (max-width: 80rem) {

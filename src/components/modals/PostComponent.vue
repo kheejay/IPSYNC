@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import ArrowDownNoBg from './icons/ArrowDownNoBg.vue';
+import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
 </script>
 
 <style scoped>
