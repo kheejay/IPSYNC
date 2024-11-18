@@ -58,7 +58,15 @@
                 <div class="h-[2.75rem] sm:h-[3.2rem] w-max bg-white flex items-center gap-2 md:gap-6 border-2 border-c1 text-c1 px-4">
                     <FilterSort class="w-5 h-5 sm:w-7 sm:h-7" />
                     <span class="text-[0.9rem] sm:text-[1rem] font-bold text-nowrap">Filter & Sort</span>
-                    <ArrowDownNoBg class="w-5 sm:w-7 h-5 sm:h-7 bg-white text-c1" />
+                    <div class="relative z-[1]">
+                        <ArrowDownNoBg class="w-5 sm:w-7 h-5 sm:h-7 bg-white text-c1" />
+                        <div class="absolute flex flex-col -left-[8.635rem] top-[2.3rem] sm:-left-[15.1rem] sm:top-[2.8rem] w-[18rem] h-[22.5rem] bg-white border-2 border-c1 overflow-y-auto gap-4 py-3 px-2.5 no-scrollbar">
+                            <div v-for="x in 20" :key="x" class="flex items-center gap-2">
+                                <input type="checkbox" class="border my-2 mx-1.5">
+                                Healthcare & Life Sciences  
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,7 +75,7 @@
                 <PostComponent v-for="x in 8" :key="x" />
             </div>
         </div>
-        <PostAProjectModal v-if="1" />
+        <PostAProjectModal v-if="0" />
     </div>
 </template>
 
