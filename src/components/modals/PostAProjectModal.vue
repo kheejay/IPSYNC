@@ -9,7 +9,7 @@
             <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
                 class="absolute top-0 left-0 w-[25rem] h-auto rounded-[2.4rem] rotate-180 select-none">
 
-                <XIcon class="w-9 h-8 text-black absolute right-[1.25rem] top-[1.25rem] z-[2] cursor-pointer" />
+                <XIcon class="w-9 h-8 text-black absolute right-[1.25rem] top-[1.25rem] z-[2] cursor-pointer active:translate-y-[0.1rem]" />
 
             <div class="text-[1.5rem] sm:text-[2rem] md:text-[2.5rem] font-bold relative w-full text-center text-c6 sm:text-c1 pt-[3.5rem] tracking-[0.015rem]">
                 Project <span class="text-c6">Posting Form</span>
@@ -93,7 +93,7 @@
                 </div>
 
                 <div class="w-full flex justify-end py-2">
-                    <button class="drop-shadow font-[800] text-white bg-c1 px-11 py-[0.75rem] text-[1rem] rounded-[1rem] active:scale-[99%] duration-75">
+                    <button class="drop-shadow font-[800] text-white bg-c1 px-11 py-[0.75rem] text-[1rem] rounded-[1rem] active:translate-y-[0.1rem] duration-75">
                         SUBMIT</button>
                 </div>
                 
