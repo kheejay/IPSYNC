@@ -108,10 +108,10 @@ const getCurrentUser = () => {
     })
 }
 
-// router.beforeEach(async (to) => {
-//     if (to.meta.requiresAuth && !(await getCurrentUser())) {
-//         return '/'
-//     }
-// })
+router.beforeEach(async (to) => {
+    if (to.meta.requiresAuth && !(await getCurrentUser())) {
+        return '/'
+    }
+})
 
 export {router, authenticatingUser }

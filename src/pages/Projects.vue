@@ -87,19 +87,27 @@ import PostComponent from '../components/PostComponent.vue'
     background-repeat: no-repeat;
     background-position-y: bottom;
     background-position-x: 45rem;
-    background-size: 50rem;
+    background-size: calc(50rem / var(--scale-factor));
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 80rem) {
     .bg-image {
-        background-position-x: 28rem;
-        background-size: 45rem;
+        background-position-x: 32rem;
     }
 }
-@media (max-width: 768px) {
+@media (max-width: 65rem) {
     .bg-image {
-        background-position-x: 9rem;
-        background-size: 39rem;
+        background-position-x: 18rem;
+    }
+}
+@media (max-width: 48rem) {
+    .bg-image {
+        background-position-x: 2rem;
+    }
+}
+@media (max-width: 37.5rem) {
+    .bg-image {
+        background-position-x: 1rem;
     }
 }
 </style>
