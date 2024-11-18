@@ -1,5 +1,5 @@
 <template>
-    <div class="z-[2] w-screen h-screen fixed top-0 left-0 flex items-center justify-center px-[1rem] overflow-y-auto pt-[12rem] pb-[6rem] sm:pt-0 sm:pb-0">
+    <div class="z-[2] w-screen h-screen fixed top-0 left-0 flex items-center justify-center px-[1rem] overflow-y-auto py-[36rem] sm:pt-0 sm:pb-0">
         <div class="bg-c1 opacity-80 w-full h-full fixed left-0 top-0">
 
         </div>
@@ -12,13 +12,13 @@
                 <XIcon @click="$emit('close')"
                     class="w-9 h-8 text-black absolute right-[1.25rem] top-[1.25rem] z-[2] cursor-pointer active:translate-y-[0.1rem]" />
 
-            <div class="text-[1.5rem] sm:text-[2rem] md:text-[2.5rem] font-bold relative w-full text-center text-c6 sm:text-c1 pt-[3.5rem] tracking-[0.015rem]">
-                Project <span class="text-c6">Posting Form</span>
+            <div class="text-[1.75rem] sm:text-[2rem] md:text-[2.5rem] font-bold relative w-full text-center text-c6 sm:text-c1 pt-[3.5rem] tracking-[0.015rem] text-wrap px-8">
+                Project <span class="text-c1 sm:text-c6">Posting Form</span>
             </div>
 
-            <div class="w-full relative mt-[1.25rem] md:mt-[1.8rem] pb-6 md:pb-9 px-[1.5rem] md:px-[2.75rem] flex flex-col gap-2 sm:gap-4 md:gap-6">
+            <div class="w-full relative mt-[1.25rem] md:mt-[1.8rem] pb-6 md:pb-9 px-[1.5rem] md:px-[2.75rem] flex flex-col gap-4 md:gap-6">
 
-                <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
+                <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                     <div class=w-full>
                         <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                             <input type="text" placeholder="Project Title" v-model="postSchema.projectTitle.value"
@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-2 md:gap-6">
+                <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                     <div class="flex-grow">
                         <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                             <input type="text" placeholder="Company or Organization Name" v-model="postSchema.orgName.value"
@@ -60,8 +60,8 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
-                    <div class="flex flex-col sm:flex-row md:flex-col md:w-max gap-2 md:gap-6 w-full">
+                <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
+                    <div class="flex flex-col sm:flex-row md:flex-col md:w-max gap-4 md:gap-6 w-full">
                         <div class="w-full sm:w-1/2 md:w-[17rem]">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
                                 <input type="text" placeholder="Category/Tags" v-model="postSchema.categoryTags.value"
@@ -115,8 +115,8 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-6">
-                    <div class="flex flex-col sm:flex-row gap-2 md:gap-6">
+                <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
+                    <div class="flex flex-col sm:flex-row gap-4 md:gap-6">
                         <div class="w-full md:w-[14rem]">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
                                 <input type="text" placeholder="Application Deadline" v-model="postSchema.deadline.value"
@@ -148,7 +148,8 @@
                 </div>
 
                 <div class="w-full flex justify-end py-2">
-                    <button class="drop-shadow font-[800] text-white bg-c1 px-11 py-[0.75rem] text-[1rem] rounded-[1rem] active:translate-y-[0.1rem] duration-75 flex items-center justify-center gap-2">
+                    <button @click="handleSubmit" 
+                        class="drop-shadow font-[800] text-white bg-c1 px-11 py-[0.75rem] text-[1rem] rounded-[1rem] active:translate-y-[0.1rem] duration-75 flex items-center justify-center gap-2">
                         <BarsSpin v-if="0" />
                         <span>SUBMIT</span>
                     </button>
@@ -197,7 +198,7 @@ const postSchema = reactive({
     numOfOpenPositions: { value: '', hasError: false, errorMessage: '' },
     orgName: { value: '', hasError: false, errorMessage: '' },
     rolePosition: { value: '', hasError: false, errorMessage: '' },
-    categoryTags: { value: '', hasError: false, errorMessage: '' },
+    categoryTags: { value: [''], hasError: false, errorMessage: '' },
     compensation: { value: '', hasError: false, errorMessage: '' },
     projDescription: { value: '', hasError: false, errorMessage: '' },
     deadline: { value: '', hasError: false, errorMessage: '' },
@@ -210,7 +211,7 @@ const validationSchema = yup.object().shape({
     numOfOpenPositions: yup.string().required('Number of positions is required'),
     orgName: yup.string().required('Organization is required'),
     rolePosition: yup.string().required('Role/Position is required'),
-    categoryTags: yup.string().required('Category/Tags is required'),
+    categoryTags: yup.array().of(yup.string().required('Category/Tags is required')),
     compensation: yup.string().required('Compensation is required'),
     projDescription: yup.string().required('Project description is required'),
     deadline: yup.string().required('Application deadline is required'),
@@ -229,5 +230,15 @@ const validateInput = (name) => {
             postSchema[name].hasError = true;
             postSchema[name].errorMessage = err.message;
         });
+}
+
+const handleSubmit = () => {
+    for(const key in postSchema) {
+        validateInput(key)
+        if(key.hasError) {
+            return;
+        }
+    }
+    alert(123)
 }
 </script>
