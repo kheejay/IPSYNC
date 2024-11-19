@@ -64,12 +64,15 @@
                     <div class="flex flex-col sm:flex-row md:flex-col md:w-max gap-4 md:gap-6 w-full">
                         <div class="w-full sm:w-1/2 md:w-[17rem] relative">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
-                                <input type="text" placeholder="Category/Tags" v-model="categoryTagsEntrance" 
-                                @keypress.enter="alert('keypres')" @keydown.enter="alert('keydown')" @keyup.enter="alert('keyup')" @focus="handleFocusCategoryTags" @click="handleFocusCategoryTags"
+                                <input type="text" placeholder="Category/Tags" v-model="categoryTagsEntry" 
+                                @keypress.enter="handlePushCategoryTags" @focus.stop="handleFocusCategoryTags" @click.stop="handleFocusCategoryTags"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                                 @blur="handleBlurCategory">
-                                <div class="bg-transparent w-11 flex justify-center items-center cursor-pointer relative">
+                                <div class="bg-transparent w-11 flex justify-center items-center cursor-pointer">
                                     <!-- <ArrowDownNoBg class="text-black w-6 h-auto hover:scale-125 duration-200 hover:text-c2" @click="toggleCategoryTags" /> -->
+
+                                    <PlusIcon @mousedown="handlePushCategoryTags"
+                                        class="w-6 h-5 active:scale-125 duration-200 active:text-c2 text-c1" />
 
                                     <div v-if="openCategoryTagsLg" 
                                         class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" 
@@ -167,6 +170,7 @@
 </template>
 
 <script setup>
+import PlusIcon from '../icons/PlusIcon.vue'
 import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
 import { reactive, ref, watch } from 'vue';
@@ -212,7 +216,7 @@ const postSchema = reactive({
     projTimeline: { value: '', hasError: false, errorMessage: '' },
     contactInformation: { value: '', hasError: false, errorMessage: '' } 
 })
-const categoryTagsEntrance = ref('')
+const categoryTagsEntry = ref('')
 
 const validationSchema = yup.object().shape({
     projectTitle: yup.string().required('Project title is required'),
@@ -254,7 +258,7 @@ const handleSubmit = () => {
 }
 
 const handleFocusCategoryTags = () => {
-    categoryTagsEntrance.value = ''
+    categoryTagsEntry.value = ''
     postSchema.categoryTags.hasError = false;
     postSchema.categoryTags.errorMessage = '';
     openCategoryTagsLg.value = true;
@@ -262,30 +266,27 @@ const handleFocusCategoryTags = () => {
 }
 
 const handlePushCategoryTags = () => {
-    if(categoryTagsEntrance.value != false) {
-        categoryTags.value.splice(0, 0, {value: categoryTagsEntrance.value, selected: true})
-        updateCategoryTagsEntrance()
-        categoryTagsEntrance.value = '';
+    if(categoryTagsEntry.value != false) {
+        categoryTags.value.splice(0, 0, {value: categoryTagsEntry.value, selected: true})
+        updatePostSchemaCategoryTags()
     } else {
         postSchema.categoryTags.hasError = true;
         postSchema.categoryTags.errorMessage =  'Opps, tags must have a value'
     }
 }
-const updateCategoryTagsEntrance = () => {
-    postSchema.categoryTags.value = categoryTags.value.filter((tag) => tag.selected == true)
-    categoryTagsEntrance.value = postSchema.categoryTags.value.length ? postSchema.categoryTags.value[0].value : '';
+const updatePostSchemaCategoryTags = () => {
+    postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)]
+    categoryTagsEntry.value = postSchema.categoryTags.value.length ? postSchema.categoryTags.value[0].value : ''
     validateInput('categoryTags')
 }
 
 const closeCategoryTagsLg = () => {
     openCategoryTagsLg.value = false;
     validateInput('categoryTags')
-    updateCategoryTagsEntrance()
 }
 const closeCategoryTagsSm = () => {
     openCategoryTagsSm.value = false;
     validateInput('categoryTags')
-    updateCategoryTagsEntrance()
 }
 
 const handleBlurCategory = () => {
@@ -295,6 +296,6 @@ const handleBlurCategory = () => {
 }
 
 watch(categoryTags.value, () => {
-    updateCategoryTagsEntrance();
+    updatePostSchemaCategoryTags();
 })
 </script>
