@@ -1,5 +1,5 @@
 <template>
-    <div class="z-[2] w-screen h-screen fixed top-0 left-0 flex items-center justify-center px-[1rem] overflow-y-auto py-[36rem] sm:pt-0 sm:pb-0">
+    <div class="z-[2] w-screen h-screen fixed top-0 left-0 flex items-center justify-center px-[1rem] overflow-y-auto py-[36rem] sm:pt-0 sm:pb-0 select-text">
         <div class="bg-c1 opacity-80 w-full h-full fixed left-0 top-0">
 
         </div>
@@ -62,9 +62,10 @@
 
                 <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                     <div class="flex flex-col sm:flex-row md:flex-col md:w-max gap-4 md:gap-6 w-full">
-                        <div class="w-full sm:w-1/2 md:w-[17rem]">
+                        <div class="w-full sm:w-1/2 md:w-[17rem] relative">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
-                                <input type="text" placeholder="Category/Tags" v-model="postSchema.categoryTags.value"
+                                <input type="text" placeholder="Category/Tags" v-model="categoryTagsEntrance" 
+                                @keyup.enter="handlePushCategoryTags" @focus="handleFocusCategoryTags"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                                 @blur="validateInput('categoryTags')">
                                 <div class="bg-transparent w-9 cursor-pointer relative">
@@ -73,8 +74,9 @@
                                         class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" >
                                         <div v-for="tag, index in categoryTags" :key="index" 
                                             @click="tag.selected = !tag.selected"
-                                            class="flex items-center gap-2 hover:bg-c5 duration-100 py-2">
-                                            <input v-model="tag.selected" type="checkbox" class="border ml-2 my-2 mx-1.5 w-4 h-4">
+                                            class="flex items-center gap-2 hover:bg-c5 duration-100 py-2 select-none">
+                                            <input v-model="tag.selected" type="checkbox" class="border ml-2 my-2 mx-1.5 w-4 h-4"
+                                            @change="updateSelectedCategoryTags">
                                             {{ tag.value }} 
                                         </div>
                                     </div>
@@ -86,13 +88,16 @@
                                     class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3">
                                     <div v-for="tag, index in categoryTags" :key="index" class="flex items-center hover:bg-c5 duration-100 py-2 gap-2" 
                                         @click="tag.selected = !tag.selected">
-                                        <input v-model="tag.selected" type="checkbox" class="border ml-2 w-4 h-4 my-2 mx-1">
+                                        <input v-model="tag.selected" type="checkbox" class="border ml-2 w-4 h-4 my-2 mx-1"
+                                        @change="updateSelectedCategoryTags">
                                         {{ tag.value }}  
                                     </div>
                                 </div>
                             </div>
                             <span v-if="postSchema.categoryTags.hasError" class="text-red-500 text-xs w-full text-start pl-2">
                                 {{ postSchema.categoryTags.errorMessage }}</span>
+                            <!-- user help -->
+                             <span v-if="openCategoryTags" class="text-[0.6rem] absolute -top-[1rem] w-full left-0 pl-2">Press enter to add tag</span>
                         </div>
                         <div class="w-full sm:w-1/2">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
@@ -150,7 +155,7 @@
                 <div class="w-full flex justify-end py-2">
                     <button @click="handleSubmit" 
                         class="drop-shadow font-[800] text-white bg-c1 px-11 py-[0.75rem] text-[1rem] rounded-[1rem] active:translate-y-[0.1rem] duration-75 flex items-center justify-center gap-2">
-                        <BarsSpin v-if="0" />
+                        <BarsSpin v-if="isLoading" />
                         <span>SUBMIT</span>
                     </button>
                 </div>
@@ -171,6 +176,9 @@ import * as yup from 'yup';
 const emit = defineEmits(['close'])
 
 const openCategoryTags = ref(false);
+const isLoading = ref(false)
+
+const categoryTagsEntrance = ref('')
 
 const toggleCategoryTags = () => {
     openCategoryTags.value = !openCategoryTags.value;
@@ -198,7 +206,7 @@ const postSchema = reactive({
     numOfOpenPositions: { value: '', hasError: false, errorMessage: '' },
     orgName: { value: '', hasError: false, errorMessage: '' },
     rolePosition: { value: '', hasError: false, errorMessage: '' },
-    categoryTags: { value: [''], hasError: false, errorMessage: '' },
+    categoryTags: { value: [], hasError: false, errorMessage: '' },
     compensation: { value: '', hasError: false, errorMessage: '' },
     projDescription: { value: '', hasError: false, errorMessage: '' },
     deadline: { value: '', hasError: false, errorMessage: '' },
@@ -211,7 +219,7 @@ const validationSchema = yup.object().shape({
     numOfOpenPositions: yup.string().required('Number of positions is required'),
     orgName: yup.string().required('Organization is required'),
     rolePosition: yup.string().required('Role/Position is required'),
-    categoryTags: yup.array().of(yup.string().required('Category/Tags is required')),
+    categoryTags: yup.array().of(yup.object()).required('required').min(1, 'Category/Tags is required'),
     compensation: yup.string().required('Compensation is required'),
     projDescription: yup.string().required('Project description is required'),
     deadline: yup.string().required('Application deadline is required'),
@@ -235,10 +243,39 @@ const validateInput = (name) => {
 const handleSubmit = () => {
     for(const key in postSchema) {
         validateInput(key)
-        if(key.hasError) {
-            return;
+    }  
+    setTimeout(() => {
+        if(!postSchema.projectTitle.hasError && !postSchema.numOfOpenPositions.hasError && !postSchema.orgName.hasError && !postSchema.rolePosition.hasError && !postSchema.categoryTags.hasError && !postSchema.compensation.shape && !postSchema.projDescription.hasError && !postSchema.deadline.hasError && !postSchema.projTimeline.hasError && !postSchema.contactInformation.hasError) {
+            alert('clear')
+        } else {
+            alert('erro')
         }
+    }, 50)
+}
+
+const handleFocusCategoryTags = () => {
+    categoryTagsEntrance.value = ''
+    postSchema.categoryTags.hasError = false;
+    postSchema.categoryTags.errorMessage = '';
+    openCategoryTags.value = true;
+}
+
+const handlePushCategoryTags = () => {
+    if(categoryTagsEntrance.value != false) {
+        postSchema.categoryTags.value.push(categoryTagsEntrance.value)
+        categoryTags.value.splice(0, 0, {value: categoryTagsEntrance.value, selected: true})
+        categoryTagsEntrance.value = '';
+        updateSelectedCategoryTags();
+    } else {
+        postSchema.categoryTags.hasError = true;
+        postSchema.categoryTags.errorMessage =  'Opps, tags must have a value'
     }
-    alert(123)
+}
+
+const updateSelectedCategoryTags = () => {
+    postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)];
+    postSchema.categoryTags.hasError = false;
+    categoryTagsEntrance.value = postSchema.categoryTags.value.length ? postSchema.categoryTags.value[0].value : ''
+    console.log(postSchema.categoryTags.value)
 }
 </script>
