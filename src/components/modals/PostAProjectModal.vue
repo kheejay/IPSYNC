@@ -73,7 +73,7 @@
 
                                     <PlusIcon @mousedown="handlePushCategoryTags"
                                         class="w-6 h-5 active:scale-125 duration-200 active:text-c2 text-c1" />
-                                    <transition name="tags" mode="out-in">
+                                    <transition name="fade" mode="out-in">
                                         <div v-if="openCategoryTagsLg" 
                                             class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[.2rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" 
                                             ref="targetTagsLg">
@@ -329,3 +329,12 @@ watch(categoryTags.value, () => {
     updatePostSchemaCategoryTags();
 })
 </script>
+
+<style scoped>
+.fade-leave-active {
+    transition: opacity 100ms;
+}
+.fade-leave-to {
+    opacity: 0; /* End state */
+}
+</style>

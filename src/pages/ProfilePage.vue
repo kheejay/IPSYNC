@@ -562,3 +562,18 @@ const handleSubmit = async () => {
     }
 }
 </script>
+
+<style scoped>
+.fade-enter-active {
+    transition: opacity 300ms;
+}
+.fade-enter {
+    opacity: 0; /* Start state */
+}
+.fade-leave-active {
+    transition: opacity 300ms;
+}
+.fade-leave-to {
+    opacity: 0; /* End state */
+}
+</style>
