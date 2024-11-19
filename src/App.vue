@@ -22,6 +22,7 @@ import { authenticatingUser } from './router';
 const route = useRoute()
 
 const isAuthPage = computed(() => route.meta.isAuthPage)
+const isAuthenticated = ref(false)
 
 // USER
 const genericProfile = ref('https://i.ibb.co/LJPrkjQ/np.png')
@@ -116,6 +117,7 @@ provide('userData', {
     authenticatingUser,
     setUserData,
     emptyUserData,
+    isAuthenticated
 })
 
 onMounted(() => {

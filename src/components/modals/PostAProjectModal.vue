@@ -295,28 +295,34 @@ const handleSubmit = () => {
         validateInput(key)
     }  
     if(authorIdCopy == undefined || authorIdCopy == false) {
-        alert('error')
-    }
-    setTimeout(() => {
-        if(!postSchema.projectTitle.hasError && !postSchema.numOfOpenPositions.hasError && !postSchema.orgName.hasError && !postSchema.rolePosition.hasError && !postSchema.categoryTags.hasError && !postSchema.compensation.shape && !postSchema.projDescription.hasError && !postSchema.deadline.hasError && !postSchema.projTimeline.hasError && !postSchema.contactInformation.hasError) {
+        toast('Identity missing please try to re-login', "top", 5000, '#CB3D3D', '#B74242')
+        return emit('close')
+    } else {
+        setTimeout(() => {
+            if(!postSchema.projectTitle.hasError && !postSchema.numOfOpenPositions.hasError && !postSchema.orgName.hasError && 
+                !postSchema.rolePosition.hasError && !postSchema.categoryTags.hasError && !postSchema.compensation.shape && 
+                !postSchema.projDescription.hasError && !postSchema.deadline.hasError && !postSchema.projTimeline.hasError && 
+                !postSchema.contactInformation.hasError) 
+            {
 
-            let submitPostSchema = {
-                projectTitle: postSchema.projectTitle.value,
-                numOfOpenPositions: postSchema.numOfOpenPositions.value,
-                orgName: postSchema.orgName.value,
-                rolePosition: postSchema.rolePosition.value,
-                categoryTags: postSchema.categoryTags.value,
-                compensation: postSchema.compensation.value,
-                projDescription: postSchema.projDescription.value,
-                deadline: postSchema.deadline.value,
-                projTimeline: postSchema.projTimeline.value,
-                contactInformation: postSchema.contactInformation.value,
-                authorId: authorIdCopy 
-            }
-            
-            submitPost(submitPostSchema);
-        }   
+                let submitPostSchema = {
+                    projectTitle: postSchema.projectTitle.value,
+                    numOfOpenPositions: postSchema.numOfOpenPositions.value,
+                    orgName: postSchema.orgName.value,
+                    rolePosition: postSchema.rolePosition.value,
+                    categoryTags: postSchema.categoryTags.value,
+                    compensation: postSchema.compensation.value,
+                    projDescription: postSchema.projDescription.value,
+                    deadline: postSchema.deadline.value,
+                    projTimeline: postSchema.projTimeline.value,
+                    contactInformation: postSchema.contactInformation.value,
+                    authorId: authorIdCopy 
+                }
+                
+                submitPost(submitPostSchema);
+            }   
     }, 50)
+    }
 }
 
 const handleFocusCategoryTags = () => {

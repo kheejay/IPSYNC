@@ -221,7 +221,7 @@ const confirmActionLogout = () => {
     showMobileNav.value = false;
 }
 
-const isAuthenticated = ref(false)
+const { isAuthenticated } = inject('userData')
 
 const unsubscribeAuth = ref(null)
 
