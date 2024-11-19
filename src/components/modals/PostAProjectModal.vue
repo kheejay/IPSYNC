@@ -65,11 +65,12 @@
                         <div class="w-full sm:w-1/2 md:w-[17rem] relative">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
                                 <input type="text" placeholder="Category/Tags" v-model="categoryTagsEntrance" 
-                                @keyup.enter="handlePushCategoryTags" @focus="handleFocusCategoryTags" @click="handleFocusCategoryTags"
+                                @keypress.enter="handlePushCategoryTags" @focus="handleFocusCategoryTags" @click="handleFocusCategoryTags"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                                 @blur="handleBlurCategory">
-                                <div class="bg-transparent w-11 flex justify-center cursor-pointer relative">
+                                <div class="bg-transparent w-11 flex justify-center items-center cursor-pointer relative">
                                     <!-- <ArrowDownNoBg class="text-black w-6 h-auto hover:scale-125 duration-200 hover:text-c2" @click="toggleCategoryTags" /> -->
+
                                     <div v-if="openCategoryTagsLg" 
                                         class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" 
                                         ref="targetTagsLg">
@@ -166,7 +167,6 @@
 </template>
 
 <script setup>
-import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
 import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
 import { reactive, ref, watch } from 'vue';
@@ -263,31 +263,18 @@ const handleFocusCategoryTags = () => {
 
 const handlePushCategoryTags = () => {
     if(categoryTagsEntrance.value != false) {
-        postSchema.categoryTags.value.splice(0, 0, {value: categoryTagsEntrance.value, selected: false})
         categoryTags.value.splice(0, 0, {value: categoryTagsEntrance.value, selected: true})
+        updateCategoryTagsEntrance()
         categoryTagsEntrance.value = '';
-        updateSelectedCategoryTagsLg();
-        updateSelectedCategoryTagsSm();
     } else {
         postSchema.categoryTags.hasError = true;
         postSchema.categoryTags.errorMessage =  'Opps, tags must have a value'
     }
 }
 const updateCategoryTagsEntrance = () => {
-    postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)]
+    postSchema.categoryTags.value = categoryTags.value.filter((tag) => tag.selected == true)
     categoryTagsEntrance.value = postSchema.categoryTags.value.length ? postSchema.categoryTags.value[0].value : '';
-    handleBlurCategory();
-}
-
-const updateSelectedCategoryTagsLg = () => {
-    postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)];
-    postSchema.categoryTags.hasError = false;
-    updateCategoryTagsEntrance()
-}
-const updateSelectedCategoryTagsSm = () => {
-    postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)];
-    postSchema.categoryTags.hasError = false;
-    updateCategoryTagsEntrance()
+    validateInput('categoryTags')
 }
 
 const closeCategoryTagsLg = () => {
