@@ -65,18 +65,18 @@
                         <div class="w-full sm:w-1/2 md:w-[17rem] relative">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
                                 <input type="text" placeholder="Category/Tags" v-model="categoryTagsEntrance" 
-                                @keyup.enter="handlePushCategoryTags" @focus="handleFocusCategoryTags"
+                                @keyup.enter="handlePushCategoryTags" @focus="handleFocusCategoryTags" @click="handleFocusCategoryTags"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
-                                @blur="validateInput('categoryTags')">
-                                <div class="bg-transparent w-9 cursor-pointer relative">
-                                    <ArrowDownNoBg class="text-black w-6 h-auto" @click="toggleCategoryTags" />
-                                    <div v-if="openCategoryTags" 
-                                        class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" >
+                                @blur="handleBlurCategory">
+                                <div class="bg-transparent w-11 flex justify-center cursor-pointer relative">
+                                    <!-- <ArrowDownNoBg class="text-black w-6 h-auto hover:scale-125 duration-200 hover:text-c2" @click="toggleCategoryTags" /> -->
+                                    <div v-if="openCategoryTagsLg" 
+                                        class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" 
+                                        ref="targetTagsLg">
                                         <div v-for="tag, index in categoryTags" :key="index" 
                                             @click="tag.selected = !tag.selected"
                                             class="flex items-center gap-2 hover:bg-c5 duration-100 py-2 select-none">
-                                            <input v-model="tag.selected" type="checkbox" class="border ml-2 my-2 mx-1.5 w-4 h-4"
-                                            @change="updateSelectedCategoryTags">
+                                            <input v-model="tag.selected" type="checkbox" class="border ml-2 my-2 mx-1.5 w-4 h-4">
                                             {{ tag.value }} 
                                         </div>
                                     </div>
@@ -84,12 +84,12 @@
     
                                     </div> -->
                                 </div>
-                                <div v-if="openCategoryTags" 
-                                    class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3">
-                                    <div v-for="tag, index in categoryTags" :key="index" class="flex items-center hover:bg-c5 duration-100 py-2 gap-2" 
+                                <div v-if="openCategoryTagsSm" 
+                                    class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3 no-scrollbar"
+                                    ref="targetTagsSm">
+                                    <div v-for="tag, index in categoryTags" :key="index" class="flex items-center hover:bg-c5 duration-100 py-2 gap-2"
                                         @click="tag.selected = !tag.selected">
-                                        <input v-model="tag.selected" type="checkbox" class="border ml-2 w-4 h-4 my-2 mx-1"
-                                        @change="updateSelectedCategoryTags">
+                                        <input v-model="tag.selected" type="checkbox" class="border ml-2 w-4 h-4 my-2 mx-1">
                                         {{ tag.value }}  
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@
                             <span v-if="postSchema.categoryTags.hasError" class="text-red-500 text-xs w-full text-start pl-2">
                                 {{ postSchema.categoryTags.errorMessage }}</span>
                             <!-- user help -->
-                             <span v-if="openCategoryTags" class="text-[0.6rem] absolute -top-[1rem] w-full left-0 pl-2">Press enter to add tag</span>
+                             <span v-if="openCategoryTagsLg || openCategoryTagsSm" class="text-[0.6rem] absolute -top-[1rem] w-full left-0 pl-2">Press enter to add tag</span>
                         </div>
                         <div class="w-full sm:w-1/2">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
@@ -169,23 +169,21 @@
 import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
 import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import * as yup from 'yup';
-// import { onClickOutside } from '@vueuse/core';
+import { onClickOutside } from '@vueuse/core';
 
 const emit = defineEmits(['close'])
 
-const openCategoryTags = ref(false);
+const openCategoryTagsLg = ref(false);
+const openCategoryTagsSm = ref(false);
 const isLoading = ref(false)
 
-const categoryTagsEntrance = ref('')
 
-const toggleCategoryTags = () => {
-    openCategoryTags.value = !openCategoryTags.value;
-}
-
-// const targetTags = ref(null)
-// onClickOutside(targetTags, () => openCategoryTags.value = false)
+const targetTagsLg = ref(null)
+const targetTagsSm = ref(null)
+onClickOutside(targetTagsLg, () => closeCategoryTagsLg())
+onClickOutside(targetTagsSm, () => closeCategoryTagsSm())
 
 const categoryTags = ref([
     {value: 'Technology', selected: false},
@@ -201,6 +199,7 @@ const categoryTags = ref([
     {value: 'Technology', selected: false},
 ])
 
+
 const postSchema = reactive({
     projectTitle: { value: '', hasError: false, errorMessage: '' },
     numOfOpenPositions: { value: '', hasError: false, errorMessage: '' },
@@ -213,6 +212,7 @@ const postSchema = reactive({
     projTimeline: { value: '', hasError: false, errorMessage: '' },
     contactInformation: { value: '', hasError: false, errorMessage: '' } 
 })
+const categoryTagsEntrance = ref('')
 
 const validationSchema = yup.object().shape({
     projectTitle: yup.string().required('Project title is required'),
@@ -257,25 +257,57 @@ const handleFocusCategoryTags = () => {
     categoryTagsEntrance.value = ''
     postSchema.categoryTags.hasError = false;
     postSchema.categoryTags.errorMessage = '';
-    openCategoryTags.value = true;
+    openCategoryTagsLg.value = true;
+    openCategoryTagsSm.value = true;
 }
 
 const handlePushCategoryTags = () => {
     if(categoryTagsEntrance.value != false) {
-        postSchema.categoryTags.value.push(categoryTagsEntrance.value)
+        postSchema.categoryTags.value.splice(0, 0, {value: categoryTagsEntrance.value, selected: false})
         categoryTags.value.splice(0, 0, {value: categoryTagsEntrance.value, selected: true})
         categoryTagsEntrance.value = '';
-        updateSelectedCategoryTags();
+        updateSelectedCategoryTagsLg();
+        updateSelectedCategoryTagsSm();
     } else {
         postSchema.categoryTags.hasError = true;
         postSchema.categoryTags.errorMessage =  'Opps, tags must have a value'
     }
 }
+const updateCategoryTagsEntrance = () => {
+    postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)]
+    categoryTagsEntrance.value = postSchema.categoryTags.value.length ? postSchema.categoryTags.value[0].value : '';
+    handleBlurCategory();
+}
 
-const updateSelectedCategoryTags = () => {
+const updateSelectedCategoryTagsLg = () => {
     postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)];
     postSchema.categoryTags.hasError = false;
-    categoryTagsEntrance.value = postSchema.categoryTags.value.length ? postSchema.categoryTags.value[0].value : ''
-    console.log(postSchema.categoryTags.value)
+    updateCategoryTagsEntrance()
 }
+const updateSelectedCategoryTagsSm = () => {
+    postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)];
+    postSchema.categoryTags.hasError = false;
+    updateCategoryTagsEntrance()
+}
+
+const closeCategoryTagsLg = () => {
+    openCategoryTagsLg.value = false;
+    validateInput('categoryTags')
+    updateCategoryTagsEntrance()
+}
+const closeCategoryTagsSm = () => {
+    openCategoryTagsSm.value = false;
+    validateInput('categoryTags')
+    updateCategoryTagsEntrance()
+}
+
+const handleBlurCategory = () => {
+    if(!openCategoryTagsLg || !openCategoryTagsSm) {
+        validateInput('categoryTags')
+    }
+}
+
+watch(categoryTags.value, () => {
+    updateCategoryTagsEntrance();
+})
 </script>

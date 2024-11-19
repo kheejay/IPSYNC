@@ -20,7 +20,7 @@
                         <button 
                             @click="showPostNewProject"
                             class="drop-shadow flex justify-between items-center w-[15.25rem] sm:w-[19rem] xl:w-[23rem] py-[.9rem]
-                            sm:py-[1.15rem] px-5 sm:px-7 border border-black rounded-[2.25rem] active:translate-y-[0.25rem] active:shadow-none duration-200 mt-5 xl:mt-7">
+                            sm:py-[1.15rem] px-7 sm:px-9 border border-black rounded-[2.25rem] active:translate-y-[0.25rem] active:shadow-none duration-200 mt-5 xl:mt-7">
                             <span class="text-[1.125rem] sm:text-[1.25rem] xl:text-[1.50rem] font-bold text-c1">Post a project!</span>
                             <EditPen class="h-6 w-6" />
                         </button>
