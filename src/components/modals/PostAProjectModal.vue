@@ -73,35 +73,41 @@
 
                                     <PlusIcon @mousedown="handlePushCategoryTags"
                                         class="w-6 h-5 active:scale-125 duration-200 active:text-c2 text-c1" />
-
-                                    <div v-if="openCategoryTagsLg" 
-                                        class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[0.8rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" 
-                                        ref="targetTagsLg">
-                                        <div v-for="tag, index in categoryTags" :key="index" 
-                                            @click="tag.selected = !tag.selected"
-                                            class="flex items-center gap-2 hover:bg-c5 duration-100 py-2 select-none">
-                                            <input v-model="tag.selected" type="checkbox" class="border ml-2 my-2 mx-1.5 w-4 h-4">
-                                            {{ tag.value }} 
+                                    <transition name="tags" mode="out-in">
+                                        <div v-if="openCategoryTagsLg" 
+                                            class="absolute hidden sm:flex flex-col -right-[18.2rem] -top-[.2rem] w-[18rem] h-[22.5rem] bg-white border border-c1 rounded-[0.8rem] overflow-y-auto py-3 px-2.5 no-scrollbar" 
+                                            ref="targetTagsLg">
+                                            <div v-for="tag, index in categoryTags" :key="index" 
+                                                @click="tag.selected = !tag.selected"
+                                                class="flex items-center gap-2 hover:bg-c5 duration-100 py-2 select-none">
+                                                <input v-model="tag.selected" type="checkbox" class="border ml-2 my-2 mx-1.5 w-4 h-4">
+                                                {{ tag.value }} 
+                                            </div>
                                         </div>
-                                    </div>
+                                    </transition>
                                     <!-- <div class="absolute flex md:hidden -left-[17rem] sm:-left-[19.96rem] top-[2.4rem] w-[19rem] sm:w-[22rem] h-[18rem] bg-white border-2 overflow-y-auto">
     
                                     </div> -->
                                 </div>
-                                <div v-if="openCategoryTagsSm" 
-                                    class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3 no-scrollbar"
-                                    ref="targetTagsSm">
-                                    <div v-for="tag, index in categoryTags" :key="index" class="flex items-center hover:bg-c5 duration-100 py-2 gap-2"
-                                        @click="tag.selected = !tag.selected">
-                                        <input v-model="tag.selected" type="checkbox" class="border ml-2 w-4 h-4 my-2 mx-1">
-                                        {{ tag.value }}  
+                                <transition name="tags" mode="out-in">
+                                    <div v-if="openCategoryTagsSm" 
+                                        class="absolute flex flex-col sm:hidden right-0 top-[3.1rem] w-full xs:w-[18rem] h-[20rem] bg-white overflow-y-auto border border-c1 rounded-[0.8rem] p-3 no-scrollbar"
+                                        ref="targetTagsSm">
+                                        <div v-for="tag, index in categoryTags" :key="index" class="flex items-center hover:bg-c5 duration-100 py-2 gap-2"
+                                            @click="tag.selected = !tag.selected">
+                                            <input v-model="tag.selected" type="checkbox" class="border ml-2 w-4 h-4 my-2 mx-1">
+                                            {{ tag.value }}  
+                                        </div>
                                     </div>
-                                </div>
+                                </transition>
                             </div>
                             <span v-if="postSchema.categoryTags.hasError" class="text-red-500 text-xs w-full text-start pl-2">
                                 {{ postSchema.categoryTags.errorMessage }}</span>
                             <!-- user help -->
-                             <span v-if="openCategoryTagsLg || openCategoryTagsSm" class="text-[0.6rem] absolute -top-[1rem] w-full left-0 pl-2">Press enter to add tag</span>
+                             <span v-if="tagIsAddedPrompt" class="text-[0.75rem] absolute -top-[1rem] w-full left-0 pl-2 text-c2 animate-bounce">
+                                Tag is added!
+                            </span>
+                             <span v-if="(openCategoryTagsLg || openCategoryTagsSm) && !tagIsAddedPrompt" class="text-[0.6rem] absolute -top-[1rem] w-full left-0 pl-2">Press enter to add tag</span>
                         </div>
                         <div class="w-full sm:w-1/2">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
@@ -175,14 +181,34 @@ import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
 import { reactive, ref, watch } from 'vue';
 import * as yup from 'yup';
-import { onClickOutside } from '@vueuse/core';
+import { onClickOutside, useDebounceFn } from '@vueuse/core';
 
 const emit = defineEmits(['close'])
 
 const openCategoryTagsLg = ref(false);
 const openCategoryTagsSm = ref(false);
 const isLoading = ref(false)
+const tagIsAddedPrompt = ref(false)
 
+const turnOffTafIsAddedPrompt = useDebounceFn(() => {
+    tagIsAddedPrompt.value = false;
+}, 2000)
+
+const showCategoryTagsLg = useDebounceFn(() => {
+    openCategoryTagsLg.value = true;
+}, 200)
+
+const hideCategoryTagsLg = useDebounceFn(() => {
+    openCategoryTagsLg.value = false;
+}, 150)
+
+const showCategoryTagsSm = useDebounceFn(() => {
+    openCategoryTagsSm.value = true;
+}, 200)
+
+const hideCategoryTagsSm = useDebounceFn(() => {
+    openCategoryTagsSm.value = false;
+}, 150)
 
 const targetTagsLg = ref(null)
 const targetTagsSm = ref(null)
@@ -261,14 +287,18 @@ const handleFocusCategoryTags = () => {
     categoryTagsEntry.value = ''
     postSchema.categoryTags.hasError = false;
     postSchema.categoryTags.errorMessage = '';
-    openCategoryTagsLg.value = true;
-    openCategoryTagsSm.value = true;
+    if(!openCategoryTagsLg.value || !openCategoryTagsSm.value) {
+        showCategoryTagsLg();
+        showCategoryTagsSm();
+    }
 }
 
 const handlePushCategoryTags = () => {
     if(categoryTagsEntry.value != false) {
         categoryTags.value.splice(0, 0, {value: categoryTagsEntry.value, selected: true})
-        updatePostSchemaCategoryTags()
+        updatePostSchemaCategoryTags();
+        tagIsAddedPrompt.value = true;
+        turnOffTafIsAddedPrompt();
     } else {
         postSchema.categoryTags.hasError = true;
         postSchema.categoryTags.errorMessage =  'Opps, tags must have a value'
@@ -281,11 +311,11 @@ const updatePostSchemaCategoryTags = () => {
 }
 
 const closeCategoryTagsLg = () => {
-    openCategoryTagsLg.value = false;
+    hideCategoryTagsLg();
     validateInput('categoryTags')
 }
 const closeCategoryTagsSm = () => {
-    openCategoryTagsSm.value = false;
+    hideCategoryTagsSm();
     validateInput('categoryTags')
 }
 

@@ -117,9 +117,24 @@
 }
 
 @layer utilities {
-  .drop-shadow {
-    box-shadow: 0px 4px 4px rgba(0,0,0, 0.25);
-  }
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 300ms;
+}
+.fade-enter, .fade-leave-to  {
+    opacity: 0;
+}
+.drop-shadow {
+  box-shadow: 0px 4px 4px rgba(0,0,0, 0.25);
+}
+.tags-enter-active, .tags-leave-active {
+    transition: opacity 300ms;
+}
+.tags-enter, .tags-leave-to  {
+    opacity: 0;
+}
+.drop-shadow {
+  box-shadow: 0px 4px 4px rgba(0,0,0, 0.25);
+}
 :root {
     --scale-factor: 1;
 }
