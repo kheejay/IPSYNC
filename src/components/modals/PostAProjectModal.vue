@@ -65,7 +65,7 @@
                         <div class="w-full sm:w-1/2 md:w-[17rem] relative">
                             <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
                                 <input type="text" placeholder="Category/Tags" v-model="categoryTagsEntrance" 
-                                @keypress.enter="handlePushCategoryTags" @focus="handleFocusCategoryTags" @click="handleFocusCategoryTags"
+                                @keypress.enter="alert('keypres')" @keydown.enter="alert('keydown')" @keyup.enter="alert('keyup')" @focus="handleFocusCategoryTags" @click="handleFocusCategoryTags"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                                 @blur="handleBlurCategory">
                                 <div class="bg-transparent w-11 flex justify-center items-center cursor-pointer relative">
