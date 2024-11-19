@@ -180,8 +180,11 @@ import PlusIcon from '../icons/PlusIcon.vue'
 import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
 import { reactive, ref, watch } from 'vue';
+import { collection, addDoc, sum } from "firebase/firestore"; 
 import * as yup from 'yup';
 import { onClickOutside, useDebounceFn } from '@vueuse/core';
+import { db } from '../../firebase';
+import { toast } from '../../functions/toast';
 
 const emit = defineEmits(['close'])
 
@@ -240,7 +243,7 @@ const postSchema = reactive({
     projDescription: { value: '', hasError: false, errorMessage: '' },
     deadline: { value: '', hasError: false, errorMessage: '' },
     projTimeline: { value: '', hasError: false, errorMessage: '' },
-    contactInformation: { value: '', hasError: false, errorMessage: '' } 
+    contactInformation: { value: '', hasError: false, errorMessage: '' }    
 })
 const categoryTagsEntry = ref('')
 
@@ -254,7 +257,8 @@ const validationSchema = yup.object().shape({
     projDescription: yup.string().required('Project description is required'),
     deadline: yup.string().required('Application deadline is required'),
     projTimeline: yup.string().required('Project timeline is required'),
-    contactInformation: yup.string().required('Contact information is required') 
+    contactInformation: yup.string().required('Contact information is required'),
+    authorId: yup.string()
 });
 
 const validateInput = (name) => {
@@ -270,16 +274,48 @@ const validateInput = (name) => {
         });
 }
 
+const submitPost = async (submitPostSchema) => {
+    isLoading.value = true;
+    try {
+        // Add a new document with a generated id.
+        const docRef = await addDoc(collection(db, "posts"), submitPostSchema);
+        toast('Project successfully posted!', "top", 3000);
+        emit('close')
+        isLoading.value = false;
+    } catch (error) {
+        console.log(error)
+        isLoading.value = false;
+    }
+}
+
 const handleSubmit = () => {
+    let authorIdCopy = localStorage.getItem('userId')
+    
     for(const key in postSchema) {
         validateInput(key)
     }  
+    if(authorIdCopy == undefined || authorIdCopy == false) {
+        alert('error')
+    }
     setTimeout(() => {
         if(!postSchema.projectTitle.hasError && !postSchema.numOfOpenPositions.hasError && !postSchema.orgName.hasError && !postSchema.rolePosition.hasError && !postSchema.categoryTags.hasError && !postSchema.compensation.shape && !postSchema.projDescription.hasError && !postSchema.deadline.hasError && !postSchema.projTimeline.hasError && !postSchema.contactInformation.hasError) {
-            alert('clear')
-        } else {
-            alert('erro')
-        }
+
+            let submitPostSchema = {
+                projectTitle: postSchema.projectTitle.value,
+                numOfOpenPositions: postSchema.numOfOpenPositions.value,
+                orgName: postSchema.orgName.value,
+                rolePosition: postSchema.rolePosition.value,
+                categoryTags: postSchema.categoryTags.value,
+                compensation: postSchema.compensation.value,
+                projDescription: postSchema.projDescription.value,
+                deadline: postSchema.deadline.value,
+                projTimeline: postSchema.projTimeline.value,
+                contactInformation: postSchema.contactInformation.value,
+                authorId: authorIdCopy 
+            }
+            
+            submitPost(submitPostSchema);
+        }   
     }, 50)
 }
 
