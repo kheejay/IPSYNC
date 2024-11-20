@@ -201,6 +201,18 @@ const filterData = (searchPattern) => {
   }
 }
 
+const filterByCategoryTags = (tags) => {
+  if( tags == false) {
+    shapedPostShallow.value = shapedPostsCopy.value;
+  } else {
+    // console.log(shapedPostsCopy.value[0])
+    shapedPostShallow.value = shapedPostsCopy.value.filter(post => {
+      // Check if there's any common element between `tags` and `post.categoryTags.value`
+      return post.categoryTags.some(tag => tags.includes(tag.value));
+    });
+  }
+}
+
 const emptyUserData = () => {
     localStorage.setItem('userId', null)
     userData.full_name = { value: userGmailName.value, hasError: false, errorMessage: '' };
@@ -233,7 +245,8 @@ provide('userData', {
     setUserData,
     emptyUserData,
     isAuthenticated,
-    filterData
+    filterData,
+    filterByCategoryTags
 })
 
 onMounted(() => {

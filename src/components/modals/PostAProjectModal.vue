@@ -180,7 +180,7 @@ import PlusIcon from '../icons/PlusIcon.vue'
 import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
 import { reactive, ref, watch } from 'vue';
-import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 
+import { collection, addDoc } from "firebase/firestore"; 
 import * as yup from 'yup';
 import { onClickOutside, useDebounceFn } from '@vueuse/core';
 import { db } from '../../firebase';

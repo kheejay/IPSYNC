@@ -49,7 +49,7 @@
 
         <div class="mt-20 sm:mt-32 w-full md:px-[4rem] xl:px-[6rem]">
             <div class="w-full items-start flex-col sm:flex-row flex gap-2 lg:gap-4 xl:gap-9 justify-between">
-                <div class="flex-grow w-full h-[2.75rem] sm:h-[3.2rem] border-2 border-black flex">
+                <div class="flex-grow w-full h-[2.75rem] sm:h-[3.2rem] border-2 border-black flex focus-within:border-c1">
                     <input type="text" class="focus:outline-none w-full h-full px-2 sm:px-4 md:px-8 placeholder:italic sm:text-[1.125rem]" 
                     placeholder="Search..." v-model="searchPattern" @input="handleFilterPosts">
                     <div class="w-max h-full bg-c1 flex items-center justify-center">
@@ -93,11 +93,15 @@
                     @previewPost="handleShowPreviewPost" :post="post" />
             </div>
         </div>
-        <PostAProjectModal v-if="postNewProject"
+        <transition name="fadeComponent" mode="out-in">
+            <PostAProjectModal v-if="postNewProject"
             @close="hidePostNewProject" />
-        <PreviewPostModal v-if="previewPost" 
+        </transition>
+        <transition name="fadeComponent" mode="out-in">
+            <PreviewPostModal v-if="previewPost" 
             @close="handleHidePreviewPost"
             :post="previewPostLoad"/>
+        </transition>
     </div>
 </template>
 
@@ -110,10 +114,10 @@ import ArrowDownNoBg from '../components/icons/ArrowDownNoBg.vue'
 import PostComponent from '../components/modals/PostComponent.vue'
 import PostAProjectModal from '../components/modals/PostAProjectModal.vue';
 import PreviewPostModal from '../components/modals/PreviewPostModal.vue';
-import { inject, ref } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 import { onClickOutside, useDebounceFn } from '@vueuse/core';
 
-const { categoryTags, filterData, shapedPostShallow } = inject('userData')
+const { categoryTags, filterData, filterByCategoryTags, shapedPostShallow } = inject('userData')
 
 const postNewProject = ref(false)
 const previewPost = ref(false)
@@ -159,6 +163,20 @@ const searchPattern = ref('')
 const handleFilterPosts = useDebounceFn(() => {
     filterData(searchPattern.value);
 }, 300)
+
+const tags = computed(() => {
+    return categoryTags.value
+        .filter(tag => tag.selected) // Only keeps selected tags
+        .map(tag => tag.value); // Maps to `tag.value`
+});
+
+const handleFilterByCategoryTags = useDebounceFn(() => {
+    filterByCategoryTags(tags.value)
+}, 300)
+
+watch(tags, () => {
+    handleFilterByCategoryTags()
+})
 </script>
 
 <style scoped>
@@ -167,6 +185,19 @@ const handleFilterPosts = useDebounceFn(() => {
 }
 .fade-enter-from {
     opacity: 0; /* End state */
+}
+.fadeComponent-enter-active {
+    transition: opacity 300ms;
+}
+.fadeComponent-enter-from {
+    opacity: 0; /* End state */
+}
+.fadeComponent-leave-to {
+    opacity: 0; /* Start state */
+    transition: opacity 150ms;
+}
+.fadeComponent-leave-from {
+    opacity: 100; /* Start state */
 }
 .bg-image {
     background-image: url('/src/assets/images/ProjectsBg.svg');
