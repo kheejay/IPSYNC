@@ -41,7 +41,8 @@
             </div>
             <div class="absolute right-0 top-[3.4rem] w-[21rem]">
                 <div v-if="showDropDown" ref="target"
-                    class="ml-[1.5rem] -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-max w-[16rem] bg-white rounded-[0.625rem] p-2">
+                    class="ml-[1.5rem] -bottom-[10.69rem] -left-[11.66rem] sm:-left-[8.2rem] h-max w-[16rem] bg-white 
+                    rounded-[0.625rem] p-2 drop-shadow">
                     <div class="flex p-2 items-center">
                         <img :src="userData.photoURL.value" alt="user" 
                             class="w-11 h-11 rounded-full border-2 border-c1">

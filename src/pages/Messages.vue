@@ -2,9 +2,17 @@
     <div class="w-full h-fit max-h-[calc(100vh-4rem)] flex">
 
         <div class="h-[calc(100vh-4rem)] w-[34rem] pl-4 py-4 pr-2 hidden lg:flex">
-            <div class="w-full h-full flex flex-col gap-2 p-2 overflow-y-auto outline">
-                <div v-for="x in 20" :key="x" class="w-full min-h-[5.2rem] outline">
-
+            <div class="w-full h-full flex flex-col gap-2.5 p-2 overflow-y-auto border border-c2">
+                <div v-for="x in 20" :key="x" class="w-full min-h-[5.2rem] flex bg-white shadow-sm border cursor-pointer 
+                hover:bg-c4">
+                    <div class="h-full flex items-center px-4">
+                        <img src="https://i.ibb.co/Rz329Dm/sad-dog.jpg" alt="" class="w-[3.5rem] h-[3.5rem] rounded-full
+                            border-c6 border-2">
+                    </div>
+                    <div class="flex-grow pt-3">
+                        <p class="font-bold text-c1 pt-1">Smaple Fullname</p>
+                        <p class="text-c1 text-[0.90rem]">This is a long text a lil bit long...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -28,8 +36,13 @@
 
                 <div class="flex-grow flex flex-col p-2 overflow-y-scroll text-white gap-4 no-scrollbar">
                     <div v-for="x in 10" :key="x" :class="`w-full flex ${ x%2 == 0 ? 'justify-start' : 'justify-end' }`">
-                        <div class="min-w-[10rem] max-w-[39rem] bg-c2 p-2">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque atque quod numquam natus rem est quaerat doloremque, culpa quasi nisi repudiandae eos iusto consequatur veniam reprehenderit incidunt pariatur voluptates ex.
+                        <div>
+                            <div class="min-w-[10rem] max-w-[39rem] bg-c2 p-2">
+                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque atque quod numquam natus rem est quaerat doloremque, culpa quasi nisi repudiandae eos iusto consequatur veniam reprehenderit incidunt pariatur voluptates ex.
+                            </div>
+                            <div class="text-xs text-c1 w-full text-center">
+                                <span>11:01 PM</span>
+                            </div>
                         </div>
                     </div>
                 </div>
