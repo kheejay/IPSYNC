@@ -53,6 +53,8 @@
                     <div class="w-11/12 mx-auto border-t border-black py-2">
                         <p @click="goToProfile"
                             class="text-[1rem]m py-1 cursor-pointer w-full mt-1">VIEW PROFILE</p>
+                        <p @click="goToMessages"
+                            class="text-[1rem]m py-1 cursor-pointer w-full">MESSAGES</p>
                         <p @mousedown="confirmActionLogout" class="text-[1rem] cursor-pointer 
                             pb-1 text-red-500 w-max mt-1.5">SIGN OUT</p>
                     </div>
@@ -193,17 +195,22 @@ onClickOutside(target, event => showDropDown.value = false)
 const showMobileNav = ref(false)
 const confirmLogout = ref(false)
 
-const goToProfile = () => {
+const goToProfile = useDebounceFn(() => {
     router.push({ name: 'Profile'})
     showMobileNav.value = false
     showDropDown.value = false
-}
+}, 150)
+const goToMessages = useDebounceFn(() => {
+    router.push({ name: 'Messages'})
+    showMobileNav.value = false
+    showDropDown.value = false
+}, 150)
 
 const goTo = useDebounceFn((name) => {
     router.push({ name: name})
     showMobileNav.value = false
     toast('Please sign in to get started!', "center", "3000", "#184c95", "#1c58ab")
-}, 300)
+}, 150)
 
 const handleLogout = () => {
     signOut(auth).then(() => {
