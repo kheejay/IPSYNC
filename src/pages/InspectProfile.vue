@@ -95,7 +95,7 @@
                 <JobTitleIcon class="w-[2rem] h-[2rem] sm:w-[3rem] sm:h-[3rem]" />
             </div>
             <div class="pl-4 overflow-hidden">
-                <p class="w-full text-[0.90rem] text-c1 uppercase">No Job or Experince to show</p>
+                <p class="w-full text-[0.90rem] text-c1 uppercase">No Job or Experience to show</p>
             </div>
         </div>
         <JobTitleModal v-for="experience, index in userInfo.experience.value" :key="index" 

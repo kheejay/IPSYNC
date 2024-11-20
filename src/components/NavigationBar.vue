@@ -164,7 +164,7 @@
 </template>
 
 <script setup>
-import { onClickOutside } from "@vueuse/core";
+import { onClickOutside, useDebounceFn } from "@vueuse/core";
 import { inject, onBeforeMount, onUnmounted, ref } from "vue";
 import IPSYNCLogo from "./IPSYNCLogo.vue";
 import ArrowDown from './icons/ArrowDown.vue';
@@ -198,10 +198,11 @@ const goToProfile = () => {
     showDropDown.value = false
 }
 
-const goTo = (name) => {
+const goTo = useDebounceFn((name) => {
     router.push({ name: name})
     showMobileNav.value = false
-}
+    toast('Please sign in to get started!', "center", "3000", "#184c95", "#1c58ab")
+}, 300)
 
 const handleLogout = () => {
     signOut(auth).then(() => {
