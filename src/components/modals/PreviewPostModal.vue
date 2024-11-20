@@ -13,36 +13,37 @@
 
             <div class="flex w-full border-b border-c1 relative">
                 <div class="flex xs:p-[0.75rem]">
-                    <img src="https://i.ibb.co/LJPrkjQ/np.png" alt="photo" 
-                    class="border-2 border-c1 rounded-full min-w-11 min-h-11 w-11 h-11">
+                    <img :src="props.post.photoURL.value" alt="photo" 
+                    :class="`border-2 border-c1 rounded-full min-w-11 min-h-11 w-11 h-11 scale-${ props.post.photoURL.scale     }`">
                 </div>
                 <div class="flex-grow flex flex-col justify-center text-c1 pl-[0.5rem] xs:pl-0">
-                    <span class="text-[1.125rem] font-bold uppercase">USERNAME SAMPLE</span>
-                    <span class="uppercase">Department/Organization</span>
+                    <span class="text-[1.125rem] font-bold uppercase">{{ props.post.full_name }}</span>
+                    <span class="uppercase">{{ props.post.department }}</span>
                 </div>
             </div>
             <div class="uppercase font-bold text-c1 text-[2.25rem] relative pt-[1.5rem] sm:pt-[1rem] pb-[0.25rem] leading-[2.85rem]">
-                SOFTWARE ENGINEER
+                {{ props.post.rolePosition }}
             </div>
             <div class="w-full pl-[0.75rem] sm:pl-[1.5rem] flex flex-col gap-2 relative">
-                <div class="uppercase font-bold text-c1 text-[1.125rem] pt-[0.75rem] sm:pt-[0.5rem]">ECCOMERCE WEB APPLICATION</div>
-                <div class="text-[0.90rem] flex flex-wrap gap-2 text-c6"><span class="uppercase text-nowrap">Contact Information:</span>  
-                    <span class="font-semibold">www.facebook.com/mr.recruiter123</span>
+                <div class="uppercase font-bold text-c1 text-[1.125rem] pt-[0.75rem] sm:pt-[0.5rem]">{{ props.post.projectTitle }}</div>
+                <div class="text-[0.90rem] flex flex-wrap gap-2 text-c6"><span class="text-nowrap">CONTACT INFORMATION:</span>  
+                    <span class="font-semibold">{{ props.post.contactInformation }}</span>
                 </div>
-                <div class="text-[0.90rem] flex gap-2 text-c6 flex-wrap"><span class="uppercase text-nowrap">Number of Open Positions:</span>  
-                    <span class="font-semibold">1</span>
+                <div class="text-[0.90rem] flex gap-2 text-c6 flex-wrap uppercase"><span class="text-nowrap">NUMBER OF POSITIONS:</span>  
+                    <span class="font-semibold">{{ props.post.numOfOpenPositions
+                    }}</span>
                 </div>
                 <div class="text-[0.90rem] flex gap-2 text-c6 uppercase flex-wrap"><span class="text-nowrap">Project Timeline:</span>  
-                    <span class="font-semibold">January 7 - may 7 2025</span>
+                    <span class="font-semibold">{{ props.post.projTimeline }}</span>
                 </div>
-                <div class="text-[0.90rem] flex gap-2 text-c6 uppercase  border-b border-c1 pb-4 flex-wrap"><span class="text-nowrap">Compensation (if applicable):</span>  
-                    <span class="font-semibold uppercase">senior 56k - 80k, junior 25k - 38k</span>
+                <div class="text-[0.90rem] flex gap-2 text-c6 uppercase border-b border-c1 pb-4 flex-wrap"><span class="text-nowrap">Compensation (if applicable):</span>  
+                    <span class="font-semibold uppercase">{{ props.post.compensation }}</span>
                 </div>
             </div>
             <div class="flex flex-col w-full xs:pl-[1.5rem] relative">
                 <span class="text-c1 font-bold text-[1.125rem] pt-4 pb-2">Project Description</span>
                 <div class="drop-shadow bg-c4 w-full min-h-[7rem] p-2 text-[0.90rem] text-font rounded-[0.25rem] overflow-auto no-scrollbar">
-                    Project Description
+                    {{  props.post.projDescription }}
                 </div>
             </div>
             <div class="w-full flex justify-center sm:justify-end pt-8 sm:pr-8 ">
@@ -56,6 +57,6 @@
 
 <script setup>
 import XIcon from '../icons/XIcon.vue';
-
+const props = defineProps(['post'])
 const emit = defineEmits(['close'])
 </script>

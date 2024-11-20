@@ -51,62 +51,127 @@
             <div class="w-full items-start flex-col sm:flex-row flex gap-2 lg:gap-4 xl:gap-9 justify-between">
                 <div class="flex-grow w-full h-[2.75rem] sm:h-[3.2rem] border-2 border-black flex">
                     <input type="text" class="focus:outline-none w-full h-full px-2 sm:px-4 md:px-8 placeholder:italic sm:text-[1.125rem]" 
-                    placeholder="Search...">
+                    placeholder="Search..." v-model="searchPattern" @input="handleFilterPosts">
                     <div class="w-max h-full bg-c1 flex items-center justify-center">
                         <MagnifyingGlass class="text-white w-[2rem] h-[2rem] sm:w-[2.8rem] sm:h-[2.8rem] mx-2" />
                     </div>
                 </div>
-                <div class="h-[2.75rem] sm:h-[3.2rem] w-max bg-white flex items-center gap-2 md:gap-6 border-2 border-c1 text-c1 px-4">
-                    <FilterSort class="w-5 h-5 sm:w-7 sm:h-7" />
-                    <span class="text-[0.9rem] sm:text-[1rem] font-bold text-nowrap">Filter & Sort</span>
+                <div @click="toggleFilterSort" 
+                    class="h-[2.75rem] sm:h-[3.2rem] w-max bg-white flex items-center gap-2 md:gap-6 border-2 border-c1 
+                    text-c1 px-4 cursor-pointer relative">
+                    <FilterSort class="w-5 h-5 sm:w-7 sm:h-7 hover:scale-125 duration-200" />
+                    <span class="text-[0.9rem] sm:text-[1rem] font-bold text-nowrap hover:scale-125 duration-200">
+                        Filter & Sort
+                    </span>
                     <div class="relative z-[1]">
-                        <ArrowDownNoBg class="w-5 sm:w-7 h-5 sm:h-7 bg-white text-c1" />
-                        <div class="absolute flex flex-col -left-[8.635rem] top-[2.3rem] sm:-left-[15.1rem] sm:top-[2.8rem] w-[18rem] h-[22.5rem] bg-white border-2 border-c1 overflow-y-auto gap-4 py-3 px-2.5 no-scrollbar">
-                            <div v-for="x in 20" :key="x" class="flex items-center gap-2">
-                                <input type="checkbox" class="border my-2 mx-1.5">
-                                Healthcare & Life Sciences  
+                        <ArrowDownNoBg class="w-5 sm:w-7 h-5 sm:h-7 bg-white text-c1 hover:scale-125 duration-200" />
+                        <transition name="fade" mode="out-in">
+                            <div v-if="openFilterSort" 
+                                class="absolute flex flex-col -left-[8.635rem] top-[2.3rem] sm:-left-[15.1rem] sm:top-[2.8rem] 
+                                w-[18rem] h-[22.5rem] bg-white border-2 border-c1 overflow-y-auto p-1 gap-1 no-scrollbar outline"
+                                ref="targetSort">
+                                <div v-for="tag, index in categoryTags" :key="index" 
+                                    :class="`flex items-center gap-2 hover:bg-c1 py-2 rounded-sm hover:text-white
+                                    ${ tag.selected && 'bg-c1 text-white' } cursor-pointer`"
+                                    @click="tag.selected = !tag.selected">
+                                    <input v-model="tag.selected" type="checkbox" class="border my-3 ml-3 w-4 h-4">
+                                    {{ tag.value }}
+                                </div>
                             </div>
-                        </div>
+                        </transition>
                     </div>
                 </div>
             </div>
         </div>
         <div class="w-full flex justify-center py-11 sm:py-20">
-            <div class="grid xl:grid-cols-2 gap-7 sm:gap-16">
-                <PostComponent 
-                    @previewPost="showPreviewPost"
-                    v-for="x in 8" :key="x" />
+            <div v-if="shapedPostShallow == false" class="flex flex-col gap-6 text-c1 items-center">
+                <span class="text-xs">Fetching posts for you...</span>
+                <BarsSpin class="w-9 h-9" />
+            </div>
+            <div v-else class="grid xl:grid-cols-2 gap-7 sm:gap-16">
+                <PostComponent v-for="post, index in shapedPostShallow" :key="index"
+                    @previewPost="handleShowPreviewPost" :post="post" />
             </div>
         </div>
         <PostAProjectModal v-if="postNewProject"
             @close="hidePostNewProject" />
         <PreviewPostModal v-if="previewPost" 
-            @click="hidePreviewPost"/>
+            @close="handleHidePreviewPost"
+            :post="previewPostLoad"/>
     </div>
 </template>
 
 <script setup>
 import EditPen from '../components/icons/EditPen.vue';
+import BarsSpin from '../components/icons/BarsSpin.vue';
 import MagnifyingGlass from '../components/icons/MagnifyingGlass.vue';
 import FilterSort from '../components/icons/FilterSort.vue';
 import ArrowDownNoBg from '../components/icons/ArrowDownNoBg.vue'
 import PostComponent from '../components/modals/PostComponent.vue'
 import PostAProjectModal from '../components/modals/PostAProjectModal.vue';
 import PreviewPostModal from '../components/modals/PreviewPostModal.vue';
-import { ref } from 'vue';
-// import { useWindowScroll } from '@vueuse/core';
+import { inject, ref } from 'vue';
+import { onClickOutside, useDebounceFn } from '@vueuse/core';
 
-// const { y } = useWindowScroll({ behavior: 'smooth' });
+const { categoryTags, filterData, shapedPostShallow } = inject('userData')
+
 const postNewProject = ref(false)
 const previewPost = ref(false)
+const previewPostLoad = ref(null)
+const openFilterSort = ref(false) 
 
-const showPostNewProject = () => postNewProject.value = true;
-const hidePostNewProject = () => postNewProject.value = false;
-const showPreviewPost = () => previewPost.value = true;
-const hidePreviewPost = () => previewPost.value = false;
+const targetSort = ref(null)
+onClickOutside(targetSort, event => closeFilterSort())
+
+const toggleFilterSort = useDebounceFn(() => {
+    openFilterSort.value = !openFilterSort.value;
+}, 100)
+
+const closeFilterSort = useDebounceFn(() => {
+    openFilterSort.value = false;
+}, 150)
+
+const showPostNewProject = useDebounceFn(() => {
+    postNewProject.value = true;
+}, 150)
+
+const hidePostNewProject = useDebounceFn(() => {
+    postNewProject.value = false;
+}, 150)
+const showPreviewPost = useDebounceFn(() => {
+    previewPost.value = true;
+}, 150)
+const hidePreviewPost = useDebounceFn(() => {
+    previewPost.value = false;
+}, 150)
+
+const handleHidePreviewPost = () => {
+    hidePreviewPost();
+}
+
+const handleShowPreviewPost = (load) => {
+    previewPostLoad.value = {...load};
+    showPreviewPost();
+}
+
+const searchPattern = ref('')
+
+const handleFilterPosts = useDebounceFn(() => {
+    filterData(searchPattern.value);
+}, 300)
+// const handleFilterPosts = useDebounceFn(() => {
+//     filterPosts();
+// }, 300)
+
 </script>
 
 <style scoped>
+.fade-enter-active {
+    transition: opacity 100ms;
+}
+.fade-enter-from {
+    opacity: 0; /* End state */
+}
 .bg-image {
     background-image: url('/src/assets/images/ProjectsBg.svg');
     background-repeat: no-repeat;

@@ -1,5 +1,5 @@
 <template>
-    <div class="drop-shadow post-wrapper bg-white relative overflow-hidden">
+    <div class="drop-shadow post-wrapper bg-white relative overflow-hidden flex flex-col">
 
         <div class="z-[0] light-lg rounded-full bg-c3 absolute"></div>
         <div class="z-[2] dark-sm drop-shadow rounded-full bg-c1 absolute"></div>
@@ -9,29 +9,29 @@
 
         <div class="z-[1] flex w-full border-b border-c1 relative">
             <div class="pic-wrapper flex items-center justify-center">
-                <img src="https://i.ibb.co/LJPrkjQ/np.png" alt="photo" 
-                    class="pic border-c1 rounded-full">
+                <img :src="props.post.photoURL.value" alt="photo" 
+                    :class="`pic border-c1 rounded-full scale-${ props.post.photoURL.scale }`">
             </div>
             <div class="flex-grow flex flex-col justify-center text-c1">
-                <div class="font-bold pic-texts">USERNAME</div>
-                <div class="pic-texts">ORGANIZATION/DEPARTMENT</div>
+                <div class="font-bold pic-texts">{{ props.post.full_name }}</div>
+                <div class="pic-texts">{{ props.post.department }}</div>
             </div>
         </div>
 
-        <div class="texts-wrapper relative">
-            <div class="title z-[2] relative font-bold text-c1">PROJECT TITLE</div>
-            <div class=" looking-for z-[2] relative font-bold text-c6">LOOKING FOR: <span class="font-normal">ROLE HERE</span></div>
-            <div class="deadline z-[2] relative font-bold text-c6">APPLICATION DEADLINE:<span class="font-normal">LAST DAY OF APP </span></div>
-            <div class="shadow-subtle flex w-full flex-wrap">
-                <div v-for="x in 3" :key="x"
-                    class="shadow-lg sm:shadow-none sm:drop-shadow tags bg-c5 relative z-[2] text-center">TAGS</div>
+        <div class="texts-wrapper relative shadow-subtle">
+            <div class="title z-[2] relative font-bold text-c1">{{ props.post.rolePosition }}</div>
+            <div class=" looking-for z-[2] relative font-bold text-c6">PROJECT/AGENDA: <span class="font-normal">{{ props.post.projectTitle}}</span></div>
+            <div class="deadline z-[2] relative font-bold text-c6">APPLICATION DEADLINE:<span class="font-normal">{{ props.post.deadline }} </span></div>
+            <div class="tags-wrapper flex w-full flex-wrap">
+                <div v-for="tag in props.post.categoryTags" :key="tag"
+                    class="shadow-lg sm:shadow-none sm:drop-shadow tags bg-c5 relative z-[2] text-center">{{ tag.value }}</div>
             </div>
-            <div class="w-full flex justify-end details-wrapper">
-                <div @click="$emit('previewPost')"
-                    class="flex justify-center items-center text-nowrap details text-c1 opacity-70 border-b cursor-pointer">
-                    VIEW MORE DETAILS 
-                    <ArrowDownNoBg class="arrow" />
-                </div>
+        </div>
+        <div class="flex-grow flex justify-end items-end details-wrapper pb-2">
+            <div @click="handlePreviewEmit"
+                class="flex justify-center items-center text-nowrap details text-c1 opacity-70 border-b cursor-pointer">
+                VIEW MORE DETAILS 
+                <ArrowDownNoBg class="arrow" />
             </div>
         </div>
 
@@ -41,20 +41,25 @@
 <script setup>
 import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
 const emit = defineEmits(['previewPost'])
+const props = defineProps(['post'])
+
+const handlePreviewEmit = () => {
+    emit('previewPost', props.post)
+}
 </script>
 
 <style scoped>
-
 .shadow-subtle {
-    box-shadow: -0.2rem 0.2rem 0.3rem 0rem rgba(0, 0, 0, 0.04);
+    box-shadow: 0rem 0.2rem 0.2rem 0rem rgba(0, 0, 0, 0.04);
+}
+.tags-wrapper {
     gap: calc(1rem / var(--scale-factor));
     padding-top: calc(1.5rem / var(--scale-factor));
     padding-bottom: calc(1.5rem / var(--scale-factor));
 }
-
 .post-wrapper {
     width: calc(36rem / var(--scale-factor));
-    height: calc(24rem / var(--scale-factor));
+    min-height: calc(24rem / var(--scale-factor));
     padding: calc(1rem / var(--scale-factor));
     border-radius: calc(1rem / var(--scale-factor));
     margin-left: calc(0.5rem / var(--scale-factor));
@@ -138,6 +143,7 @@ const emit = defineEmits(['previewPost'])
     padding-left: calc(2.25rem / var(--scale-factor));
     padding-right: calc(2.25rem / var(--scale-factor));
     padding-top: calc(0.1rem / var(--scale-factor));
+    padding-bottom: calc(0.1rem / var(--scale-factor));
     border-radius: calc(1.875rem / var(--scale-factor));
 }
 

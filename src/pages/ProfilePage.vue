@@ -247,48 +247,48 @@
             class="w-screen h-screen fixed top-0 left-0 z-[4] flex items-center justify-center shadow px-4 sm:px-0">
             <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
             <div ref="addExperience" 
-                class="w-full py-8 px-4 sm:w-[40rem] md:w-[45rem] z-[1] bg-white flex flex-col 
-                justify-center gap-2 relative rounded-sm sm:rounded-lg 
+                class="w-full py-8 px-6 sm:px-12 sm:w-[40rem] md:w-[47.5rem] z-[1] bg-white flex flex-col 
+                justify-center gap-2 sm:gap-4 relative rounded-sm sm:rounded-lg 
                 ">
-                <div class="w-full font-bold text-c1 text-[1rem] sm:text-[1.75rem]">
+                <div class="w-full font-bold text-c1 text-[1.5rem] sm:text-[2rem] leading-10">
                     Share your experience
                 </div>
-                <div class="focus-within:border-black duration-200 border w-full p-2 h-[4rem] sm:h-[5rem] flex flex-col mt-2">
+                <div class="focus-within:ring-2 ring-c2 duration-200 border border-c2 w-full p-2.5 h-[4rem] sm:h-[5rem] flex flex-col mt-2">
                     <span class="text-[0.6rem] sm:text-xs pr-1 w-full">Work Title</span>
-                    <input type="text" class="flex-grow focus:outline-none placeholder:font-extralight" 
+                    <input type="text" class="flex-grow focus:outline-none placeholder:font-light" 
                     placeholder="Achievements, Leadership experience, Successful collaborations"
                     v-model="tempExperienceHolder.job_title">
                 </div>
-                <div class="focus-within:border-black duration-200 border w-full p-2 h-[4rem] sm:h-[5rem] flex flex-col">
+                <div class="focus-within:ring-2  ring-c2 duration-200 border border-c2 w-full p-2.5 h-[4rem] sm:h-[5rem] flex flex-col">
                     <span class="text-[0.6rem] sm:text-xs pr-1 w-full">Organization</span>
-                    <input type="text" class="flex-grow focus:outline-none placeholder:font-extralight" 
+                    <input type="text" class="flex-grow focus:outline-none placeholder:font-light" 
                     placeholder="Company or Anything might apply"
                     v-model="tempExperienceHolder.org">
                 </div>
-                <div class="focus-within:border-black duration-200 border w-full p-2 h-[4rem] sm:h-[5rem] flex flex-col">
+                <div class="focus-within:ring-2 ring-c2 duration-200 border border-c2 w-full p-2.5 h-[4rem] sm:h-[5rem] flex flex-col">
                     <span class="text-[0.6rem] sm:text-xs pr-1 w-full">Milestone Duration</span>
-                    <input type="text" class="flex-grow focus:outline-none placeholder:font-extralight" 
+                    <input type="text" class="flex-grow focus:outline-none placeholder:font-light" 
                     placeholder="2022 - 2023/PRESENT"
                     v-model="tempExperienceHolder.time_span">
                 </div>
                 <div class="w-full flex-col sm:flex-row sm:flex sm:justify-between sm:items-center mt-4">
-                    <div class="flex-grow flex justify-start gap-2">
+                    <div class="flex-grow flex justify-center sm:justify-start gap-2 xs:gap-6 sm:gap-4">
                         <JobTitleIcon @click="tempExperienceHolder.icon = 0"
-                            :class="`w-[2.5rem] h-[2.5rem] cursor-pointer active:scale-95 duration-150 
+                            :class="`w-[2.5rem] h-[2.5rem] sm:w-[3rem] sm:h-[3rem] cursor-pointer active:scale-95 duration-150 
                             ${tempExperienceHolder.icon == 0 ? 'bg-amber-200 px-2 rounded' : 'px-1'}`" />
                         <EducationIcon @click="tempExperienceHolder.icon = 1"
-                            :class="`w-[2.5rem] h-[2.5rem] cursor-pointer active:scale-95 duration-150
+                            :class="`w-[2.5rem] h-[2.5rem] sm:w-[3rem] sm:h-[3rem] cursor-pointer active:scale-95 duration-150
                             ${tempExperienceHolder.icon == 1 && 'bg-amber-200 px-2 rounded'}`" />
                         <AwardIcon  @click="tempExperienceHolder.icon = 2" 
-                            :class="`w-[2.5rem] h-[2.5rem] cursor-pointer active:scale-95 duration-150
+                            :class="`w-[2.5rem] h-[2.5rem] sm:w-[3rem] sm:h-[3rem] cursor-pointer active:scale-95 duration-150
                             ${tempExperienceHolder.icon == 2 && 'bg-amber-200 px-2 rounded'}`" />
                         <ProjectIcon @click="tempExperienceHolder.icon = 3" 
-                            :class="`w-[2.5rem] h-[2.5rem] cursor-pointer active:scale-95 duration-150
+                            :class="`w-[2.5rem] h-[2.5rem] sm:w-[3rem] sm:h-[3rem] cursor-pointer active:scale-95 duration-150
                             ${tempExperienceHolder.icon == 3 && 'bg-amber-200 px-2 rounded'}`" />
                     </div>
                     <button @click="handleAddExperience" 
-                        class="rounded-full bg-c1 text-white h-[2.2rem]
-                            sm:h-[2.5rem] w-full sm:w-[10rem] text-[1rem] active:scale-[99%]">
+                        class="rounded-full bg-c1 text-white h-[2.5rem]
+                            sm:h-[2.75rem] w-full sm:w-[11rem] text-[1rem] active:scale-[99%] mt-4 sm:mt-0">
                             Add
                     </button>
                 </div>
@@ -545,13 +545,14 @@ const handleSubmit = async () => {
         loadingPrompt.value = 'Uploading user photo'
         const photoURL = await uploadPhoto(newProfileBucket.value);
         if(photoURL != false) {
-            userInfo.photoURL.value = photoURL;
-            setNewUserData();
-        } else {
-            isLoading.value = false;
-            alert('error')
-            toast('Error occurred. Please try again.')
-        }
+            try {
+                userInfo.photoURL.value = photoURL;
+                setNewUserData();
+            } catch (error) {
+                isLoading.value = false
+                toast('Error occurred. Please try again.')
+            }
+        } 
     } else if(validateValues()) {
         isLoading.value = true;
         setNewUserData();
@@ -564,16 +565,17 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
+.fade-leave-to {
+    opacity: 0; /* Start state */
+    transition: opacity 300ms;
+}
+.fade-leave-from {
+    opacity: 100; /* Start state */
+}
 .fade-enter-active {
     transition: opacity 300ms;
 }
-.fade-enter {
-    opacity: 0; /* Start state */
-}
-.fade-leave-active {
-    transition: opacity 300ms;
-}
-.fade-leave-to {
+.fade-enter-from {
     opacity: 0; /* End state */
 }
 </style>

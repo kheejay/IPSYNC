@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, provide, reactive, ref } from 'vue';
+import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
 import LoadingScreen from './components/LoadingScreen.vue';
 import Footer from './components/Footer.vue';
@@ -18,6 +18,7 @@ import { useRoute } from 'vue-router';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from './firebase';
 import { authenticatingUser } from './router';
+import Fuse from 'fuse.js';
 
 const route = useRoute()
 
@@ -28,6 +29,11 @@ const isAuthenticated = ref(false)
 const genericProfile = ref('https://i.ibb.co/LJPrkjQ/np.png')
 const userGmailName = ref('User fullname')
 const users = ref([])
+const posts = ref([])
+const shapedPosts = ref([])
+const shapedPostsCopy = ref([])
+const shapedPostShallow = ref([])
+const categoryTags = ref([])
 const userData = reactive({
     full_name: {value: userGmailName.value, hasError: false, errorMessage: ''},
     department: {value: '', hasError: false, errorMessage: ''},
@@ -47,9 +53,10 @@ const userData = reactive({
 })
 
 const unsubscribeUser = ref(null)
+const unsubscribePosts = ref(null)
 
 const setUserData = () => {
-    console.log('setUserData', userData.uid)
+    // console.log('setUserData', userData.uid)
     const foundUser = users.value.find((user) => user.uid === userData.uid);
     if (foundUser) {
         for (const key in userData) {
@@ -71,7 +78,7 @@ const fetchUsers = () =>  {
 
     unsubscribeUser.value = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
       const changes = snapshot.docChanges();
-      console.log('user snapshot', snapshot);
+      // console.log('user snapshot', snapshot);
 
       if (!changes.length) {
         //
@@ -89,6 +96,109 @@ const fetchUsers = () =>  {
       }
       setUserData();
     });
+}
+
+const getUniqueTagValues = () => {
+  posts.value.forEach((post) => {
+    post.categoryTags.forEach((tag) => {
+      if(!categoryTags.value.includes(tag)) {
+        categoryTags.value.push(tag)
+      }
+    })
+  })
+}
+
+const sortByDate = () => {
+  shapedPostShallow.value = shapedPostShallow.value.sort((a, b) => {
+    const timeA = new Date(a.timestamp).getTime() || 0;
+    const timeB = new Date(b.timestamp).getTime() || 0;
+
+    return timeB - timeA;
+  });
+
+  shapedPostsCopy.value = shapedPostsCopy.value.sort((a, b) => {
+    const timeA = new Date(a.timestamp).getTime() || 0;
+    const timeB = new Date(b.timestamp).getTime() || 0;
+
+    return timeB - timeA;
+  });
+  console.log('test sort: ', shapedPostShallow.value)
+}
+
+const reshapePosts = () => {
+  shapedPosts.value = {...posts.value.map((post) => {
+      const author = users.value.find((user) => {
+        if(user.uid == post.authorId) {
+          return user
+        }
+      })
+      return {...post, full_name: author.full_name, department: author.department, photoURL: author.photoURL}
+    })
+  }
+  shapedPostShallow.value = Array.isArray(shapedPosts.value) ? [...shapedPosts.value] : [...Object.values(shapedPosts.value)];
+  shapedPostsCopy.value = Array.isArray(shapedPosts.value) ? [...shapedPosts.value] : [...Object.values(shapedPosts.value)];
+  sortByDate();
+}
+
+const fetchPosts = () => {
+    turnOffPostsListener();
+
+    const q = query(collection(db, "posts"));
+
+    unsubscribePosts.value = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
+      const changes = snapshot.docChanges();
+      console.log('post snapshot', snapshot);
+
+      if (!changes.length) {
+        console.log('snapshot posts no content')
+      } else {
+        changes.forEach((change) => {
+            if(change.type === 'added') {
+              posts.value.push({...change.doc.data(), postId: change.doc.id});
+            } 
+            if(change.type == 'removed') {
+              posts.value = posts.value.filter(post => post.postId !== change.doc.id );
+            }
+        });
+      }
+      reshapePosts();
+      getUniqueTagValues();
+    });
+}
+
+const fuseOptions = {
+	// isCaseSensitive: false,
+	// includeScore: false,
+	// shouldSort: true,
+	// includeMatches: false,
+	// findAllMatches: false,
+	// minMatchCharLength: 1,
+	// location: 0,
+	// threshold: 0.6,
+	// distance: 100,
+	// useExtendedSearch: false,
+	// ignoreLocation: false,
+	// ignoreFieldNorm: false,
+	// fieldNormWeight: 1,
+	keys: [
+		"projectTitle",
+		"rolePosition"
+	]
+};
+
+let fuse = new Fuse(shapedPostsCopy.value, fuseOptions);
+
+watch(shapedPostsCopy, (newValue) => {
+  fuse = new Fuse(newValue, fuseOptions)
+})
+
+const filterData = (searchPattern) => {
+  if(searchPattern != false) {
+    let result = fuse.search(searchPattern);
+    shapedPostShallow.value = result.length ? result.map(r => r.item) : [];
+  } else {
+    shapedPostShallow.value = shapedPostsCopy.value;
+  }
 }
 
 const emptyUserData = () => {
@@ -111,25 +221,42 @@ const emptyUserData = () => {
 }
 
 provide('userData', {
+    users,
+    posts,
+    shapedPosts,
+    shapedPostShallow,
+    categoryTags,
     userData,
     genericProfile,
     userGmailName,
     authenticatingUser,
     setUserData,
     emptyUserData,
-    isAuthenticated
+    isAuthenticated,
+    filterData
 })
 
 onMounted(() => {
     fetchUsers();
+    fetchPosts();
 })
 
-onUnmounted(() => {
-    if(unsubscribeUser.value) {
+const turnOffPostsListener = () => {
+  if(unsubscribePosts.value) {
+        unsubscribePosts.value()
+    }
+}
+
+const turnOffUsersListener = () => {
+  if(unsubscribeUser.value) {
         unsubscribeUser.value()
     }
-})
+}
 
+onUnmounted(() => {
+    turnOffUsersListener();
+    turnOffPostsListener();
+})
 </script>
 
 <style lang="css" scoped>

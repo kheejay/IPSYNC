@@ -1,1 +1,9 @@
 input based text = 1.1rem
+add animation for postAProjectModal
+minimize agressiveness for tags auto completion
+animation ease-in 200ms ease-out 150ms;
+debounce autocompletion 150ms
+new user ? then after filling out the forms generate prompts for the next action or redirect to project or any intuitive actions
+conflict when multiple identity is logged in in a single browser, overwritten's the other accounts identity, due to shared key 
+name in the same storage, alternative is prompt user for this case if no solution has been supplied.
+tags filters

@@ -180,7 +180,7 @@ import PlusIcon from '../icons/PlusIcon.vue'
 import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
 import { reactive, ref, watch } from 'vue';
-import { collection, addDoc, sum } from "firebase/firestore"; 
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 
 import * as yup from 'yup';
 import { onClickOutside, useDebounceFn } from '@vueuse/core';
 import { db } from '../../firebase';
@@ -192,6 +192,7 @@ const openCategoryTagsLg = ref(false);
 const openCategoryTagsSm = ref(false);
 const isLoading = ref(false)
 const tagIsAddedPrompt = ref(false)
+const submitLock = ref(false);
 
 const turnOffTafIsAddedPrompt = useDebounceFn(() => {
     tagIsAddedPrompt.value = false;
@@ -276,21 +277,27 @@ const validateInput = (name) => {
 
 const submitPost = async (submitPostSchema) => {
     isLoading.value = true;
-    try {
+    if(submitLock.value == false) {
+        submitLock.value = true;
+        try {
         // Add a new document with a generated id.
         const docRef = await addDoc(collection(db, "posts"), submitPostSchema);
-        toast('Project successfully posted!', "top", 3000);
+        toast('Project posted successfully!', "top", 3000);
         emit('close')
         isLoading.value = false;
-    } catch (error) {
-        console.log(error)
-        isLoading.value = false;
+        setTimeout(() => {
+            submitLock.value = false;
+        }, 300)
+        } catch (error) {
+            isLoading.value = false;
+            toast('An occurred submitting post', "top", 5000, '#CB3D3D', '#B74242')
+            submitLock.value = false;
+        }
     }
 }
 
 const handleSubmit = () => {
     let authorIdCopy = localStorage.getItem('userId')
-    
     for(const key in postSchema) {
         validateInput(key)
     }  
@@ -304,7 +311,6 @@ const handleSubmit = () => {
                 !postSchema.projDescription.hasError && !postSchema.deadline.hasError && !postSchema.projTimeline.hasError && 
                 !postSchema.contactInformation.hasError) 
             {
-
                 let submitPostSchema = {
                     projectTitle: postSchema.projectTitle.value,
                     numOfOpenPositions: postSchema.numOfOpenPositions.value,
@@ -316,7 +322,8 @@ const handleSubmit = () => {
                     deadline: postSchema.deadline.value,
                     projTimeline: postSchema.projTimeline.value,
                     contactInformation: postSchema.contactInformation.value,
-                    authorId: authorIdCopy 
+                    authorId: authorIdCopy,
+                    timestamp: new Date().toISOString()
                 }
                 
                 submitPost(submitPostSchema);
@@ -347,7 +354,13 @@ const handlePushCategoryTags = () => {
     }
 }
 const updatePostSchemaCategoryTags = () => {
-    postSchema.categoryTags.value = [...categoryTags.value.filter((tag) => tag.selected == true)]
+    let temp = [...categoryTags.value.filter((tag) => tag.selected == true)]
+    postSchema.categoryTags.value = temp.map((tag) => {
+        return {
+            value: tag.value,
+            selected: false
+        }
+    })
     categoryTagsEntry.value = postSchema.categoryTags.value.length ? postSchema.categoryTags.value[0].value : ''
     validateInput('categoryTags')
 }
@@ -372,11 +385,17 @@ watch(categoryTags.value, () => {
 })
 </script>
 
+// .fade-leave-active {
+//     transition: opacity 50ms;
+// }
+// .fade-leave-to {
+//     opacity: 0; /* End state */
+// }
 <style scoped>
-.fade-leave-active {
+.fade-enter-active {
     transition: opacity 100ms;
 }
-.fade-leave-to {
+.fade-enter-from {
     opacity: 0; /* End state */
 }
 </style>
