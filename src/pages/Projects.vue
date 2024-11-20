@@ -56,9 +56,9 @@
                         <MagnifyingGlass class="text-white w-[2rem] h-[2rem] sm:w-[2.8rem] sm:h-[2.8rem] mx-2" />
                     </div>
                 </div>
-                <div @click="toggleFilterSort" 
-                    class="h-[2.75rem] sm:h-[3.2rem] w-max bg-white flex items-center gap-2 md:gap-6 border-2 border-c1 
-                    text-c1 px-4 cursor-pointer relative">
+                <div @click="showSortFilter" 
+                    :class="`h-[2.75rem] sm:h-[3.2rem] w-max bg-white flex items-center gap-2 md:gap-6 border-2 border-c1 
+                    text-c1 px-4 cursor-pointer ${ 'pointer-events-none' && openFilterSort }`">
                     <FilterSort class="w-5 h-5 sm:w-7 sm:h-7 hover:scale-125 duration-200" />
                     <span class="text-[0.9rem] sm:text-[1rem] font-bold text-nowrap hover:scale-125 duration-200">
                         Filter & Sort
@@ -68,7 +68,7 @@
                         <transition name="fade" mode="out-in">
                             <div v-if="openFilterSort" 
                                 class="absolute flex flex-col -left-[8.635rem] top-[2.3rem] sm:-left-[15.1rem] sm:top-[2.8rem] 
-                                w-[18rem] h-[22.5rem] bg-white border-2 border-c1 overflow-y-auto p-1 gap-1 no-scrollbar outline"
+                                w-[18rem] h-[22.5rem] bg-white border-2 border-c1 overflow-y-auto p-1 gap-1 no-scrollbar"
                                 ref="targetSort">
                                 <div v-for="tag, index in categoryTags" :key="index" 
                                     :class="`flex items-center gap-2 hover:bg-c1 py-2 rounded-sm hover:text-white
@@ -123,9 +123,9 @@ const openFilterSort = ref(false)
 const targetSort = ref(null)
 onClickOutside(targetSort, event => closeFilterSort())
 
-const toggleFilterSort = useDebounceFn(() => {
-    openFilterSort.value = !openFilterSort.value;
-}, 100)
+const showSortFilter = () => {
+    openFilterSort.value = true;
+}
 
 const closeFilterSort = useDebounceFn(() => {
     openFilterSort.value = false;
@@ -159,10 +159,6 @@ const searchPattern = ref('')
 const handleFilterPosts = useDebounceFn(() => {
     filterData(searchPattern.value);
 }, 300)
-// const handleFilterPosts = useDebounceFn(() => {
-//     filterPosts();
-// }, 300)
-
 </script>
 
 <style scoped>
