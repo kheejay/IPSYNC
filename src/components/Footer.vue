@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-full h-fit md:h-[18rem] py-11 pl-[1rem] sm:pl-[7rem] text-[1rem]">
+        <div class="w-full h-fit md:h-[18rem] py-11 pl-[1rem] sm:pl-[7rem] text-[1rem] overflow-hidden">
             <div class="grid gap-2 md:gap-0 sm:flex w-full h-full">
                 <div class="w-max sm:w-[18rem] md:w-[18rem]">
                     <p class="font-bold py-2 text-c1">HEAD OFFICE</p>

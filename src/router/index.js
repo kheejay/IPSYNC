@@ -11,6 +11,7 @@ import AboutUs from '../pages/AboutUs.vue'
 import ContactUs from '../pages/ContactUs.vue'
 import { ref } from 'vue'
 import Projects from '../pages/Projects.vue'
+import InspectProfile from '../pages/InspectProfile.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -70,11 +71,14 @@ const router = createRouter({
             name: 'Contact',
             component: ContactUs
         },
-        // {
-        //     path: '/inspect-user/:id',
-        //     name: 'InspectUser',
-        //     component: InspectUser
-        // },
+        {   
+            path: '/inspect-profile/:id',
+            name: 'InspectProfile',
+            component: InspectProfile,
+            meta: {
+                requiresAuth: true
+            }
+        },
         {
             path: "/:pathMatch(.*)*",
             redirect: '/'

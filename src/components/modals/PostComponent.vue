@@ -9,8 +9,10 @@
 
         <div class="z-[1] flex w-full border-b border-c1 relative">
             <div class="pic-wrapper flex items-center justify-center">
-                <img :src="props.post.photoURL.value" alt="photo" 
-                    :class="`pic border-c1 rounded-full scale-${ props.post.photoURL.scale }`">
+                <img @click="$router.push(`/inspect-profile/${ props.post.authorId }`)" 
+                    :src="props.post.photoURL.value" alt="photo" 
+                    :class="`pic border-c1 rounded-full scale-${ props.post.photoURL.scale } cursor-pointer 
+                    hover:scale-125 duration-200`">
             </div>
             <div class="flex-grow flex flex-col justify-center text-c1">
                 <div class="font-bold pic-texts">{{ props.post.full_name }}</div>
