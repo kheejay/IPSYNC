@@ -49,12 +49,14 @@
 
                 <div class="w-full p-2 flex justify-start items-end bg-transparent to-c6 gap-4">
                     <textarea 
-                        class="h-fit w-full focus:outline-none p-4 resize-none"
+                        class="h-fit w-full focus:outline-none p-4 resize-none caret-c2 focus:ring focus:ring-c2 text-c1
+                        hover:ring hover:ring-c3 duration-200"
                         v-model="input"
                         ref="textarea" 
                         placeholder="Hello!"
                         />
-                    <button class="px-9 h-[3.25rem] bg-c6 text-white rounded">
+                    <button class="px-9 h-[3.25rem] bg-c6 text-white rounded hover:bg-[#386bb2] duration-75 
+                    active:translate-y-[0.125rem]">
                         Send
                     </button>
                 </div>
@@ -73,3 +75,9 @@ import ArrowLeft from '../components/icons/ArrowLeft.vue';
 import { useTextareaAutosize } from '@vueuse/core';
 const { textarea, input } = useTextareaAutosize()
 </script>
+
+<style>
+.c {
+    color: hsl(215, 52%, 48%)
+}
+</style>

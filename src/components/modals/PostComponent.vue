@@ -37,7 +37,8 @@
         </div>
         <div class="flex-grow flex justify-end items-end details-wrapper pb-2">
             <div @click="handlePreviewEmit"
-                class="flex justify-center items-center text-nowrap details text-c1 opacity-70 border-b cursor-pointer">
+                class="flex justify-center items-center text-nowrap details text-c1 opacity-70 border-b cursor-pointer hover:text-c2
+                active:translate-y-1">
                 VIEW MORE DETAILS 
                 <ArrowDownNoBg class="arrow" />
             </div>
