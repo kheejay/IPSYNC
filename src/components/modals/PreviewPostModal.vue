@@ -12,9 +12,17 @@
                 class="w-8 h-8 text-black absolute right-[1.25rem] top-[1.25rem] z-[2] cursor-pointer active:translate-y-[0.1rem]" />
 
             <div class="flex w-full border-b border-c1 relative">
-                <div class="flex xs:p-[0.75rem]">
-                    <img :src="props.post.photoURL.value" alt="photo" 
-                    :class="`border-2 border-c1 rounded-full min-w-11 min-h-11 w-11 h-11 scale-${ props.post.photoURL.scale     }`">
+                <div class="flex xs:p-[0.75rem] relative">
+                    <img @click="$router.push(`/inspect-profile/${ props.post.authorId}`)" 
+                    @mouseover="showPromptProfile = true"
+                    @mouseleave="showPromptProfile = false"
+                    :src="props.post.photoURL.value" alt="photo" 
+                    :class="`border-2 border-c1 rounded-full min-w-11 min-h-11 w-11 h-11 scale-${ props.post.photoURL.scale     }
+                    hover:scale-125 duration-200 cursor-pointer`">
+                    <span v-if="showPromptProfile"
+                        class="text-xs absolute -top-[.90rem] left-1/2 -translate-x-1/2 rounded-lg shadow text-nowrap px-2 text-c1">
+                        See user!
+                    </span>
                 </div>
                 <div class="flex-grow flex flex-col justify-center text-c1 pl-[0.5rem] xs:pl-0">
                     <span class="text-[1.125rem] font-bold uppercase">{{ props.post.full_name }}</span>
@@ -56,7 +64,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import XIcon from '../icons/XIcon.vue';
 const props = defineProps(['post'])
 const emit = defineEmits(['close'])
+const showPromptProfile = ref(false)
 </script>

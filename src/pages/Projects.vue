@@ -73,7 +73,7 @@
                                 w-[18rem] h-[22.5rem] bg-white border-2 border-c1 overflow-y-auto p-1 gap-1 no-scrollbar"
                                 ref="targetSort">
                                 <div v-for="tag, index in categoryTags" :key="index" 
-                                    :class="`flex items-center gap-2 hover:bg-c1 py-2 rounded-sm hover:text-white
+                                    :class="`flex items-center gap-2 hover:bg-c1 py-2 rounded-sm hover:text-white delay-75
                                     ${ tag.selected && 'bg-c1 text-white' } cursor-pointer`"
                                     @click="tag.selected = !tag.selected">
                                     <input v-model="tag.selected" type="checkbox" class="border my-3 ml-3 w-4 h-4">

@@ -8,11 +8,17 @@
         <div class="z-[2] lightest drop-shadow rounded-full bg-c5 absolute"></div>
 
         <div class="z-[1] flex w-full border-b border-c1 relative">
-            <div class="pic-wrapper flex items-center justify-center">
+            <div class="pic-wrapper flex items-center justify-center relative">
                 <img @click="$router.push(`/inspect-profile/${ props.post.authorId }`)" 
+                    @mouseover="showPromptProfile = true"
+                    @mouseleave="showPromptProfile = false"
                     :src="props.post.photoURL.value" alt="photo" 
                     :class="`pic border-c1 rounded-full scale-${ props.post.photoURL.scale } cursor-pointer 
-                    hover:scale-125 duration-200`">
+                    hover:scale-125 duration-200 `">
+                <span v-if="showPromptProfile"
+                    class="text-xs absolute -top-[0.90rem] left-1/2 -translate-x-1/2 rounded-lg shadow text-nowrap px-2 text-c1">
+                    See user!
+                </span>
             </div>
             <div class="flex-grow flex flex-col justify-center text-c1">
                 <div class="font-bold pic-texts">{{ props.post.full_name }}</div>
@@ -41,6 +47,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
 const emit = defineEmits(['previewPost'])
 const props = defineProps(['post'])
@@ -48,6 +55,8 @@ const props = defineProps(['post'])
 const handlePreviewEmit = () => {
     emit('previewPost', props.post)
 }
+
+const showPromptProfile = ref(false)
 </script>
 
 <style scoped>
