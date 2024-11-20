@@ -3,7 +3,7 @@
         <div class="md:w-[9rem] h-[4rem] flex justify-center items-center">
             <IPSYNCLogo class="w-[3rem] md:w-[5rem]" />
         </div>
-        <div class="hidden md:flex text-nowrap">
+        <div class="hidden md:flex flex-grow lg:px-12 xl:px-0 justify-between xl:justify-center text-nowrap">
             <RouterLink :to="{ name: 'Landing' }"
                 :class="`text-[0.8rem] xl:text-[1rem] text-font ${ $route.name === 'Landing' ? 'font-bold underline' : '' } 
                     hover:font-bold hover:underline w-[3rem] lg:w-[3.5rem] xl:w-[4rem] text-center`">

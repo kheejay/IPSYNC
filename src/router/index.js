@@ -12,6 +12,7 @@ import ContactUs from '../pages/ContactUs.vue'
 import { ref } from 'vue'
 import Projects from '../pages/Projects.vue'
 import InspectProfile from '../pages/InspectProfile.vue'
+import Messages from '../pages/Messages.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -75,6 +76,14 @@ const router = createRouter({
             path: '/inspect-profile/:id',
             name: 'InspectProfile',
             component: InspectProfile,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/messages',
+            name: 'Messages',
+            component: Messages,
             meta: {
                 requiresAuth: true
             }
