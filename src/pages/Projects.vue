@@ -49,22 +49,24 @@
 
         <div class="mt-20 sm:mt-32 w-full md:px-[4rem] xl:px-[6rem]">
             <div class="w-full items-start flex-col sm:flex-row flex gap-2 lg:gap-4 xl:gap-9 justify-between">
-                <div class="flex-grow w-full h-[2.75rem] sm:h-[3.2rem] border-2 border-black flex focus-within:border-c1">
+                <div class="flex-grow w-full h-[2.75rem] sm:h-[3.2rem] border-2 border-black bg-c1 flex 
+                    focus-within:border-c6 focus-within:bg-c6 duration-200 hover:bg-c6 hover:border-c6">
                     <input type="text" class="focus:outline-none w-full h-full px-2 sm:px-4 md:px-8 placeholder:italic sm:text-[1.125rem]" 
                     placeholder="Search..." v-model="searchPattern" @input="handleFilterPosts">
-                    <div class="w-max h-full bg-c1 flex items-center justify-center">
+                    <div class="w-max h-full bg-transparent flex items-center justify-center">
                         <MagnifyingGlass class="text-white w-[2rem] h-[2rem] sm:w-[2.8rem] sm:h-[2.8rem] mx-2" />
                     </div>
                 </div>
                 <div @click="showSortFilter" 
                     :class="`h-[2.75rem] sm:h-[3.2rem] w-max bg-white flex items-center gap-2 md:gap-6 border-2 border-c1 
-                    text-c1 px-4 cursor-pointer ${ 'pointer-events-none' && openFilterSort }`">
-                    <FilterSort class="w-5 h-5 sm:w-7 sm:h-7 hover:scale-125 duration-200" />
+                    text-c1 px-4 cursor-pointer ${ 'pointer-events-none' && openFilterSort } hover:text-c6 hover:border-c6
+                    duration-200`">
+                    <FilterSort class="w-5 h-5 sm:w-7 sm:h-7" />
                     <span class="text-[0.9rem] sm:text-[1rem] font-bold text-nowrap hover:scale-125 duration-200">
                         Filter & Sort
                     </span>
                     <div class="relative z-[1]">
-                        <ArrowDownNoBg class="w-5 sm:w-7 h-5 sm:h-7 bg-white text-c1 hover:scale-125 duration-200" />
+                        <ArrowDownNoBg class="w-5 sm:w-7 h-5 sm:h-7 bg-white" />
                         <transition name="fade" mode="out-in">
                             <div v-if="openFilterSort" 
                                 class="absolute flex flex-col -left-[8.635rem] top-[2.3rem] sm:-left-[15.1rem] sm:top-[2.8rem] 
