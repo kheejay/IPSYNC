@@ -84,13 +84,18 @@
             </div>
         </div>
         <div class="w-full flex justify-center py-11 sm:py-20">
-            <div v-if="shapedPostShallow == false" class="flex flex-col gap-6 text-c1 items-center">
+            <div v-if="shapedPostShallow == false && shapedPostsCopy == false" class="flex flex-col gap-6 text-c1 items-center">
                 <span class="text-xs">Fetching posts for you...</span>
                 <BarsSpin class="w-9 h-9" />
             </div>
+            <div v-else-if="shapedPostShallow == false && shapedPostsCopy != false" class="flex flex-col gap-6 text-c1 items-center">
+                <span class="text-xs">No match for this request</span>
+            </div>
             <div v-else class="grid xl:grid-cols-2 gap-7 sm:gap-16">
-                <PostComponent v-for="post, index in shapedPostShallow" :key="index"
+                <transition-group name="fadeComponent" mode="out-in">
+                    <PostComponent v-for="post, index in shapedPostShallow" :key="index"
                     @previewPost="handleShowPreviewPost" :post="post" />
+                </transition-group>
             </div>
         </div>
         <transition name="fadeComponent" mode="out-in">
@@ -117,7 +122,7 @@ import PreviewPostModal from '../components/modals/PreviewPostModal.vue';
 import { computed, inject, ref, watch } from 'vue';
 import { onClickOutside, useDebounceFn } from '@vueuse/core';
 
-const { categoryTags, filterData, filterByCategoryTags, shapedPostShallow } = inject('userData')
+const { categoryTags, filterData, filterByCategoryTags, shapedPostShallow, shapedPostsCopy } = inject('userData')
 
 const postNewProject = ref(false)
 const previewPost = ref(false)

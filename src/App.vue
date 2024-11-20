@@ -236,6 +236,7 @@ provide('userData', {
     users,
     posts,
     shapedPosts,
+    shapedPostsCopy,
     shapedPostShallow,
     categoryTags,
     userData,
