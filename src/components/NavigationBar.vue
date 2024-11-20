@@ -90,17 +90,25 @@
                         SIGN IN TO GET STARTED <LightArrowRight class="w-[1.75rem] h-[1.75rem]" />
                     </RouterLink>
                     <div v-if="isAuthenticated" 
-                        @mousedown="goToProfile" :class="`w-full active:bg-c4 rounded ${ $route.name === 'Profile' && 'bg-c4'}`">
+                        :class="`w-full rounded`">
                         <div class="flex p-2">
                             <img :src="userData.photoURL.value" alt="" 
+                                @mousedown="goToProfile"
                                 class="bg-black w-11 h-11 rounded-full border-2 border-c1">
                             <div class=" flex-grow flex flex-col justify-center px-2">
                                 <p class="font-bold text-[1rem]">Chicken Bilog</p>
                                 <p class="text-[0.90rem]">STUDENT</p>
                             </div>
                         </div>
-                        <div class="w-11/12 mx-auto border-t border-black p-2">
+                        <div @mousedown="goToProfile" 
+                            :class="`w-11/12 mx-auto border-black pl-2 py-1.5 
+                            ${ $route.name === 'Profile' && 'bg-c4'} mt-2 active:bg-c4 duration-200`">
                             <p class="text-[1rem]m mb-1 cursor-pointer">VIEW PROFILE</p>
+                        </div>
+                        <div @mousedown="goToMessages" 
+                            :class="`w-11/12 mx-auto border-black pl-2 py-1
+                            ${ $route.name === 'Messages' && 'bg-c4'} active:bg-c4 duration-200`">
+                            <p class="text-[1rem]m mb-1 cursor-pointer">MESSAGES</p>
                         </div>
                     </div>
                     <div class="w-full grid">
