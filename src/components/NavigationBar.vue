@@ -234,10 +234,10 @@ const handleLogout = () => {
     });
 }
 
-const confirmActionLogout = () => {
+const confirmActionLogout = useDebounceFn(() => {
     confirmLogout.value = true;
     showMobileNav.value = false;
-}
+}, 150)
 
 const { isAuthenticated } = inject('userData')
 

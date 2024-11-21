@@ -10,8 +10,8 @@
                 </div>
                 <div class="flex justify-center md:justify-start mt-6 md:mt-12">
                     <button 
-                        @click="$router.push({ name: isAuthenticated ? 'Dashboard' : 'Login' })" 
-                        class="pl-6 pr-3 py-2 bg-[#EBF1FD] text-[#113567] font-bold rounded-3xl flex items-center">
+                        @click="handlePush('Dashboard')" 
+                        class="pl-6 pr-3 py-2 bg-[#EBF1FD] text-[#113567] font-bold rounded-3xl flex items-center uppercase">
                         {{ isAuthenticated ? 'Go to Dashboard' : 'GET STARTED' }}
                         <LightArrowRight class="w-[2rem] md:w-[3rem] h-[1.5rem] md:h-[2rem] ml-1 text-[#113567]" />
                     </button>
@@ -60,9 +60,9 @@
             </div>
             <div class="flex justify-center md:justify-start mt-6 md:mt-12">
                 <button 
-                    @click="$router.push({ name: 'Login' })" 
-                    class="pl-6 pr-3 py-2 bg-[#EBF1FD] text-[#113567] font-bold rounded-2xl flex items-center">
-                    JOIN NOW
+                    @click="handlePush('Projects')" 
+                    class="pl-6 pLr-3 py-2 bg-[#EBF1FD] text-[#113567] font-bold rounded-2xl flex items-center uppercase">
+                    {{  isAuthenticated ? 'Project Listings' : 'join now' }}
                     <LightArrowRight class="w-[2rem] md:w-[3rem] h-[1.5rem] md:h-[2rem] ml-1 text-[#113567]" />
                 </button>
             </div>
@@ -88,7 +88,14 @@
 </style>
 
 <script setup>
-import { inject, watch } from 'vue';
+import { inject } from 'vue';
 import LightArrowRight from '../components/icons/LightArrowRight.vue';
+import { useDebounceFn } from '@vueuse/core';
+import { useRouter } from 'vue-router';
 const { isAuthenticated } = inject('userData')
+
+const router = useRouter()
+const handlePush = useDebounceFn((name) => {
+    isAuthenticated.value ? router.push({ name: name }) : router.push({ name: 'Login' })
+}, 150)
 </script>

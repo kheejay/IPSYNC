@@ -12,7 +12,7 @@
                 <img @click="$router.push(`/inspect-profile/${ props.post.authorId }`)" 
                     @mouseover="showPromptProfile = true"
                     @mouseleave="showPromptProfile = false"
-                    :src="props.post.photoURL.value" alt="photo" 
+                    :src="props.post.photoURL.value ?? 'https://i.ibb.co/LJPrkjQ/np.png'" alt="photo" 
                     :class="`pic border-c1 rounded-full scale-${ props.post.photoURL.scale } cursor-pointer 
                     hover:scale-125 duration-200 `">
                 <span v-if="showPromptProfile"
@@ -21,7 +21,7 @@
                 </span>
             </div>
             <div class="flex-grow flex flex-col justify-center text-c1">
-                <div class="font-bold pic-texts">{{ props.post.full_name }}</div>
+                <div class="font-bold pic-texts">{{ props.post.full_name ?? 'IPSYNC User' }}</div>
                 <div class="pic-texts">{{ props.post.department }}</div>
             </div>
         </div>

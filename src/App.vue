@@ -205,7 +205,6 @@ const filterByCategoryTags = (tags) => {
   if( tags == false) {
     shapedPostShallow.value = shapedPostsCopy.value;
   } else {
-    // console.log(shapedPostsCopy.value[0])
     shapedPostShallow.value = shapedPostsCopy.value.filter(post => {
       // Check if there's any common element between `tags` and `post.categoryTags.value`
       return post.categoryTags.some(tag => tags.includes(tag.value));
@@ -273,7 +272,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.3s;

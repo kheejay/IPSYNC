@@ -21,7 +21,8 @@
             <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4 relative">
                 <div class="w-full flex flex-col-reverse sm:flex-col">
                     <div class="w-full grid md:flex justify-center sm:justify-end items-center gap-4 mt-4 sm:mt-0 py-6">
-                        <button class="rounded-full bg-c1 text-white h-[2.2rem]
+                        <button @click="handleCreateRoom"
+                            class="rounded-full bg-c1 text-white h-[2.2rem]
                             sm:h-[2.5rem] px-6 sm:px-0 sm:w-[10rem] text-[1rem] active:scale-[99%]">
                             Message
                         </button>
@@ -180,7 +181,7 @@
                 :value="userInfo.mobileNumber">
         </div>
     </div>
-    <LoadingScreen :loadingPrompt="'Getting user data'" v-if="isLoading" />
+    <LoadingScreen :loadingPrompt="loadingPrompt" v-if="isLoading" />
 </div>
 </template>
 
@@ -190,14 +191,19 @@ import FacebookIcon from '../components/icons/FacebookIcon.vue';
 import MailIcon from '../components/icons/MailIcon.vue';
 import PhoneIcon from '../components/icons/PhoneIcon.vue';
 import JobTitleIcon from '../components/icons/JobTitleIcon.vue';
-import { useTextareaAutosize, onClickOutside, useDebounceFn } from '@vueuse/core';
+import { useTextareaAutosize, onClickOutside, useDebounceFn, timestamp } from '@vueuse/core';
 import { inject, onMounted, reactive, ref, watch, } from 'vue';
 import { useRoute } from 'vue-router';
 import LoadingScreen from '../components/LoadingScreen.vue';
+import { toast } from '../functions/toast';
+import { db } from '../firebase';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 const { textarea, input } = useTextareaAutosize()
 
 const previewProfile = ref(false)
 const isLoading = ref(false)
+const loadingPrompt = ref('Processing request')
+const buttonLock = ref(false)
 
 const showProfile = useDebounceFn(() => {
     previewProfile.value = true;
@@ -209,7 +215,7 @@ const hideProfile = () => useDebounceFn(() => {
 const target = ref(null)
 onClickOutside(target, event => hideProfile())
 
-const { users } = inject('userData') 
+const { users, userData } = inject('userData') 
 
 const userInfo = reactive({
     full_name: {value: '', hasError: false, errorMessage: ''},
@@ -225,31 +231,46 @@ const userInfo = reactive({
     facebook: '',
     gmail: '',
     mobileNumber: '',
-    uid: localStorage.getItem('userId'),
+    uid: null,
     photoURL: { value: 'https://i.ibb.co/LJPrkjQ/np.png', scale: 100}
 })
 
 const getUserInformation = (userId) => {
     const user = users.value.find((user) => user.uid == userId);
-    if (user) {
-        // Assigning properties one by one to maintain reactivity
-        userInfo.full_name.value = user.full_name;
-        userInfo.department.value = user.department;
-        userInfo.degree_program.value = user.degree_program;
-        userInfo.year_level.value = user.year_level;
-        userInfo.student_id.value = user.student_id;
-        userInfo.personal_description.value = user.personal_description;
-        userInfo.experience.value = user.experience;
-        userInfo.skills.value = user.skills;
-        userInfo.education.value = user.education;
-        userInfo.interest.value = user.interest;
-        userInfo.facebook = user.facebook;
-        userInfo.gmail = user.gmail;
-        userInfo.mobileNumber = user.mobileNumber;
-        userInfo.photoURL.value = user.photoURL.value;
-        userInfo.photoURL.scale = user.photoURL.scale;
+    if(user.length || user != false) {
+        
+        if (user) {
+            // Assigning properties one by one to maintain reactivity
+            userInfo.full_name.value = user.full_name;
+            userInfo.department.value = user.department;
+            userInfo.degree_program.value = user.degree_program;
+            userInfo.year_level.value = user.year_level;
+            userInfo.student_id.value = user.student_id;
+            userInfo.personal_description.value = user.personal_description;
+            userInfo.experience.value = user.experience;
+            userInfo.skills.value = user.skills;
+            userInfo.education.value = user.education;
+            userInfo.interest.value = user.interest;
+            userInfo.facebook = user.facebook;
+            userInfo.gmail = user.gmail;
+            userInfo.mobileNumber = user.mobileNumber;
+            userInfo.photoURL.value = user.photoURL.value;
+            userInfo.photoURL.scale = user.photoURL.scale;
+            userInfo.uid = user.uid
+        }
+    } else {
+        stopLoading()
+        toast('Error occurred while loading user data', "top", 5000, '#CB3D3D', '#B74242')
     }
-    isLoading.value = false;
+    stopLoading()
+}
+
+const startLoading = (prompt = 'Processing request') => {
+    isLoading.value = true;
+    loadingPrompt.value = prompt;
+}
+const stopLoading = () => {
+    isLoading.value  = false;
 }
 
 const route = useRoute()
@@ -258,7 +279,7 @@ onMounted(() => {
     if(users.value.length) {
         getUserInformation(route.params.id)
     } else {
-        isLoading.value = true;
+        startLoading('Getting user data')
         watch(users.value, () => {
             if(users.value.length) {
                 getUserInformation(route.params.id)
@@ -266,6 +287,40 @@ onMounted(() => {
         })
     }
 })
+
+const currentUserId = ref(userData.uid)
+
+const handleCreateRoom = async () => {
+    startLoading('System is generating room')
+    if(userInfo.uid && userInfo.uid !== currentUserId.value && !buttonLock.value) {
+        buttonLock.value = true;
+        try {
+            // Add a new document with a generated id.
+            // two personed room
+            const docRef = await addDoc(collection(db, "messages"), {
+                users: [
+                    {uid: userInfo.uid, photoURL: userInfo.photoURL, full_name: userInfo.full_name.value},
+                    {uid: userInfo.uid, photoURL: userInfo.photoURL, full_name: userInfo.full_name.value}
+                ],
+                type: "Private message"
+            })
+            // const docRef = await addDoc(collection(db, "messages", "DthaGOPdmkmOcb7bdDeb", "messages"), {
+            //     value: "sample nested message",
+            //     timestamp: new Date().toISOString()
+            // });
+        // console.log("Document written" );
+        console.log("Document written with ID: ", docRef.id);   
+        stopLoading();
+        } catch (error) {
+            alert(error.message)
+            toast('Error occurred while creating a room', "top", 5000, '#CB3D3D', '#B74242')
+            stopLoading();
+        }
+    } else {
+        stopLoading();
+        toast('Error occurred while creating a room', "top", 5000, '#CB3D3D', '#B74242')
+    }
+}
 </script>
 
 <style scoped>
