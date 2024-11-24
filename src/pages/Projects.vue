@@ -191,20 +191,20 @@ watch(tags, () => {
     transition: opacity 100ms;
 }
 .fade-enter-from {
-    opacity: 0; /* End state */
+    opacity: 0;
 }
 .fadeComponent-enter-active {
     transition: opacity 300ms;
 }
 .fadeComponent-enter-from {
-    opacity: 0; /* End state */
+    opacity: 0;
 }
 .fadeComponent-leave-to {
-    opacity: 0; /* Start state */
+    opacity: 0;
     transition: opacity 150ms;
 }
 .fadeComponent-leave-from {
-    opacity: 100; /* Start state */
+    opacity: 1;
 }
 .bg-image {
     background-image: url('/src/assets/images/ProjectsBg.svg');

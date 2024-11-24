@@ -9,7 +9,7 @@
 
         <div class="z-[1] flex w-full border-b border-c1 relative">
             <div class="pic-wrapper flex items-center justify-center relative">
-                <img @click="$router.push(`/inspect-profile/${ props.post.authorId }`)" 
+                <img @click="handleInspectProfile" 
                     @mouseover="showPromptProfile = true"
                     @mouseleave="showPromptProfile = false"
                     :src="props.post.photoURL.value ?? 'https://i.ibb.co/LJPrkjQ/np.png'" alt="photo" 
@@ -48,8 +48,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import ArrowDownNoBg from '../icons/ArrowDownNoBg.vue';
+import { useRouter } from 'vue-router';
 const emit = defineEmits(['previewPost'])
 const props = defineProps(['post'])
 
@@ -57,7 +58,19 @@ const handlePreviewEmit = () => {
     emit('previewPost', props.post)
 }
 
+const { userData } = inject('userData')
+
 const showPromptProfile = ref(false)
+
+const router = useRouter()
+
+const handleInspectProfile = () => {
+    if(userData.uid === props.post.authorId) {
+        router.push({ name: "Profile" })
+    } else {
+        router.push(`/inspect-profile/${ props.post.authorId }`)
+    }
+}
 </script>
 
 <style scoped>

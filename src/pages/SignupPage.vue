@@ -52,9 +52,9 @@
                                 class="w-full py-3 border border-black focus:outline-none px-4 text-[0.90rem] 
                                     sm:text-[1rem] placeholder:font-light shadow"
                                 placeholder="Password">
-                            <VisibilityOutline v-if="showPass" @click="showPass = false" 
+                            <VisibilityOutline v-if="!showPass" @click="showPass = true" 
                                 class="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 cursor-pointer" />
-                            <VisibilityOffOutline v-else @click="showPass = true" 
+                            <VisibilityOffOutline v-else @click="showPass = false" 
                             class="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 cursor-pointer" />
                         </div>
                         <span v-if="user.password.hasError" class="text-red-500 text-xs w-full text-start">

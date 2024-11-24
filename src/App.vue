@@ -10,15 +10,17 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 'vue';
+import { computed, onBeforeMount, onUnmounted, provide, reactive, ref, watch } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
 import LoadingScreen from './components/LoadingScreen.vue';
 import Footer from './components/Footer.vue';
 import { useRoute } from 'vue-router';
-import { collection, onSnapshot, query } from 'firebase/firestore';
+import { collection, getDocs, onSnapshot, query } from 'firebase/firestore';
 import { db } from './firebase';
 import { authenticatingUser } from './router';
 import Fuse from 'fuse.js';
+import { formatDate } from './functions/formatDate';
+import { useDebounceFn } from '@vueuse/core';
 
 const route = useRoute()
 
@@ -47,13 +49,25 @@ const userData = reactive({
     interest: {value: [''], hasError: false, errorMessage: ''},
     facebook: '',
     gmail: '',
-    mobileNumber: '',
+    mobileNumber: '', 
     uid: localStorage.getItem('userId'),
     photoURL: { value: genericProfile.value, scale: 100}
 })
 
+const messagesRooms = ref([])
+const selectedRoom = ref()
+const allMessages = ref([])
+const messageRoom = ref({})
+const isLoadingMessagesRooms = ref(false)
+
+watch(selectedRoom, (newValue) => {
+  messageRoom.value = allMessages.value.filter((room) => room.roomId === newValue.roomId)
+})
+
 const unsubscribeUser = ref(null)
 const unsubscribePosts = ref(null)
+const unsubscribeMessagesRooms = ref(null)
+const unsubscribeMessageRoom = ref(null)
 
 const setUserData = () => {
     // console.log('setUserData', userData.uid)
@@ -75,7 +89,8 @@ const setUserData = () => {
 
 const fetchUsers = () =>  {
     const q = query(collection(db, "users"));
-
+    
+    let newUsers = []
     unsubscribeUser.value = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
       const changes = snapshot.docChanges();
       // console.log('user snapshot', snapshot);
@@ -85,15 +100,16 @@ const fetchUsers = () =>  {
       } else {
         changes.forEach((change) => {
             if(change.type === 'added') {
-              users.value.push({...change.doc.data()});
+              newUsers.push({...change.doc.data()});
             } 
             if(change.type == 'modified') {
-              users.value = users.value.map(user => 
+              newUsers = newUsers.map(user => 
                 user.uid === userData.uid ? {...change.doc.data()} : user
               );
             }
         });
       }
+      users.value = newUsers;
       setUserData();
     });
 }
@@ -122,10 +138,11 @@ const sortByDate = () => {
 
     return timeB - timeA;
   });
-  console.log('test sort: ', shapedPostShallow.value)
+  // console.log('test sort: ', shapedPostShallow.value)
 }
 
 const reshapePosts = () => {
+  // append the author few details to corresponding post
   shapedPosts.value = {...posts.value.map((post) => {
       const author = users.value.find((user) => {
         if(user.uid == post.authorId) {
@@ -147,22 +164,225 @@ const fetchPosts = () => {
 
     unsubscribePosts.value = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
       const changes = snapshot.docChanges();
-      console.log('post snapshot', snapshot);
-
+      // console.log('post snapshot', snapshot);
       if (!changes.length) {
-        console.log('snapshot posts no content')
+        // 
       } else {
         changes.forEach((change) => {
+            const postData = {
+                ...change.doc.data(),
+                postId: change.doc.id, // Ensure unique identifier
+            };
+            const existingIndex = posts.value.findIndex(post => post.postId === postData.postId);
             if(change.type === 'added') {
-              posts.value.push({...change.doc.data(), postId: change.doc.id});
-            } 
-            if(change.type == 'removed') {
-              posts.value = posts.value.filter(post => post.postId !== change.doc.id );
+              if (existingIndex === -1) {
+                  posts.value.push(postData);
+              }
+            } else if (change.type === "modified") {
+              
+                if (existingIndex !== -1) {
+                    posts.value[existingIndex] = postData;
+                }
+            } else if (change.type === "removed") {
+                    // Remove the post
+                if (existingIndex !== -1) {
+                  posts.value.splice(existingIndex, 1);
+                }
             }
         });
       }
       reshapePosts();
       getUniqueTagValues();
+    });
+}
+
+
+const setLastMessage = () => { 
+    messagesRooms.value = messagesRooms.value.map((thisRoom) => {
+    const matchingRoom = allMessages.value.find(
+      (messageRoom) => messageRoom.roomId === thisRoom.roomId
+    );
+    const roomMessages = matchingRoom?.roomMessages;
+    if (Array.isArray(roomMessages) && roomMessages.length > 0) {
+      const lastMessage = roomMessages[roomMessages.length - 1].value;
+      return {
+        ...thisRoom,
+        lastMessage: lastMessage.length > 30 ? `${lastMessage.slice(0, 30)}...` : lastMessage
+      };
+    }
+    return thisRoom;
+  });
+}
+
+
+const filterOnlyUserExclusiveRooms = () => {
+  console.log('intial v', messagesRooms.value)
+      messagesRooms.value = messagesRooms.value.filter((room) =>
+        room.users.some(user => user.uid === userData.uid)
+      ).map((thisRoom) => {
+        const matchingRoom = allMessages.value.find(
+                (messageRoom) => messageRoom.roomId === thisRoom.roomId
+            );
+            const roomMessages = matchingRoom?.roomMessages;
+            if (Array.isArray(roomMessages) && roomMessages.length > 0) {
+                const lastMessage = roomMessages[roomMessages.length - 1].value;
+                return {...thisRoom, lastMessage: lastMessage.length > 30 ? `${lastMessage.slice(0, 30)}...` : lastMessage}
+            }
+            return thisRoom
+      })
+      setLastMessage()
+      console.log('why do you get vanished? ', messagesRooms.value)
+};
+
+
+const updateUsersDataInMessagesRooms = () => {
+  messagesRooms.value.forEach((room) => {
+    room.users = room.users.map((user) => {
+      const userAccount = users.value.find((userAccount) => userAccount.uid === user.uid);
+      if (userAccount) {
+        // Update the user object with new data
+        return { ...user, full_name: userAccount.full_name, photoURL: userAccount.photoURL };
+      }
+      // Return the original user object if no match is found
+      return user;
+    });
+  });
+  // console.log('Updated user profile in rooms:', messagesRooms.value);
+};
+
+const gatherMessages = useDebounceFn(() => {
+  messagesRooms.value.forEach( async (room) => {
+    const querySnapshot = await getDocs(collection(db, "messagesRooms", room.roomId, "messages"));
+    let roomMessages = []
+    querySnapshot.forEach((doc) => {
+      roomMessages.push({...doc.data(), formattedStamp: formatDate(doc.data().timestamp), messageId: doc.id, showDeleteButton: false})
+    });
+    console.log('get docs ', roomMessages)
+    roomMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+    allMessages.value.push({roomId: room.roomId, roomMessages: roomMessages})
+    console.log('all messages: ', allMessages.value)
+    setLastMessage()
+  })
+}, 150)
+
+
+const fetchMessagesRooms = async () => {
+
+  if (isLoadingMessagesRooms.value) return;
+  isLoadingMessagesRooms.value = true;
+
+  turnOffMessagesRoomsListener();
+
+  const q = query(collection(db, "messagesRooms"));
+  try {
+    console.log('Initializing query snapshot...');
+    unsubscribeMessagesRooms.value = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
+      const changes = snapshot.docChanges();
+      
+      if (!changes.length) {
+        console.log('No changes in messagesRooms');
+      } else {
+        changes.forEach((change) => {
+          if (change.type === 'added') {
+            // Add new room if it doesn't already exist
+            if (!messagesRooms.value.some((room) => room.roomId === change.doc.id)) {
+              messagesRooms.value.push({
+                ...change.doc.data(),
+                roomId: change.doc.id,
+              });
+            }
+          }
+          if (change.type === 'modified') {
+            // Update existing room
+            if (!messagesRooms.value.some((room) => room.roomId === change.doc.id)) {
+              messagesRooms.value.push({
+                ...change.doc.data(),
+                roomId: change.doc.id,
+              });
+            } else {
+              messagesRooms.value = messagesRooms.value.map((room) =>
+                room.roomId === change.doc.id
+                ? { ...room, ...change.doc.data() }
+                : room
+              );
+            }
+          }
+          if (change.type === 'removed') {
+            // Remove the deleted room
+            messagesRooms.value = messagesRooms.value.filter(
+              (room) => room.roomId !== change.doc.id
+            );
+          }
+        });
+
+        // Update dependent data
+        gatherMessages();
+        filterOnlyUserExclusiveRooms();
+        updateUsersDataInMessagesRooms();
+        console.log('Updated messagesRooms:', messagesRooms.value);
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching initial messagesRooms:', error);
+  } finally {
+    isLoadingMessagesRooms.value = false;
+  }
+};
+
+
+const updateRoomMessages = (newMessages) => {
+  let updatedRoom = null;
+
+  // Check if the room already exists in allMessages.value
+  if (allMessages.value.some((room) => room.roomId === selectedRoom.value.roomId)) {
+    allMessages.value = allMessages.value.map((room) => {
+      if (room.roomId === selectedRoom.value.roomId) {
+        updatedRoom = { ...room, roomMessages: newMessages };
+        return updatedRoom;
+      }
+      return room;
+    });
+  } else {
+    // If not, add the room to allMessages.value
+    updatedRoom = { roomId: selectedRoom.value.roomId, roomMessages: newMessages };
+    allMessages.value.push(updatedRoom);
+  }
+
+  // Update messageRoom.value and sort messages by timestamp
+  if (updatedRoom) {
+    messageRoom.value = updatedRoom;
+    messageRoom.value.roomMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  }
+
+  console.log('snapshot triggered:', messageRoom.value);
+
+  setLastMessage();
+};
+
+
+
+const fetchMessageRoom = () => {
+    turnOffMessageRoomListener();
+    
+    let newMessages = []
+
+    const q = query(collection(db, "messagesRooms", selectedRoom.value.roomId, "messages"));
+
+    unsubscribeMessageRoom.value = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
+      const changes = snapshot.docChanges();
+      if (!changes.length) {
+        // console.log('snapshot posts no content')
+      } else {
+        changes.forEach((change) => {
+            if(change.type === 'added') {
+              newMessages.push({...change.doc.data(), formattedStamp: formatDate(change.doc.data().timestamp), messageId: change.doc.id, showDeleteButton: false});
+            } 
+            if(change.type == 'removed') {
+              newMessages = newMessages.filter((message) => message.messageId !== change.doc.id)
+            }
+        });
+      }
+      updateRoomMessages(newMessages);
     });
 }
 
@@ -174,7 +394,7 @@ const fuseOptions = {
 	// findAllMatches: false,
 	// minMatchCharLength: 1,
 	// location: 0,
-	// threshold: 0.6,
+	threshold: 0.6,
 	// distance: 100,
 	// useExtendedSearch: false,
 	// ignoreLocation: false,
@@ -229,11 +449,34 @@ const emptyUserData = () => {
     userData.mobileNumber = '';
     userData.uid = null;
     userData.photoURL = { value: genericProfile.value, scale: 100 };
-}
+} 
+
+const findPreExistingRoom = (otherUserUid) => {
+  for (const room of messagesRooms.value) {
+    const hasBothUsers = room.users.some(user => user.uid === userData.uid) &&
+                         room.users.some(user => user.uid === otherUserUid);
+
+    if (hasBothUsers && room.type === "Private message") {
+      console.log("found! ", room.roomId)
+      return room.roomId; 
+    }
+  }
+  return null; 
+};
+
+const runAllNecessaryFunctions = async () => {
+  await fetchMessagesRooms()
+  gatherMessages();
+  fetchUsers();
+  fetchPosts();
+};
 
 provide('userData', {
     users,
     posts,
+    messagesRooms,
+    messageRoom,
+    selectedRoom,
     shapedPosts,
     shapedPostsCopy,
     shapedPostShallow,
@@ -246,13 +489,26 @@ provide('userData', {
     emptyUserData,
     isAuthenticated,
     filterData,
-    filterByCategoryTags
+    filterByCategoryTags,
+    fetchMessageRoom,
+    fetchMessagesRooms,
+    findPreExistingRoom,
+    runAllNecessaryFunctions,
+    allMessages, 
+    gatherMessages,
+    setLastMessage
 })
 
-onMounted(() => {
-    fetchUsers();
-    fetchPosts();
+watch(messagesRooms.value, () => {
+  if(messagesRooms.value.length) {
+    gatherMessages();
+    console.log('gathering..')
+  }
 })
+
+onBeforeMount(() => {
+  runAllNecessaryFunctions();
+});
 
 const turnOffPostsListener = () => {
   if(unsubscribePosts.value) {
@@ -266,9 +522,23 @@ const turnOffUsersListener = () => {
     }
 }
 
+const turnOffMessagesRoomsListener = () => {
+  if(unsubscribeMessagesRooms.value) {
+        unsubscribeMessagesRooms.value()
+    }
+}
+
+const turnOffMessageRoomListener = () => {
+  if(unsubscribeMessageRoom.value) {
+        unsubscribeMessageRoom.value()
+    }
+}
+
 onUnmounted(() => {
     turnOffUsersListener();
     turnOffPostsListener();
+    turnOffMessagesRoomsListener();
+    turnOffMessageRoomListener();
 })
 </script>
 

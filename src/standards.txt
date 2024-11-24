@@ -6,3 +6,10 @@ new user ? then after filling out the forms generate prompts for the next action
 
 conflict when multiple identity is logged in in a single browser, overwritten's the other accounts identity, due to shared key 
 name in the same storage, alternative is prompt user for this case if no solution has been supplied.
+
+mailgun apikey: 0adc1fa40e8ae959d481c74d436c9daf-6df690bb-8e362c93
+
+sorting sang message according to timestamp - date fns
+formatting sang timestamp for every message
+then quality test 
+then proceed to group chat 

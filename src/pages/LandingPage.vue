@@ -88,14 +88,20 @@
 </style>
 
 <script setup>
-import { inject } from 'vue';
+import { inject, onBeforeMount } from 'vue';
 import LightArrowRight from '../components/icons/LightArrowRight.vue';
 import { useDebounceFn } from '@vueuse/core';
 import { useRouter } from 'vue-router';
-const { isAuthenticated } = inject('userData')
+import { toast } from '../functions/toast';
+const { isAuthenticated, runAllNecessaryFunctions } = inject('userData')
 
 const router = useRouter()
 const handlePush = useDebounceFn((name) => {
+    toast('Please sign in to get started!', "center", "3000", "#184c95", "#1c58ab")
     isAuthenticated.value ? router.push({ name: name }) : router.push({ name: 'Login' })
 }, 150)
+
+onBeforeMount(() => {
+    runAllNecessaryFunctions()
+})
 </script>

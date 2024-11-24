@@ -191,9 +191,9 @@ import FacebookIcon from '../components/icons/FacebookIcon.vue';
 import MailIcon from '../components/icons/MailIcon.vue';
 import PhoneIcon from '../components/icons/PhoneIcon.vue';
 import JobTitleIcon from '../components/icons/JobTitleIcon.vue';
-import { useTextareaAutosize, onClickOutside, useDebounceFn, timestamp } from '@vueuse/core';
+import { useTextareaAutosize, onClickOutside, useDebounceFn } from '@vueuse/core';
 import { inject, onMounted, reactive, ref, watch, } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import LoadingScreen from '../components/LoadingScreen.vue';
 import { toast } from '../functions/toast';
 import { db } from '../firebase';
@@ -215,7 +215,7 @@ const hideProfile = () => useDebounceFn(() => {
 const target = ref(null)
 onClickOutside(target, event => hideProfile())
 
-const { users, userData } = inject('userData') 
+const { users, userData, messagesRooms, selectedRoom, findPreExistingRoom, fetchMessageRoom } = inject('userData') 
 
 const userInfo = reactive({
     full_name: {value: '', hasError: false, errorMessage: ''},
@@ -288,37 +288,53 @@ onMounted(() => {
     }
 })
 
+const router = useRouter()
 const currentUserId = ref(userData.uid)
 
 const handleCreateRoom = async () => {
-    startLoading('System is generating room')
-    if(userInfo.uid && userInfo.uid !== currentUserId.value && !buttonLock.value) {
-        buttonLock.value = true;
-        try {
-            // Add a new document with a generated id.
-            // two personed room
-            const docRef = await addDoc(collection(db, "messages"), {
-                users: [
-                    {uid: userInfo.uid, photoURL: userInfo.photoURL, full_name: userInfo.full_name.value},
-                    {uid: userInfo.uid, photoURL: userInfo.photoURL, full_name: userInfo.full_name.value}
-                ],
-                type: "Private message"
-            })
-            // const docRef = await addDoc(collection(db, "messages", "DthaGOPdmkmOcb7bdDeb", "messages"), {
-            //     value: "sample nested message",
-            //     timestamp: new Date().toISOString()
-            // });
-        // console.log("Document written" );
-        console.log("Document written with ID: ", docRef.id);   
-        stopLoading();
-        } catch (error) {
-            alert(error.message)
-            toast('Error occurred while creating a room', "top", 5000, '#CB3D3D', '#B74242')
-            stopLoading();
+    const preExistingRoomId = findPreExistingRoom(route.params.id)
+    if(preExistingRoomId != null) {
+        selectedRoom.value = messagesRooms.value.find((room) => room.roomId === preExistingRoomId)
+        if(selectedRoom.value) {
+            fetchMessageRoom()
+            router.push({ name: 'Messages' })
         }
     } else {
-        stopLoading();
-        toast('Error occurred while creating a room', "top", 5000, '#CB3D3D', '#B74242')
+        startLoading('System is generating room')
+        if(userInfo.uid && userInfo.uid !== currentUserId.value && !buttonLock.value) {
+            buttonLock.value = true;
+            try {
+                const messageRoom = {
+                    users: [
+                        {uid: userInfo.uid, photoURL: userInfo.photoURL, full_name: userInfo.full_name.value},
+                        {uid: userData.uid, photoURL: userData.photoURL, full_name: userData.full_name.value}
+                    ],
+                    type: "Private message",
+                    isNew: true,
+                }
+                // Add a new document with a generated id.
+                // two personed room
+                const docRef = await addDoc(collection(db, "messagesRooms"), messageRoom)
+                // const docRef = await addDoc(collection(db, "messagesRooms", "DWAAfvGQcQ09sr5Mcje8", "messages"), {
+                //     value: "Whassupp ashkur",
+                //     timestamp: new Date().toISOString()
+                // }); 
+                // console.log("Document written: ", docRef.id );
+                const createdRoom = {...messageRoom, roomId: docRef.id}
+                selectedRoom.value = createdRoom;
+                router.push({ name: 'Messages' }); 
+                stopLoading();
+                buttonLock.value = false;
+            } catch (error) {
+                buttonLock.value = false;
+                alert(error.message)
+                toast('Error occurred while creating a room', "top", 5000, '#CB3D3D', '#B74242')
+                stopLoading();
+            }
+        } else {
+            stopLoading();
+            toast('Error occurred while creating a room', "top", 5000, '#CB3D3D', '#B74242')
+        }
     }
 }
 </script>

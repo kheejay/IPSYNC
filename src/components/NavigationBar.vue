@@ -193,7 +193,7 @@ import { RouterLink, useRouter } from "vue-router";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { toast } from "../functions/toast";
-const { userData, emptyUserData } = inject('userData')
+const { userData, emptyUserData, selectedRoom } = inject('userData')
 const showDropDown = ref(false)
 
 const router = useRouter()

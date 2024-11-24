@@ -11,7 +11,7 @@
             <div :class="`z-[2] absolute w-[11rem] h-[11rem] lg:w-[12rem] lg:h-[12rem] bg-white rounded-full left-1/2 
                 -translate-x-1/2 sm:-translate-x-0 sm:left-[3.5rem] lg:left-[2.7rem] top-[12.2rem] sm:top-[5.7rem] 
                 hover:cursor-pointer lg:top-[13.8rem] ${ isEditMode && 'top-[15.2rem] sm:top-[8rem] lg:top-[16.8rem]'} flex items-center 
-                justify-center border-0 overflow-hidden object-cover`">
+                justify-center border-0 overflow-hidden object-covers`">
                 <div @click="showProfile"
                     :class="`w-full h-full border-[0.2rem] rounded-full border-white z-[2] absolute 
                     ${ !isEditMode ? 'hover:bg-c1 opacity-20 cursor-pointer' : 'cursor-default' }`">
@@ -43,19 +43,24 @@
                         </div>  
                     </div>
                     <div class="w-full flex flex-col items-start pt-2 mt-[4.4rem] sm:mt-0">
-                        <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 ${ isEditMode && 'ring-1 ring-c2 mb-1'}`">
-                            <input :disabled="!isEditMode" type="text" ref="fullName"
+                        <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 ${ isEditMode && 'ring-1 ring-c2 mb-1'} flex flex-col sm:flex-row items-center`">
+                            <input v-if="isEditMode" type="text" ref="fullName"
                                 v-model="userInfo.full_name.value" placeholder="Full Name"
                                 @blur="validateInput('full_name')"
-                                class="w-full h-full bg-transparent p-2 text-[1.5rem] focus:outline-none text-center 
-                                sm:text-start placeholder:font-normal placeholder:italic">
+                                :class="`h-full bg-transparent p-2 text-[1.5rem] focus:outline-none text-center 
+                                sm:text-start placeholder:font-normal placeholder:italic ${ isEditMode ? 'w-full' : 'w-max'}`">
+                            <div v-else class="`h-full bg-transparent p-2 text-[1.5rem] sm:text-start">{{ userInfo.full_name.value }}</div>
+                            <span v-if="!isEditMode" class="bg-gradient-to-r from-c2 to-c6 text-white text-nowrap h-max pl-2 pr-[0.90rem] rounded-full text-[0.80rem] flex items-center gap-1 ml-2">
+                                <Verified />
+                                IPSYNC Verified
+                            </span>
                         </div>
                             <span v-if="userInfo.full_name.hasError" class="text-red-500 text-xs w-full text-center sm:text-start">
                                 {{ userInfo.full_name.errorMessage }}</span>
                         <div :class="`w-full ring-inset focus-within:ring-1 focus-within:ring-c2 ${ isEditMode && 'ring-1 ring-c2'}`">
                             <input :disabled="!isEditMode" type="text" placeholder="College or Department"
                                 v-model="userInfo.department.value" @blur="validateInput('department')"
-                                :class="`w-full bg-transparent px-2 ${ isEditMode && 'py-2'} text-[1rem] italic text-c1 focus:outline-none 
+                                :class="`w-full bg-transparent px-2 py-2 sm:py-0 ${ isEditMode && 'py-2'} text-[1rem] italic text-c1 focus:outline-none 
                                 text-center sm:text-start placeholder:font-normal placeholder:italic placeholder:opacity-75 placeholder:text-c1`">
                         </div>
                             <span v-if="userInfo.department.hasError" class="text-red-500 text-xs w-full text-center     sm:text-start">
@@ -166,15 +171,20 @@
             Education <span v-if="isEditMode" class="text-font text-base font-light">(Optional)</span>
         </div>
         <div class="w-full border-b-2 border-b-black">
-            <input type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1
-                focus:outline-none text-center sm:text-start" placeholder="Name of School" :disabled="!isEditMode" 
+            <input v-if="isEditMode" type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1
+                focus:outline-none text-center sm:text-start" placeholder="Name of School"
                 v-model="userInfo.education.value.school_name">
+            <input v-else type="text" class="w-full bg-transparent p-2 text-[1rem] italic text-c1
+                focus:outline-none text-center sm:text-start" placeholder="Name of School"
+                :value="userInfo.education.value.school_name != false ? userInfo.education.value.school_name : 'Education is not provided'">
         </div>
         <div class="w-full mt-2">
-            <input type="text" class="w-full bg-transparent p-2 text-[0.90rem] italic text-c1
+            <input v-if="isEditMode" type="text" class="w-full bg-transparent p-2 text-[0.90rem] italic text-c1
                 focus:outline-none text-center sm:text-start" placeholder="Start Date - End Date/Present" 
-                v-model="userInfo.education.value.time_span"
-                :disabled="!isEditMode">
+                v-model="userInfo.education.value.time_span">
+            <input v-else type="text" class="w-full bg-transparent p-2 text-[0.90rem] italic text-c1
+                focus:outline-none text-center sm:text-start" placeholder="Start Date - End Date/Present" 
+                :value="userInfo.education.value.time_span != false ? userInfo.education.value.time_span : 'Timeline is not provided'">
         </div>
     </div>
 
@@ -313,6 +323,7 @@ import AwardIcon from '../components/icons/AwardIcon.vue';
 import ProjectIcon from '../components/icons/ProjectIcon.vue';
 import ConfirmationModal from '../components/modals/ConfirmationModal.vue';
 import Remove from '../components/icons/Remove.vue';
+import Verified from '../components/icons/Verified.vue'
 import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
 import { inject, reactive, ref, } from 'vue';
 import * as yup from 'yup';
@@ -501,6 +512,11 @@ const getPhotoScale = (scaleCount) => {
     }
 } 
 
+const filterBlankData = () => {
+    userInfo.skills.value = userInfo.skills.value.filter((value) => value != false)
+    userInfo.interest.value = userInfo.interest.value.filter((value) => value != false)
+}
+
 const setNewUserData = async () => {
     if(userInfo.uid == null || userInfo.uid == false) {
         toast('User identity is missing')
@@ -508,6 +524,7 @@ const setNewUserData = async () => {
         return
     }
     try {
+        filterBlankData();
         loadingPrompt.value = 'Updating User Data';
         const userRef = doc(db, 'users', userInfo.uid);
         await setDoc(userRef, { 
