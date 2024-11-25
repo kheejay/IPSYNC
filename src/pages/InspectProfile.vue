@@ -179,6 +179,20 @@
                 :value="userInfo.mobileNumber">
         </div>
     </div>
+    <transition name="fade" mode="out-in">
+        <div v-if="previewProfile" 
+            class="w-screen h-screen fixed top-0 left-0 z-[4] flex items-center justify-center shadow px-12 sm:px-0">
+            <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
+            <div ref="target" 
+                class="w-full h-auto sm:h-[30rem] sm:w-[44rem] lg:h-[40rem] lg:w-[64rem] z-[1] bg-c5 flex justify-center relative py-8 rounded-lg overflow-hidden">
+                <!-- <IPStamp class="absolute -left-2 top-4 sm:scale-[250%] lg:scale-[150%] -rotate-45 opacity-45" /> -->
+                <!-- <IPStamp class="absolute left-8 bottom-4 sm:scale-[150%] lg:scale-[250%] -rotate-45 opacity-45" />
+                <IPStamp class="absolute right-2 -top-4 sm:scale-[150%] lg:scale-[250%] -rotate-45 opacity-45" />
+                <IPStamp class="absolute right-4 -bottom-4 sm:scale-[150%] lg:scale-[250%] -rotate-45 opacity-45" /> -->
+                <img :src="userInfo.photoURL.value" alt="profile" class="h-full w-auto z-[5]">
+            </div>
+        </div>
+    </transition> 
     <LoadingScreen :loadingPrompt="loadingPrompt" v-if="isLoading" />
 </div>
 </template>
@@ -207,12 +221,9 @@ const buttonLock = ref(false)
 const showProfile = useDebounceFn(() => {
     previewProfile.value = true;
 }, 150)
-const hideProfile = () => useDebounceFn(() => {
-    previewProfile.value = false;
-}, 150)
 
 const target = ref(null)
-onClickOutside(target, event => hideProfile())
+onClickOutside(target, event => previewProfile.value = false)
 
 const { users, userData, messagesRooms, selectedRoom, findPreExistingRoom, fetchMessageRoom, verifiedUsers } = inject('userData') 
 
