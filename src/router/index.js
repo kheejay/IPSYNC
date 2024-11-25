@@ -13,6 +13,7 @@ import { ref } from 'vue'
 import Projects from '../pages/Projects.vue'
 import InspectProfile from '../pages/InspectProfile.vue'
 import Messages from '../pages/Messages.vue'
+import { toast } from '../functions/toast'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -121,10 +122,18 @@ const getCurrentUser = () => {
     })
 }
 
-// router.beforeEach(async (to) => {
-//     if (to.meta.requiresAuth && !(await getCurrentUser())) {
-//         return '/'
-//     }
-// })
+router.beforeEach(async (to) => {
+    if (to.meta.requiresAuth && !(await getCurrentUser())) {
+        toast('You need to log in first.');
+        return '/';
+    }
+
+    if(localStorage.getItem('isRegistered') !== 'true' && to.name !== 'Profile' && to.meta.requiresAuth) {
+        toast('Please fill out required fields')
+        return '/profile'
+    }
+
+    return true
+});
 
 export {router, authenticatingUser }

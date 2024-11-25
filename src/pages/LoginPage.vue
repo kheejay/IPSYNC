@@ -142,7 +142,7 @@ const user = reactive({
     // last_name: { value: '', hasError: false, errorMessage: '' },
     email: { value: 'test@user.com', hasError: false, errorMessage: '' },
     // email_confirmation: { value: '', hasError: false, errorMessage: '' },
-    password: { value: 'testing123', hasError: false, errorMessage: '' },
+    password: { value: 'Testing122', hasError: false, errorMessage: '' },
     // password_confirmation: { value: 'testing123', hasError: false, errorMessage: '' },
     // confirmation_code: { value: '', hasError: false, errorMessage: '' },
 })
@@ -155,6 +155,7 @@ const handleUserLogin = async (result) => {
         if (docSnap.exists()) {
             isLoading.value = false;
             localStorage.setItem('userId', result.user.uid)
+            localStorage.setItem('isRegistered', 'true')
             userData.uid = result.user.uid
             setUserData();
             redirectTo('Landing');
@@ -162,6 +163,7 @@ const handleUserLogin = async (result) => {
             // docSnap.data() will be undefined in this case
             isLoading.value = false;
             localStorage.setItem('userId', result.user.uid) 
+            localStorage.setItem('isRegistered', false) 
             userData.photoURL.value = result.user.photoURL;
             userData.full_name.value = result.user.displayName;
             userData.uid = result.user.uid
@@ -185,11 +187,7 @@ const login = () => {
     signInWithEmailAndPassword(auth, user.email.value, user.password.value)
     .then((result) => {
         // Signed in 
-        localStorage.setItem('userId', result.user.uid)
-        isLoading.value = false;
-        userData.uid = result.user.uid
-        setUserData();
-        redirectTo('Landing')
+        handleUserLogin(result)
         // ...
     })
     .catch((error) => {

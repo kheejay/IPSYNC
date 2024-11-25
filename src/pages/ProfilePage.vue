@@ -545,6 +545,7 @@ const setNewUserData = async () => {
             photoURL: userInfo.photoURL
         }, { merge: true });
         isLoading.value = false;
+        localStorage.setItem('isRegistered', 'true')
         toast('Information updated successfully!')
     } catch (error) {
         isLoading.value = false;

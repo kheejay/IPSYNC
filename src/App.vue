@@ -433,22 +433,23 @@ const filterByCategoryTags = (tags) => {
 }
 
 const emptyUserData = () => {
-    localStorage.setItem('userId', null)
-    userData.full_name = { value: userGmailName.value, hasError: false, errorMessage: '' };
-    userData.department = { value: '', hasError: false, errorMessage: '' };
-    userData.degree_program = { value: '', hasError: false, errorMessage: '' };
-    userData.year_level = { value: '', hasError: false, errorMessage: '' };
-    userData.student_id = { value: '', hasError: false, errorMessage: '' };
-    userData.personal_description = { value: '', hasError: false, errorMessage: '' };
-    userData.experience = { value: [{ jobTitle: '', org: '', time_span: '' }], hasError: false, errorMessage: '' };
-    userData.skills = { value: [''], hasError: false, errorMessage: '' };
-    userData.education = { value: { school_name: '', time_span: '' }, hasError: false, errorMessage: '' };
-    userData.interest = { value: [''], hasError: false, errorMessage: '' };
-    userData.facebook = '';
-    userData.gmail = '';
-    userData.mobileNumber = '';
-    userData.uid = null;
-    userData.photoURL = { value: genericProfile.value, scale: 100 };
+  localStorage.setItem('userId', null)
+  userData.full_name = { value: userGmailName.value, hasError: false, errorMessage: '' };
+  userData.department = { value: '', hasError: false, errorMessage: '' };
+  userData.degree_program = { value: '', hasError: false, errorMessage: '' };
+  userData.year_level = { value: '', hasError: false, errorMessage: '' };
+  userData.student_id = { value: '', hasError: false, errorMessage: '' };
+  userData.personal_description = { value: '', hasError: false, errorMessage: '' };
+  userData.experience = { value: [{ jobTitle: '', org: '', time_span: '' }], hasError: false, errorMessage: '' };
+  userData.skills = { value: [''], hasError: false, errorMessage: '' };
+  userData.education = { value: { school_name: '', time_span: '' }, hasError: false, errorMessage: '' };
+  userData.interest = { value: [''], hasError: false, errorMessage: '' };
+  userData.facebook = '';
+  userData.gmail = '';
+  userData.mobileNumber = '';
+  userData.uid = null;
+  userData.photoURL = { value: genericProfile.value, scale: 100 };
+  localStorage.setItem('isRegistered', 'false')
 } 
 
 const findPreExistingRoom = (otherUserUid) => {

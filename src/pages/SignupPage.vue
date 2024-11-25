@@ -133,6 +133,7 @@ const handleNewUser = async (result) => {
         if (docSnap.exists()) {
             isLoading.value = false;
             localStorage.setItem('userId', result.user.uid);
+            localStorage.setItem('isRegistered', 'true')
             userData.uid = result.user.uid;
             toast('Account already registered, Welcome back!', "top")
             redirectTo('Landing');
@@ -143,6 +144,7 @@ const handleNewUser = async (result) => {
             genericProfile.value = result.user.photoURL;
             userGmailName.value = result.user.displayName;
             userData.uid = result.user.uid;
+            localStorage.setItem('isRegistered', false)
             console.log("No such document!");
             toast('Welcome! Let\'s get you set up with just a few quick details.', "top", "5000")
             redirectTo('Profile');
