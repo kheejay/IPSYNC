@@ -130,7 +130,7 @@
                         <div class="flex items-center lg:pr-2 lg:pl-4">
                             <img @click="seeUser(selectedRoom.users[0].uid != userData.uid ? selectedRoom.users[0].uid : selectedRoom.users[1].uid)" :src="selectedRoom.users[0].uid != userData.uid ? selectedRoom.users[0].photoURL.value : selectedRoom.users[1].photoURL.value ?? 'https://i.ibb.co/LJPrkjQ/np.png'" alt="profile" :class="`w-11 h-11 cursor-pointer rounded-full`">
                         </div>
-                        <div class="flex items-center px-4 lg:text-[1.125rem] text-white">
+                        <div class="flex items-center px-2.5 lg:text-[1.125rem] text-white">
                             {{ selectedRoom.users[0].uid != userData.uid ? selectedRoom.users[0].full_name : selectedRoom.users[1].full_name ?? 'IPSYNC User' }}
                         </div>
                     </div>
@@ -154,7 +154,7 @@
 
                 <div class="flex-grow flex flex-col p-2 overflow-y-scroll text-white gap-4 no-scrollbar"
                     ref="chatBox">
-                    <div v-if="!selectedRoom" class="flex-grow flex items-center justify-center text-c2">
+                    <div v-if="!selectedRoom" class="flex-grow flex items-center justify-center text-[#91add5]">
                         {{ 'Select a chat' }}
                     </div>
                     <div v-else-if="messageRoom && messageRoom?.roomMessages?.length"
@@ -179,6 +179,9 @@
                                 <span>{{ message.formattedStamp }}</span>
                             </div>
                         </div>
+                    </div>
+                    <div v-if="messageRoom && !messageRoom?.roomMessages?.length && selectedRoom" class="flex-grow text-[#91add5] flex items-center justify-center">
+                        IPSYNC Message Room
                     </div>
                 </div>
 

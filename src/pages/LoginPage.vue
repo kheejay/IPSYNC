@@ -140,9 +140,9 @@ const { userData, setUserData } = inject('userData')
 const user = reactive({
     // first_name: { value: '', hasError: false, errorMessage: '' },
     // last_name: { value: '', hasError: false, errorMessage: '' },
-    email: { value: 'test@user.com', hasError: false, errorMessage: '' },
+    email: { value: '', hasError: false, errorMessage: '' },
     // email_confirmation: { value: '', hasError: false, errorMessage: '' },
-    password: { value: 'Testing122', hasError: false, errorMessage: '' },
+    password: { value: '', hasError: false, errorMessage: '' },
     // password_confirmation: { value: 'testing123', hasError: false, errorMessage: '' },
     // confirmation_code: { value: '', hasError: false, errorMessage: '' },
 })

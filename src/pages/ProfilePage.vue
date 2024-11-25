@@ -49,11 +49,8 @@
                                 @blur="validateInput('full_name')"
                                 :class="`h-full bg-transparent p-2 text-[1.5rem] focus:outline-none text-center 
                                 sm:text-start placeholder:font-normal placeholder:italic ${ isEditMode ? 'w-full' : 'w-max'}`">
-                            <div v-else class="`h-full bg-transparent p-2 text-[1.5rem] sm:text-start">{{ userInfo.full_name.value }}</div>
-                            <span v-if="!isEditMode" class="bg-gradient-to-r from-c2 to-c6 text-white text-nowrap h-max pl-2 pr-[0.90rem] rounded-full text-[0.80rem] flex items-center gap-1 ml-2">
-                                <Verified />
-                                IPSYNC Verified
-                            </span>
+                            <div v-else class="`h-full bg-transparent px-2 py-1.5 text-[1.5rem] sm:text-start">{{ userInfo.full_name.value }}</div>
+                            <VerifiedTag v-if="!isEditMode && verifiedUsers.includes(userData.uid)" />
                         </div>
                             <span v-if="userInfo.full_name.hasError" class="text-red-500 text-xs w-full text-center sm:text-start">
                                 {{ userInfo.full_name.errorMessage }}</span>
@@ -323,7 +320,7 @@ import AwardIcon from '../components/icons/AwardIcon.vue';
 import ProjectIcon from '../components/icons/ProjectIcon.vue';
 import ConfirmationModal from '../components/modals/ConfirmationModal.vue';
 import Remove from '../components/icons/Remove.vue';
-import Verified from '../components/icons/Verified.vue'
+import VerifiedTag from '../components/VerifiedTag.vue';
 import { useTextareaAutosize, useFocus, onClickOutside } from '@vueuse/core';
 import { inject, reactive, ref, } from 'vue';
 import * as yup from 'yup';
@@ -373,7 +370,7 @@ const addExperience = ref(null)
 onClickOutside(target, event => hideProfile())
 onClickOutside(addExperience, event => hideAddExperienceModal())
 
-const { userData } = inject('userData') 
+const { userData, verifiedUsers } = inject('userData') 
 
 const userInfo = reactive( userData )
 

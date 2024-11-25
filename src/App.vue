@@ -59,6 +59,7 @@ const selectedRoom = ref()
 const allMessages = ref([])
 const messageRoom = ref({})
 const isLoadingMessagesRooms = ref(false)
+const verifiedUsers = ref(['x4xMyOXtPFYzfMZO97JM3cIuZJy2', '9ASX5ToFXfYeLnK7aztxae9n3tU2', 'mtNyuTO4gFbTLjmSROfV87NiWuI2', 'm37gTYcbIdYxNqTHllpnPm9X0rz2'])
 
 watch(selectedRoom, (newValue) => {
   messageRoom.value = allMessages.value.filter((room) => room.roomId === newValue.roomId)
@@ -474,6 +475,7 @@ const runAllNecessaryFunctions = async () => {
 
 provide('userData', {
     users,
+    verifiedUsers,
     posts,
     messagesRooms,
     messageRoom,

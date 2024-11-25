@@ -28,16 +28,14 @@
                         </button>
                     </div>
                     <div class="w-full flex flex-col items-start pt-2 mt-[4.4rem] sm:mt-0">
-                        <div class="w-full">
-                            <input disabled type="text" ref="fullName"
-                                :value="userInfo.full_name.value" placeholder="Full Name"
-                                class="w-full h-full bg-transparent p-2 text-[1.5rem] text-center 
-                                sm:text-start placeholder:font-normal placeholder:italic">
+                        <div class="w-full flex items-center flex-col sm:flex-row">
+                            <div class="`h-full bg-transparent px-2 py-1.5 text-[1.5rem] sm:text-start">{{ userInfo.full_name.value }}</div>
+                            <VerifiedTag v-if="!isEditMode && verifiedUsers.includes($route.params.id)" />
                         </div>
                         <div class="w-full">
                             <input disabled type="text" placeholder="College or Department"
                                 :value="userInfo.department.value"
-                                class="w-full bg-transparent px-2 text-[1rem] italic text-c1 
+                                class="w-full bg-transparent px-2 py-2 sm:py-0 text-[1rem] italic text-c1 
                                 text-center sm:text-start placeholder:font-normal placeholder:italic placeholder:opacity-75
                                 placeholder:text-c1">
                         </div>
@@ -191,13 +189,14 @@ import FacebookIcon from '../components/icons/FacebookIcon.vue';
 import MailIcon from '../components/icons/MailIcon.vue';
 import PhoneIcon from '../components/icons/PhoneIcon.vue';
 import JobTitleIcon from '../components/icons/JobTitleIcon.vue';
+import VerifiedTag from '../components/VerifiedTag.vue';
 import { useTextareaAutosize, onClickOutside, useDebounceFn } from '@vueuse/core';
-import { inject, onMounted, reactive, ref, watch, } from 'vue';
+import { inject, onMounted, reactive, ref, } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import LoadingScreen from '../components/LoadingScreen.vue';
 import { toast } from '../functions/toast';
 import { db } from '../firebase';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 const { textarea, input } = useTextareaAutosize()
 
 const previewProfile = ref(false)
@@ -215,7 +214,7 @@ const hideProfile = () => useDebounceFn(() => {
 const target = ref(null)
 onClickOutside(target, event => hideProfile())
 
-const { users, userData, messagesRooms, selectedRoom, findPreExistingRoom, fetchMessageRoom } = inject('userData') 
+const { users, userData, messagesRooms, selectedRoom, findPreExistingRoom, fetchMessageRoom, verifiedUsers } = inject('userData') 
 
 const userInfo = reactive({
     full_name: {value: '', hasError: false, errorMessage: ''},
@@ -280,9 +279,11 @@ onMounted(() => {
         getUserInformation(route.params.id)
     } else {
         startLoading('Getting user data')
-        watch(users.value, () => {
+        let newInterval = setInterval(() => {
             if(users.value.length) {
                 getUserInformation(route.params.id)
+                stopLoading()
+                return clearInterval(newInterval)
             }
         })
     }
