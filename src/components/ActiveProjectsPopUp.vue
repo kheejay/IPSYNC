@@ -1,6 +1,6 @@
 <template>
     <div class="z-[2] w-screen h-screen fixed top-0 left-0 flex items-start py-20 overflow-y-auto no-scrollbar justify-center bg-transparent select-none px-2 sm:px-4">
-        <div class="bg-c1 opacity-80 w-full h-full fixed left-0 top-0"></div>
+        <div @click="$emit('close')" class="bg-c1 opacity-80 w-full h-full fixed left-0 top-0"></div>
     
         <!-- 1.357784431137725 -->
          <div class="drop-shadow max-w-[50.84rem] w-[50.84rem] bg-white rounded-[1.125rem] relative py-12 px-4 sm:p-12">
@@ -9,19 +9,19 @@
             <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
                 class="absolute bottom-[0.675rem] -left-[0.75rem] xs:bottom-[1rem] sm:bottom-[1.4rem] xs:-left-[1.1rem] sm:-left-[1.4575rem] rotate-90 w-[18rem] xs:w-[26rem] sm:w-[36rem] h-auto rounded-[1.125rem] z-[-1]">
 
-            <XIcon class="w-7 h-7 sm:w-9 sm:h-9 text-black absolute right-[1rem] top-[1rem] sm:right-[1.5rem] sm:top-[1.5rem] z-[2] cursor-pointer active:translate-y-[0.1rem] duration-200 rounded-full" />
+            <XIcon @click="$emit('close')" class="w-7 h-7 sm:w-9 sm:h-9 text-black absolute right-[1rem] top-[1rem] sm:right-[1.5rem] sm:top-[1.5rem] z-[2] cursor-pointer active:translate-y-[0.1rem] duration-200 rounded-full" />
             
             <div class="font-bold tracking-[10%] text-c1 text-[2.25rem] md:text-[2.5rem] py-2 sm:py-0 sm:p-2">
-                Project Title
+                {{ props.post.projectTitle }}
             </div>
 
             <div class="w-full xs:px-6 sm:px-12">
-                <p class="font-bold text-c1 tracking-[10%] text-[1.25rem] sm:text-[1.5em] sm:py-1">ROLE: <span class="font-light uppercase italic">USER ROLE</span></p>
+                <p class="font-bold text-c1 tracking-[10%] text-[1.25rem] sm:text-[1.5em] sm:py-1">ROLE: <span class="font-light uppercase italic">{{ props.post.rolePosition }}</span></p>
 
                 <div class="text-c1 border border-c1 rounded-[0.95rem] mt-2 bg-white">
-                    <div class="uppercase pl-6 py-1.5 font-bold text-[1.125rem] border-b border-b-c1">Project Description</div>
-                    <div class="min-h-[12rem] pl-6 py-4">
-                        <span class="text-zinc-400 italic">Brief overview and key information about the project.</span>
+                    <div class="uppercase pl-4 py-1.5 font-bold text-[1.125rem] border-b border-b-c1">Project Description</div>
+                    <div class="min-h-[12rem] pl-4 py-2">
+                        {{ props.post.projDescription }}
                     </div>
                 </div>
                 
@@ -44,12 +44,15 @@
                         </div>
                     </div>
                     <div class="py-[0.125rem] pr-6 border-t border-t-c1 flex justify-end">
-                        <MailIcon class="w-[1.75rem] h-auto cursor-pointer active:scale-95 duration-200" />
+                        <div class="relative">
+                            <span v-show="showChat" class="absolute -top-5 left-[-3.5rem] text-[0.75rem] text-nowrap bg-white rounded-xl text-black shadow px-2">Open Group Chat!</span>
+                            <MailIcon @mouseover="openShowChat" @mouseleave="hideShowChat" class="w-[1.75rem] h-auto cursor-pointer active:scale-95 duration-200" />
+                        </div>
                     </div>
                 </div>
 
-                <p class="sm:text-[1.125rem] font-bold text-c6 py-2 mt-4">START DATE: <span class="font-light pl-2">mm/dd/yy</span></p>
-                <p class="sm:text-[1.125rem] font-bold text-c6 py-2">DEADLINE: <span class="font-light pl-2">mm/dd/yy</span></p>
+                <p class="sm:text-[1.125rem] font-bold text-c6 py-2 mt-4">DATE CREATED: <span class="font-light pl-2">{{ format(props.post.timestamp, ('MM/dd/yyyy'))}}</span></p>
+                <p class="sm:text-[1.125rem] font-bold text-c6 py-1.5">DEADLINE: <span class="font-light pl-2">{{ props.post.deadline }}</span></p>
 
                 <div class="w-full flex justify-end">
                     <button class="py-[0.5rem] mt-2 sm:py-[0.75rem] px-4 sm:px-8 text-c1 font-extrabold drop-shadow rounded-[1.125rem] bg-white border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-zinc-50">
@@ -67,4 +70,14 @@
 <script setup>
 import XIcon from '../components/icons/XIcon.vue'
 import MailIcon from '../components/icons/MailIcon.vue'
+import { format } from 'date-fns';
+import { useDebounceFn } from '@vueuse/core';
+import { ref } from 'vue';
+const emit = defineEmits(['close'])
+const props = defineProps(['post'])
+
+const showChat = ref(false)
+
+const openShowChat = useDebounceFn(() => showChat.value = true, 150)
+const hideShowChat = useDebounceFn(() => showChat.value = false, 150)
 </script>

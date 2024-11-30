@@ -305,7 +305,7 @@ const submitPost = async (submitPostSchema) => {
         try {
             // Add a new document with a generated id.
             const uploadedPhotoURL = await uploadPhoto(tempPhotoBucket.value)
-            const docRef = await addDoc(collection(db, "posts"), {...submitPostSchema, postPhotoURL: uploadedPhotoURL, completed: false, applicants: []});
+            const docRef = await addDoc(collection(db, "posts"), {...submitPostSchema, postPhotoURL: uploadedPhotoURL, completed: false, applicants: [], members: []});
             toast('Project posted successfully!', "top", 3000);
             emit('close')
             isLoading.value = false;

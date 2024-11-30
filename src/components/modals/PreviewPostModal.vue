@@ -84,7 +84,7 @@ const updateApplicants = async () => {
     if(userData.uid === props.post.authorId) {
         return toast('You cannot apply to a post you created.', "top", 1500, '#CB3D3D', '#B74242')
     }
-    if(props.post.applicants.includes(userData.uid)) {
+    if(props.post.applicants.some(((applicant) => applicant.userId == userData.uid))) {
         return toast('Already applied to this post, visit it to your dashboard', "top", 3000)
     }
     if(buttonLock.value) {
@@ -93,14 +93,17 @@ const updateApplicants = async () => {
     try {
         buttonLock.value = true
         isLoading.value = true
+
         const currentApplicants = Array.isArray(props.post.applicants) ? props.post.applicants : [];
-        const updatedApplicants = [...currentApplicants, {userId: userData.uid, status: 'Under Review'}];
+        const updatedApplicants = [...currentApplicants, { userId: userData.uid, status: 'Under Review', dateApplied: new Date().toISOString() }];
+        
         const docRef = doc(db, 'posts', props.post.postId);
         const updatePost = await updateDoc(docRef, {
             applicants: updatedApplicants
         });
 
         toast('Application sent!')
+        emit('close')
         
     } catch (error) {
         toast('Error occurred while sending application.', "top", 1500, '#CB3D3D', '#B74242')

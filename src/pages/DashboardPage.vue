@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full p-4 sm:px-6 sm:pt-6 pb-12">
+    <div v-if="!openMyPostedProject" class="w-full p-4 sm:px-6 sm:pt-6 pb-12">
 
        <div class="flex flex-col lg:flex-row w-full gap-4">
             <div class="h-[22rem] sm:h-[25rem] lg:h-[38rem] w-full lg:w-[24rem] bg-c1 rounded-[0.75rem] shadow-glass backdrop-blur-[1.56rem] flex flex-col justify-center">
@@ -22,7 +22,9 @@
                 </div>
                 <div v-if="!activeProjects.length" class="w-full text-center mt-[10rem] text-c1">No active projects yet 🙂</div>
                 <div class="flex-grow p-2 overflow-y-auto grid project-cards gap-4 mt-2.5 thumb-scrollbar">
-                    <ActiveProjectsCard v-for="post, index in activeProjects" :key="index" :post="post" />
+                    <ActiveProjectsCard v-for="post, index in activeProjects" :key="index" 
+                        :post="post" 
+                        @showActiveProject="showActiveProject" />
                 </div>
             </div>
        </div>
@@ -33,7 +35,7 @@
 
                 <div class="flex-grow px-2 sm:px-4 flex mb-4">
                     <div class="flex-grow overflow-y-auto thumb-scrollbar max-h-[20rem] px-2 sm:px-4">
-                        <div v-for="post, index in postedProjects" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] ${ index === postedProjects.length - 1 && 'border-b'}`">
+                        <div @click="showMyPostedProject(post)" v-for="post, index in postedProjects" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] ${ index === postedProjects.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] duration-200`">
                             <img :src="post.postPhotoURL ?? post.photoURL.value ?? 'https://i.ibb.co/VmwCJxf/image.png'" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full border-2 border-c1">
                             <div class="flex-grow flex justify-between items-center pr-2 sm:pr-8">
                                 <div class="pl-2">
@@ -54,15 +56,21 @@
 
                 <div class="flex-grow px-2 sm:px-4 flex mb-4">
                     <div class="flex-grow overflow-y-auto thumb-scrollbar max-h-[20rem] px-2 sm:px-4">
-                        <div v-for="post, index in myApplications" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] relative ${ index === myApplications.length - 1 && 'border-b'}`">
-                            <img src="" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full bg-c1">
+                        <div @click="showApplicationStatus(post.applicants.find((applicant) => applicant.userId == userData.uid).status)" 
+                            v-for="post, index in myApplications" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] relative ${ index === myApplications.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] duration-200`">
+                            <img :src="post.postPhotoURL" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full border border-c1">
                             <div class="flex-grow h-full flex justify-between items-center sm:pr-4 ">
                                 <div class="pl-2">
-                                    <p class="sm:text-[1.25rem] text-c1 font-bold uppercase">{{ post.projTitle }}</p>
-                                    <p class="text-[0.7rem] sm:text-[0.75rem] text-c1 uppercase">Role Looking For</p>
+                                    <p class="sm:text-[1.25rem] text-c1 font-bold uppercase">{{ post.projectTitle }}</p>
+                                    <p class="text-[0.7rem] sm:text-[0.75rem] text-c1 uppercase">{{ post.rolePosition }}</p>
                                 </div>
-                                    <p class="font-light text-c6 text-[0.75rem] text-wrap">DATE APPLIED: 11/22/24</p>
-                                    <p class="font-light text-[0.75rem] italic text-green-500 absolute right-2 sm:right-4 bottom-1">STATUS</p>
+
+                                    <p class="font-light text-c6 text-[0.75rem] text-wrap">DATE APPLIED: {{ format(post.applicants.find((applicant) => applicant.userId == userData.uid).dateApplied, 'MM/dd/yyyy') }}</p>
+
+                                    <p :class="`font-light text-[0.75rem] italic absolute right-2 sm:right-4 bottom-1 
+                                    ${ post.applicants.find((applicant) => applicant.userId == userData.uid).status == 'Under Review' ? 'text-c1' : post.applicants.find((applicant) => applicant.userId == userData.uid).status == 'Accepted' ? 'text-green-500' : 'text-red-500'}`">{{
+                                        post.applicants.find((applicant) => applicant.userId == userData.uid).status
+                                    }}</p>
                             </div>
                         </div>
                         <div v-if="!myApplications.length" class="w-full text-center mt-[8rem] text-c1">No active applications yet 🙂</div>
@@ -81,7 +89,7 @@
                     <div class="h-[4rem] flex w-full bg-c1 text-white items-center">
                         <div class="font-normal text-sm sm:text-[1.25rem] text-start pl-2 sm:pl-8 w-[30%]">Project Name</div>
                         <div class="font-normal text-sm sm:text-[1.25rem] text-start w-[17%]">Role</div>
-                        <div class="font-normal text-sm sm:text-[1.25rem] text-start w-[19%]">Start Date</div>
+                        <div class="font-normal text-sm sm:text-[1.25rem] text-start w-[19%]">Date Created</div>
                         <div class="font-normal text-sm sm:text-[1.25rem] text-start w-[19%]">Date Finished</div>
                         <div class="font-normal text-sm sm:text-[1.25rem] text-start w-[15%]">Status</div>
                     </div>
@@ -91,9 +99,9 @@
                                 <div class="w-full border-t border-c3"></div>
                             </div>
                             <div class="h-[5rem] items-center flex w-full text-wrap">
-                                <div class="font-bold text-[0.65rem] sm:text-[1.125rem] uppercase text-c1 text-start pl-2 sm:pl-8 w-[30%] tracking-[1%]">Project Title</div>
-                                <div class="text-font text-[0.5rem] sm:text-[1rem] font-bold uppercase text-start w-[17%]">BACK-END</div>
-                                <div class="text-font text-[0.5rem] sm:text-[1rem] font-bold text-start w-[19%]">08/23/2024</div>
+                                <div class="font-bold text-[0.65rem] sm:text-[1.125rem] uppercase text-c1 text-start pl-2 sm:pl-8 w-[30%] tracking-[1%]">{{ post.projectTitle }}</div>
+                                <div class="text-font text-[0.5rem] sm:text-[1rem] font-bold uppercase text-start w-[17%]">{{ post.rolePosition }}</div>
+                                <div class="text-font text-[0.5rem] sm:text-[1rem] font-bold text-start w-[19%]">{{ format(post.timestamp, 'MM/dd/yyyy') }}</div>
                                 <div class="text-font text-[0.5rem] sm:text-[1rem] font-bold text-start w-[19%]">11/22/2024</div>
                                 <div class="text-green-500 italic uppercase text-[0.5rem] sm:text-[1rem] font-light text-start w-[15%]">cOMPLETED</div>
                             </div>
@@ -103,26 +111,85 @@
                 </div>
             </div>
        </div>
-
+       <transition name="fadeComponent" mode="out-in">
+           <AcceptedPopUp v-if="applicationStatus == 'Accepted'" @close="closeStatusPopUp" />
+        </transition>
+        <transition name="fadeComponent" mode="out-in">
+            <UnderReviewPopUp v-if="applicationStatus == 'Under Review'" @close="closeStatusPopUp" />
+        </transition>
+        <transition name="fadeComponent" mode="out-in">
+            <DeclinePopUp v-if="applicationStatus == 'Declined'" @close="closeStatusPopUp" />
+        </transition>
+        <transition name="fadeComponent" mode="out-in">
+            <ActiveProjectsPopUp v-if="openActiveProject" 
+                @close="closeActiveProject"
+                :post="activeProjectData"/>
+        </transition>
     </div>
+    <MyPostedProject v-else @close="hideMyPostedProject" :post="myPostedProjectData" />
 </template>
 
 <script setup>
 import Diamond from '../components/icons/Diamond.vue';
 import ActiveProjectsCard from '../components/ActiveProjectsCard.vue';
-import { inject } from 'vue';
-import { useRouter } from 'vue-router';
-import { useDebounceFn } from '@vueuse/core';
+import ActiveProjectsPopUp from '../components/ActiveProjectsPopUp.vue';
+import AcceptedPopUp from '../components/AcceptedPopUp.vue'
+import DeclinePopUp from '../components/DeclinePopUp.vue'
+import UnderReviewPopUp from '../components/UnderReviewPopUp.vue'
+import MyPostedProject from '../components/MyPostedProject.vue';
+import { inject, ref } from 'vue';
+import { useDebounceFn, useWindowScroll } from '@vueuse/core';
+import { format } from 'date-fns';
 
 const { userData, activeProjects, completedProjects, myApplications, postedProjects } = inject('userData')
 
-const router = useRouter()
+const applicationStatus = ref('')
 
-const goTo = useDebounceFn((name) => {
-    router.push({ name: name });
-}, 0)
+const showApplicationStatus = useDebounceFn((status) => {
+    applicationStatus.value = status
+}, 150)
+
+const closeStatusPopUp = useDebounceFn((fromAcceptedPopUp = false) => {
+    applicationStatus.value = ''
+    if(fromAcceptedPopUp) {
+        handleBackToTop()
+    }
+}, 150)
+
+const openMyPostedProject = ref(false)
+const myPostedProjectData = ref({})
+
+const { y } = useWindowScroll({ behavior: 'smooth' })
+
+const handleBackToTop = () => {
+    y.value = 0;
+}
+
+const showMyPostedProject = useDebounceFn((post) => {
+    myPostedProjectData.value = post
+    openMyPostedProject.value = true
+    handleBackToTop()
+}, 150)
+
+const hideMyPostedProject = useDebounceFn(() => {
+    openMyPostedProject.value = false
+    handleBackToTop()
+}, 150)
+
+const openActiveProject = ref(false)
+const activeProjectData = ref({})
+
+const closeActiveProject = useDebounceFn(() => {
+    openActiveProject.value = false
+}, 150)
+
+const showActiveProject = useDebounceFn((post) => {
+    activeProjectData.value = post
+    openActiveProject.value = true
+}, 150)
 
 </script>
+
 <style scoped>
 .project-cards {
     grid-template-columns: repeat(3, 1fr);

@@ -9,21 +9,23 @@
             <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
                 class="absolute top-0 left-0 rotate-180 w-[26rem] h-auto rounded-[2.4rem] z-[-1]">
 
-            <XIcon class="w-9 h-8 text-black absolute right-[1.5rem] top-[1.8rem] z-[2] cursor-pointer active:translate-y-[0.1rem] duration-200 rounded-full" />
+            <XIcon @click="$emit('close')" class="w-9 h-8 text-black absolute right-[1.5rem] top-[1.8rem] z-[2] cursor-pointer active:translate-y-[0.1rem] duration-200 rounded-full" />
             
-            <img src="https://i.ibb.co/kBxjQtb/chickenbilog.jpg" alt="" class="w-[11rem] h-[11rem] rounded-full border-4 border-c1">
+            <img :src="props.applicantData.photoURL.value ?? 'https://i.ibb.co/kBxjQtb/chickenbilog.jpg'" alt="" class="w-[11rem] h-[11rem] rounded-full border-4 border-c1">
 
             <p class="text-[1.75rem] text-c1 font-extrabold tracking-[10%] py-2">
-                USERNAME
+                {{ props.applicantData.full_name }}
             </p>
 
-            <p class="underline text-c1 text-[1.25rem] cursor-pointer font-[400]">View Profile</p>
+            <p @click="$router.push(`/inspect-profile/${ props.applicantData.userId }`)" class="underline text-c1 text-[1.25rem] cursor-pointer font-[400]">
+                View Profile
+            </p>
             
             <div class="w-full flex items-center justify-center gap-16 mt-10">
-                <button class="w-[10rem] py-2 text-[1.125rem] text-c1 font-extrabold drop-shadow rounded-[1rem] border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-zinc-50">
+                <button @click="$emit('handleDecline', props.applicantData.userId)" class="w-[10rem] py-2 text-[1.125rem] text-c1 font-extrabold drop-shadow rounded-[1rem] border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-zinc-50 bg-white">
                     DECLINE
                 </button>
-                <button class="w-[10rem] py-2 text-[1.125rem] text-white bg-c1 font-extrabold drop-shadow rounded-[1rem] border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-[#0e2d58]">
+                <button @click="$emit('handleAddMemBer')" class="w-[10rem] py-2 text-[1.125rem] text-white bg-c1 font-extrabold drop-shadow rounded-[1rem] border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-[#0e2d58]">
                     ACCEPT
                 </button>
             </div>
@@ -34,4 +36,6 @@
 
 <script setup>
 import XIcon from '../components/icons/XIcon.vue'
+const props = defineProps(['applicantData'])
+const emit = defineEmits(['close', 'handleDecline', 'handleAddMember'])
 </script>

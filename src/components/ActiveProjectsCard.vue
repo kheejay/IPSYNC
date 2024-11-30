@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper bg-gray-100 relative overflow-hidden flex items-end drop-shadow">
+    <div @click="$emit('showActiveProject', props.post )" class="wrapper bg-gray-100 relative overflow-hidden flex items-end drop-shadow cursor-pointer">
         <div class="circle rounded-full absolute bg-c1 "></div>
         <div class="square absolute -top-0 bg-[#4A658D] "></div>
         <div class="w-full h-[62.5%] body z-[1] bg-white">
@@ -8,7 +8,7 @@
             <div class="flex flex-col items-end justify-center w-full pr-[calc(0.25rem / var(--scale-project))]">
                 <div class="relative">
                     <span v-show="showChat" class="absolute -top-5 left-[-0.2rem] text-[0.75rem] text-nowrap">Chat!</span>
-                    <MailIcon @mouseover="openShowChat" @mouseleave="hideShowChat"
+                    <MailIcon @mouseover="openShowChat" @mouseleave="hideShowChat" @click="handleMailClick"
                         class="mail cursor-pointer font-bold text-c1 active:scale-95 duration-200" />
                 </div>
                 <p class="text text-c6 mt-2"><span class="font-bold">PROJECT TIMELINE:</span> {{ props.post.projTimeline}}</p>
@@ -22,6 +22,7 @@
 import { ref } from 'vue';
 import MailIcon from '../components/icons/MailIcon.vue'
 import { useDebounceFn } from '@vueuse/core';
+const emit = defineEmits(['showActiveProject'])
 const props = defineProps(['post'])
 const showChat = ref(false)
 
@@ -32,6 +33,12 @@ const hideShowChat = useDebounceFn(() => {
 const openShowChat = useDebounceFn(() => {
     showChat.value = true;
 }, 150)
+
+const handleMailClick = (event) => {
+    event.stopPropagation();
+    alert(1);
+}
+
 </script>
 
 <style scoped>

@@ -130,18 +130,41 @@ const getUniqueTagValues = () => {
   })
 }
 
+const updatePostedProjectApplicantsData = () => {
+  postedProjects.value = postedProjects.value.map((project) => {
+    const updatedApplicants = project.applicants.map((applicant) => {
+      const applicantData = users.value.find((user) => user.uid === applicant.userId);
+      if (applicantData) {
+        return {
+          ...applicant,
+          full_name: applicantData.full_name,
+          department: applicantData.department,
+          photoURL: applicantData.photoURL, // Accessing nested photoURL value
+        };
+      }
+      return applicant; // Return unchanged applicant if no match is found
+    });
+
+    return {
+      ...project,
+      applicants: updatedApplicants,
+    };
+  });
+}
+
 const filterDashboardComponents = () => {
   const userRelatedProjects = shapedPostShallow.value.filter((projectPost) => {
-    return (projectPost.authorId == userData.uid) || (projectPost.applicants.includes(userData.uid))
+    return (projectPost.authorId == userData.uid) || (projectPost.applicants.some((applicant) => applicant.userId == userData.uid))
   })
   activeProjects.value = [...userRelatedProjects.filter((projectPost) => !projectPost.completed)]
   completedProjects.value = [...userRelatedProjects.filter((projectPost) => projectPost.completed)]
   // myApplications here if post.applicants.includes(userData.uid)
   myApplications.value = userRelatedProjects.filter((projectPost) => {
-    return (projectPost.authorId != userData.uid) && (projectPost.applicants.includes(userData.uid))
+    return (projectPost.authorId != userData.uid) && (projectPost.applicants.some((applicant) => applicant.userId == userData.uid))
   })
   postedProjects.value = userRelatedProjects.filter((projectPost) => projectPost.authorId == userData.uid )
-  console.log('mark test fn', activeProjects.value)
+  updatePostedProjectApplicantsData()
+  console.log('mark test updatedApplicants', postedProjects.value)
 }
 
 const sortByDate = () => {
