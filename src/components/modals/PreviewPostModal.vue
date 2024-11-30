@@ -55,7 +55,8 @@
                 </div>
             </div>
             <div class="w-full flex justify-center sm:justify-end pt-8 sm:pr-8 ">
-                <button class="drop-shadow px-12 py-1 text-[1.125rem] bg-c1 text-white rounded-full active:translate-y-[0.1rem] duration-100">
+                <button @click="updateApplicants" class="flex items-center gap-2 drop-shadow px-12 py-1 text-[1.125rem] bg-c1 text-white rounded-full active:translate-y-[0.1rem] duration-100">
+                    <BarsSpin v-if="isLoading" />
                     APPLY NOW
                 </button>
             </div>
@@ -64,9 +65,47 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import XIcon from '../icons/XIcon.vue';
+import BarsSpin from '../icons/BarsSpin.vue';
+import { toast } from '../../functions/toast';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
 const props = defineProps(['post'])
 const emit = defineEmits(['close'])
 const showPromptProfile = ref(false)
+
+const { userData } = inject('userData')
+
+const buttonLock = ref(false)
+const isLoading = ref(false)
+
+const updateApplicants = async () => {
+    if(userData.uid === props.post.authorId) {
+        return toast('You cannot apply to a post you created.', "top", 1500, '#CB3D3D', '#B74242')
+    }
+    if(props.post.applicants.includes(userData.uid)) {
+        return toast('Already applied to this post, visit it to your dashboard', "top", 3000)
+    }
+    if(buttonLock.value) {
+        return
+    }
+    try {
+        buttonLock.value = true
+        isLoading.value = true
+        const currentApplicants = Array.isArray(props.post.applicants) ? props.post.applicants : [];
+        const updatedApplicants = [...currentApplicants, {userId: userData.uid, status: 'Under Review'}];
+        const docRef = doc(db, 'posts', props.post.postId);
+        const updatePost = await updateDoc(docRef, {
+            applicants: updatedApplicants
+        });
+
+        toast('Application sent!')
+        
+    } catch (error) {
+        toast('Error occurred while sending application.', "top", 1500, '#CB3D3D', '#B74242')
+    } finally {
+        isLoading.value = false
+    }
+}
 </script>

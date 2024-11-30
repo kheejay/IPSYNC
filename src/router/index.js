@@ -14,6 +14,7 @@ import Projects from '../pages/Projects.vue'
 import InspectProfile from '../pages/InspectProfile.vue'
 import Messages from '../pages/Messages.vue'
 import { toast } from '../functions/toast'
+import TestPage from '../pages/TestPage.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -85,6 +86,14 @@ const router = createRouter({
             path: '/messages',
             name: 'Messages',
             component: Messages,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/test',
+            name: 'TestPage',
+            component: TestPage,
             meta: {
                 requiresAuth: true
             }

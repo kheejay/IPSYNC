@@ -17,7 +17,10 @@ export default {
       },
       screens: {
         xs: '400px'
-      }
+      },
+      boxShadow: {
+        'glass': '7px 16px 15px -8px rgba(0, 0, 0, 0.6)',
+      },
     },
   },
   plugins: [],

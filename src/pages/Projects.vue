@@ -210,29 +210,29 @@ watch(tags, () => {
     background-image: url('/src/assets/images/ProjectsBg.svg');
     background-repeat: no-repeat;
     background-position-y: bottom;
-    background-position-x: 45rem;
-    background-size: calc(50rem / var(--scale-factor));
+    background-position-x: 42rem;
+    background-size: calc(65rem / var(--scale-factor));
     user-select: none;
 }
 
 @media (max-width: 80rem) {
     .bg-image {
-        background-position-x: 32rem;
+        background-position-x: 14rem;
     }
 }
 @media (max-width: 65rem) {
     .bg-image {
-        background-position-x: 18rem;
+        background-position-x: 1rem;
     }
 }
 @media (max-width: 48rem) {
     .bg-image {
-        background-position-x: 2rem;
+        background-position-x: -16rem;
     }
 }
 @media (max-width: 37.5rem) {
     .bg-image {
-        background-position-x: 1rem;
+        background-position-x: -9rem;   
     }
 }
 </style>

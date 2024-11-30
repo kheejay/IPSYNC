@@ -1,6 +1,6 @@
 <template>
     <NavigationBar v-if="(!isAuthPage  && !authenticatingUser)" />
-    <router-view class="max-w-[100rem] mx-auto" v-slot="{ Component }">
+    <router-view class="max-w-[120rem] mx-auto" v-slot="{ Component }">
         <transition :name="`${ !isAuthPage && 'fade' }`" mode="out-in">
             <component v-if="!authenticatingUser" :is="Component" :class="`${ !isAuthPage && 'bg-c4' }`" />
         </transition>
@@ -59,11 +59,16 @@ const selectedRoom = ref()
 const allMessages = ref([])
 const messageRoom = ref({})
 const isLoadingMessagesRooms = ref(false)
-const verifiedUsers = ref(['x4xMyOXtPFYzfMZO97JM3cIuZJy2', '9ASX5ToFXfYeLnK7aztxae9n3tU2', 'mtNyuTO4gFbTLjmSROfV87NiWuI2', 'm37gTYcbIdYxNqTHllpnPm9X0rz2'])
+const verifiedUsers = ref(['x4xMyOXtPFYzfMZO97JM3cIuZJy2', '9ASX5ToFXfYeLnK7aztxae9n3tU2', 'mtNyuTO4gFbTLjmSROfV87NiWuI2', 'm37gTYcbIdYxNqTHllpnPm9X0rz2', '58UH3Lr6lNbC1XkdYx6iq6KvwE83'])
 
 watch(selectedRoom, (newValue) => {
   messageRoom.value = allMessages.value.filter((room) => room.roomId === newValue.roomId)
 })
+
+const activeProjects = ref([])
+const completedProjects = ref([])
+const myApplications = ref([])
+const postedProjects = ref([])
 
 const unsubscribeUser = ref(null)
 const unsubscribePosts = ref(null)
@@ -125,6 +130,20 @@ const getUniqueTagValues = () => {
   })
 }
 
+const filterDashboardComponents = () => {
+  const userRelatedProjects = shapedPostShallow.value.filter((projectPost) => {
+    return (projectPost.authorId == userData.uid) || (projectPost.applicants.includes(userData.uid))
+  })
+  activeProjects.value = [...userRelatedProjects.filter((projectPost) => !projectPost.completed)]
+  completedProjects.value = [...userRelatedProjects.filter((projectPost) => projectPost.completed)]
+  // myApplications here if post.applicants.includes(userData.uid)
+  myApplications.value = userRelatedProjects.filter((projectPost) => {
+    return (projectPost.authorId != userData.uid) && (projectPost.applicants.includes(userData.uid))
+  })
+  postedProjects.value = userRelatedProjects.filter((projectPost) => projectPost.authorId == userData.uid )
+  console.log('mark test fn', activeProjects.value)
+}
+
 const sortByDate = () => {
   shapedPostShallow.value = shapedPostShallow.value.sort((a, b) => {
     const timeA = new Date(a.timestamp).getTime() || 0;
@@ -139,7 +158,8 @@ const sortByDate = () => {
 
     return timeB - timeA;
   });
-  // console.log('test sort: ', shapedPostShallow.value)
+  // diri ta ma update sang dashboard component to secure recent values of the objects
+  filterDashboardComponents()
 }
 
 const reshapePosts = () => {
@@ -217,7 +237,7 @@ const setLastMessage = () => {
 
 
 const filterOnlyUserExclusiveRooms = () => {
-  console.log('intial v', messagesRooms.value)
+  // console.log('intial v', messagesRooms.value)
       messagesRooms.value = messagesRooms.value.filter((room) =>
         room.users.some(user => user.uid === userData.uid)
       ).map((thisRoom) => {
@@ -232,7 +252,7 @@ const filterOnlyUserExclusiveRooms = () => {
             return thisRoom
       })
       setLastMessage()
-      console.log('why do you get vanished? ', messagesRooms.value)
+      // console.log('why do you get vanished? ', messagesRooms.value)
 };
 
 
@@ -499,7 +519,11 @@ provide('userData', {
     runAllNecessaryFunctions,
     allMessages, 
     gatherMessages,
-    setLastMessage
+    setLastMessage,
+    activeProjects,
+    completedProjects,
+    myApplications,
+    postedProjects
 })
 
 watch(messagesRooms.value, () => {

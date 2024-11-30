@@ -10,7 +10,7 @@
                 class="absolute top-0 left-0 w-[25rem] h-auto rounded-[2.4rem] rotate-180 select-none">
 
                 <XIcon @click="$emit('close')"
-                    class="w-9 h-8 text-black absolute right-[1.25rem] top-[1.25rem] z-[2] cursor-pointer active:translate-y-[0.1rem]" />
+                class="w-9 h-8 text-black absolute right-[1.25rem] top-[1.25rem] z-[2] cursor-pointer active:translate-y-[0.1rem] duration-200 rounded-full" />
 
             <div class="text-[1.75rem] sm:text-[2rem] md:text-[2.5rem] font-bold relative w-full text-center text-c6 sm:text-c1 pt-[3.5rem] tracking-[0.015rem] text-wrap px-8">
                 Project <span class="text-c1 sm:text-c6">Posting Form</span>
@@ -20,16 +20,16 @@
 
                 <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                     <div class=w-full>
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] flex-grow border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4">
                             <input type="text" placeholder="Project Title" v-model="postSchema.projectTitle.value"
-                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
+                            class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent "
                             @blur="validateInput('projectTitle')">
                         </div>
                         <span v-if="postSchema.projectTitle.hasError" class="text-red-500 text-xs w-full text-start pl-2">
                             {{ postSchema.projectTitle.errorMessage }}</span>
                     </div>
                     <div class="w-full sm:w-[22rem]">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4">
                             <input type="text" placeholder="Number of Open Postions" v-model="postSchema.numOfOpenPositions.value"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                             @blur="validateInput('numOfOpenPositions')">
@@ -41,7 +41,7 @@
 
                 <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                     <div class="flex-grow">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4">
                             <input type="text" placeholder="Company or Organization Name" v-model="postSchema.orgName.value"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                             @blur="validateInput('orgName')">
@@ -50,7 +50,7 @@
                             {{ postSchema.orgName.errorMessage }}</span>
                     </div>
                     <div class=" w-full sm:w-[20rem]">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4">
                             <input type="text" placeholder="Role/Position" v-model="postSchema.rolePosition.value"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                             @blur="validateInput('rolePosition')">
@@ -63,7 +63,7 @@
                 <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                     <div class="flex flex-col sm:flex-row md:flex-col md:w-max gap-4 md:gap-6 w-full">
                         <div class="w-full sm:w-1/2 md:w-[17rem] relative">
-                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1]">
+                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 pl-4 sm:pl-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit flex relative z-[1] focus-within:bg-c4">
                                 <input type="text" placeholder="Category/Tags" v-model="categoryTagsEntry" 
                                 @keypress.enter="handlePushCategoryTags" @focus.stop="handleFocusCategoryTags" @click.stop="handleFocusCategoryTags"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
@@ -110,7 +110,7 @@
                              <span v-if="(openCategoryTagsLg || openCategoryTagsSm) && !tagIsAddedPrompt" class="text-[0.6rem] absolute -top-[1rem] w-full left-0 pl-2">Press enter to add tag</span>
                         </div>
                         <div class="w-full sm:w-1/2">
-                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black h-fit">
+                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full md:w-[17rem] border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4 h-fit">
                                 <input type="text" placeholder="Compensation (if applicable)" v-model="postSchema.compensation.value"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                                 @blur="validateInput('compensation')">
@@ -121,7 +121,7 @@
                     </div>
 
                     <div class="flex-grow">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full h-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full h-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4">
                             <textarea type="text" placeholder="Project Description" v-model="postSchema.projDescription.value"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent resize-none" @blur="validateInput('projDescription')" />
                         </div>
@@ -133,7 +133,7 @@
                 <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                     <div class="flex flex-col sm:flex-row gap-4 md:gap-6">
                         <div class="w-full md:w-[14rem]">
-                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4">
                                 <input type="text" placeholder="Application Deadline" v-model="postSchema.deadline.value"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                                 @blur="validateInput('deadline')">
@@ -143,7 +143,7 @@
                         </div>
                         
                         <div class="w-full md:w-[14rem]">
-                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                            <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4">
                                 <input type="text" placeholder="Project Timeline" v-model="postSchema.projTimeline.value"
                                 class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent"
                                 @blur="validateInput('projTimeline')">
@@ -153,12 +153,23 @@
                         </div>
                     </div>
                     <div class="w-full h-fit">
-                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full h-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black">
+                        <div class="drop-shadow rounded-[0.9rem] text-[0.9rem] w-full h-full border border-c1 px-4 sm:px-[1.4rem] py-[0.675rem] bg-white focus-within:border-black focus-within:bg-c4">
                             <input type="text" placeholder="Contact Information" v-model="postSchema.contactInformation.value"
                             class="w-full h-full focus:outline-none placeholder:italic placeholder:font-light bg-transparent" @blur="validateInput('contactInformation')">
                         </div>
                         <span v-if="postSchema.contactInformation.hasError" class="text-red-500 text-xs w-full text-start pl-2">
                             {{ postSchema.contactInformation.errorMessage }}</span>
+                    </div>
+                </div>
+
+                <div class="w-full">
+                    <div class="w-[12rem] h-[2.25rem] overflow-hidden relative drop-shadow rounded-[0.9rem] text-[0.9rem] border border-c1 hover:bg-zinc-50">
+                        <input type="file" class="border w-[16rem] opacity-0 cursor-pointer" accept="image/*" @change="updateImage">
+                        <div class="absolute top-0 left-0 z-[-1] bg-transparent w-full h-full flex gap-1 items-center justify-center">
+                            Attached Image 
+                            <PlusIcon v-if="!tempPhotoBucket" class="w-4 h-4" />
+                            <Check v-else />
+                        </div>
                     </div>
                 </div>
 
@@ -180,11 +191,13 @@ import PlusIcon from '../icons/PlusIcon.vue'
 import XIcon from '../icons/XIcon.vue';
 import BarsSpin from '../icons/BarsSpin.vue'
 import { reactive, ref, watch } from 'vue';
+import Check from '../icons/Check.vue';
 import { collection, addDoc } from "firebase/firestore"; 
 import * as yup from 'yup';
 import { onClickOutside, useDebounceFn } from '@vueuse/core';
 import { db } from '../../firebase';
 import { toast } from '../../functions/toast';
+import uploadPhoto from '../../functions/uploadPhoto';
 
 const emit = defineEmits(['close'])
 
@@ -244,8 +257,18 @@ const postSchema = reactive({
     projDescription: { value: '', hasError: false, errorMessage: '' },
     deadline: { value: '', hasError: false, errorMessage: '' },
     projTimeline: { value: '', hasError: false, errorMessage: '' },
-    contactInformation: { value: '', hasError: false, errorMessage: '' }    
+    contactInformation: { value: '', hasError: false, errorMessage: '' },
 })
+
+const tempPhotoBucket = ref('')
+
+const updateImage = (event) => {
+    const file = event.target.files[0]
+    if (file) {
+        tempPhotoBucket.value = file;
+    }
+}
+
 const categoryTagsEntry = ref('')
 
 const validationSchema = yup.object().shape({
@@ -280,15 +303,17 @@ const submitPost = async (submitPostSchema) => {
     if(submitLock.value == false) {
         submitLock.value = true;
         try {
-        // Add a new document with a generated id.
-        const docRef = await addDoc(collection(db, "posts"), submitPostSchema);
-        toast('Project posted successfully!', "top", 3000);
-        emit('close')
-        isLoading.value = false;
-        setTimeout(() => {
-            submitLock.value = false;
-        }, 300)
+            // Add a new document with a generated id.
+            const uploadedPhotoURL = await uploadPhoto(tempPhotoBucket.value)
+            const docRef = await addDoc(collection(db, "posts"), {...submitPostSchema, postPhotoURL: uploadedPhotoURL, completed: false, applicants: []});
+            toast('Project posted successfully!', "top", 3000);
+            emit('close')
+            isLoading.value = false;
+            setTimeout(() => {
+                submitLock.value = false;
+            }, 300)
         } catch (error) {
+            alert(error.message)
             isLoading.value = false;
             toast('An occurred submitting post', "top", 5000, '#CB3D3D', '#B74242')
             submitLock.value = false;

@@ -1,0 +1,70 @@
+<template>
+    <div class="z-[2] w-screen h-screen fixed top-0 left-0 flex items-start py-20 overflow-y-auto no-scrollbar justify-center bg-transparent select-none px-2 sm:px-4">
+        <div class="bg-c1 opacity-80 w-full h-full fixed left-0 top-0"></div>
+    
+        <!-- 1.357784431137725 -->
+         <div class="drop-shadow max-w-[50.84rem] w-[50.84rem] bg-white rounded-[1.125rem] relative py-12 px-4 sm:p-12">
+            <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
+                class="absolute top-[0.675rem] -right-[0.725rem] xs:top-[1rem] xs:-right-[1.1rem] sm:top-[1.4rem] sm:-right-[1.45rem] w-[18rem] xs:w-[26rem] sm:w-[36rem] -rotate-90 h-auto rounded-[1.125rem] z-[-1]">
+            <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
+                class="absolute bottom-[0.675rem] -left-[0.75rem] xs:bottom-[1rem] sm:bottom-[1.4rem] xs:-left-[1.1rem] sm:-left-[1.4575rem] rotate-90 w-[18rem] xs:w-[26rem] sm:w-[36rem] h-auto rounded-[1.125rem] z-[-1]">
+
+            <XIcon class="w-7 h-7 sm:w-9 sm:h-9 text-black absolute right-[1rem] top-[1rem] sm:right-[1.5rem] sm:top-[1.5rem] z-[2] cursor-pointer active:translate-y-[0.1rem] duration-200 rounded-full" />
+            
+            <div class="font-bold tracking-[10%] text-c1 text-[2.25rem] md:text-[2.5rem] py-2 sm:py-0 sm:p-2">
+                Project Title
+            </div>
+
+            <div class="w-full xs:px-6 sm:px-12">
+                <p class="font-bold text-c1 tracking-[10%] text-[1.25rem] sm:text-[1.5em] sm:py-1">ROLE: <span class="font-light uppercase italic">USER ROLE</span></p>
+
+                <div class="text-c1 border border-c1 rounded-[0.95rem] mt-2 bg-white">
+                    <div class="uppercase pl-6 py-1.5 font-bold text-[1.125rem] border-b border-b-c1">Project Description</div>
+                    <div class="min-h-[12rem] pl-6 py-4">
+                        <span class="text-zinc-400 italic">Brief overview and key information about the project.</span>
+                    </div>
+                </div>
+                
+                <div class="text-c1 border border-c1 rounded-[0.95rem] mt-8 bg-white">
+                    <div class="uppercase py-1.5 font-bold text-[1.125rem] border-b border-b-c1 w-full flex">
+                        <div class="pl-6 w-3/5">TEAM Members</div>
+                        <div class="pl-6 w-2/5">ROLE</div>
+                    </div>
+                    <div class="px-1">
+                        <div class="max-h-[14rem] h-[14rem] pr-2 pl-4 py-4 overflow-y-scroll thumb-scrollbar">
+                            <div v-for="x in 10" :key="x" :class="`w-full flex border-t border-t-c3 h-[4.5rem] ${ x == 10 && 'border-b border-b-c3'}`">
+                                <div class="w-[64.5%] flex items-center gap-2.5">
+                                    <img src="" alt="" class="w-[3rem] h-[3rem] bg-c1 rounded-full">
+                                    <p class="uppercase">username</p>
+                                </div>
+                                <div class="uppercase font-[300] flex items-center">
+                                    team role
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-[0.125rem] pr-6 border-t border-t-c1 flex justify-end">
+                        <MailIcon class="w-[1.75rem] h-auto cursor-pointer active:scale-95 duration-200" />
+                    </div>
+                </div>
+
+                <p class="sm:text-[1.125rem] font-bold text-c6 py-2 mt-4">START DATE: <span class="font-light pl-2">mm/dd/yy</span></p>
+                <p class="sm:text-[1.125rem] font-bold text-c6 py-2">DEADLINE: <span class="font-light pl-2">mm/dd/yy</span></p>
+
+                <div class="w-full flex justify-end">
+                    <button class="py-[0.5rem] mt-2 sm:py-[0.75rem] px-4 sm:px-8 text-c1 font-extrabold drop-shadow rounded-[1.125rem] bg-white border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-zinc-50">
+                        MARK AS COMPLETE
+                    </button>
+                </div>
+
+            </div>
+
+         </div>
+    </div>
+</template>
+
+
+<script setup>
+import XIcon from '../components/icons/XIcon.vue'
+import MailIcon from '../components/icons/MailIcon.vue'
+</script>

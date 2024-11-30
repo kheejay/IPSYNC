@@ -102,8 +102,8 @@
                                     {{ userInfo.student_id.errorMessage }}</span>
                         </div>
                     </div>
-                    <div class="w-full sm:w-[60%] h-full sm:px-4">
-                        <span v-if="userInfo.personal_description.hasError" class="text-red-500 text-xs w-full text-start">
+                    <div class="w-full sm:w-[60%] h-full sm:px-4 relative">
+                        <span v-if="userInfo.personal_description.hasError" class="text-red-500 text-xs w-full text-start absolute -top-5 left-4">
                             {{ userInfo.personal_description.errorMessage }}</span>
                         <textarea :disabled="!isEditMode"
                                 :class="`w-full min-h-[9rem] border p-2 focus:outline-none focus:border-0 focus:ring-inset focus:ring-1 ring-c2 resize-none max-h-[9rem] text-[1rem] placeholder:font-light placeholder:italic bg-transparent ${ isEditMode && 'ring-1 ring-c2'}`"
