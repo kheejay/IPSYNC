@@ -13,3 +13,5 @@ sorting sang message according to timestamp - date fns
 formatting sang timestamp for every message
 then quality test 
 then proceed to group chat 
+
+potential bugs for conflicting identity keys between 'uid' and 'userId' preferred value is 'uid' 

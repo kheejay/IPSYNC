@@ -20,7 +20,7 @@
                     <Diamond class="w-[0.55rem] h-[0.55rem] absolute text-c1 -left-[0.33rem] -bottom-[0.35rem]" />
                     <Diamond class="w-[0.55rem] h-[0.55rem] absolute text-c1 -right-[0.33rem] -bottom-[0.35rem]" />
                 </div>
-                <div v-if="!activeProjects.length" class="w-full text-center mt-[10rem] text-c1">No active projects yet 🙂</div>
+                <div v-if="!activeProjects.length" class="w-full text-center mt-[10rem] text-c1">No active projects yet</div>
                 <div class="flex-grow p-2 overflow-y-auto grid project-cards gap-4 mt-2.5 thumb-scrollbar">
                     <ActiveProjectsCard v-for="post, index in activeProjects" :key="index" 
                         :post="post" 
@@ -35,18 +35,18 @@
 
                 <div class="flex-grow px-2 sm:px-4 flex mb-4">
                     <div class="flex-grow overflow-y-auto thumb-scrollbar max-h-[20rem] px-2 sm:px-4">
-                        <div @click="showMyPostedProject(post)" v-for="post, index in postedProjects" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] ${ index === postedProjects.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] duration-200`">
-                            <img :src="post.postPhotoURL ?? post.photoURL.value ?? 'https://i.ibb.co/VmwCJxf/image.png'" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full border-2 border-c1">
+                        <div @click="showMyPostedProject(post)" v-for="post, index in postedProjects" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] ${ index === postedProjects.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] hover:bg-c4 duration-200`">
+                            <img :src="post.postPhotoURL ?? post.photoURL.value ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full border-2 border-c1">
                             <div class="flex-grow flex justify-between items-center pr-2 sm:pr-8">
                                 <div class="pl-2">
                                     <p class="sm:text-[1.25rem] text-c1 font-bold uppercase">{{ post.projectTitle
                                     }} </p>
                                     <p class="text-[0.7rem] sm:text-[0.75rem] text-c1 uppercase">{{ post.rolePosition}}</p>
                                 </div>
-                                <span class="w-5 h-5 text-xs rounded-full bg-c6 text-white flex items-center justify-center">1</span>
+                                <span v-if="post.applicants.filter((applicant) => applicant.status == 'Under Review').length" class="w-5 h-5 text-xs rounded-full bg-c6 text-white flex items-center justify-center">{{ post.applicants.filter((applicant) => applicant.status == 'Under Review').length }}</span>
                             </div>
                         </div>
-                        <div v-if="!postedProjects.length" class="w-full text-center mt-[8rem] text-c1">No posted projects yet 🙂</div>
+                        <div v-if="!postedProjects.length" class="w-full text-center mt-[8rem] text-c1">No posted projects yet</div>
                     </div>
                 </div>
 
@@ -56,24 +56,24 @@
 
                 <div class="flex-grow px-2 sm:px-4 flex mb-4">
                     <div class="flex-grow overflow-y-auto thumb-scrollbar max-h-[20rem] px-2 sm:px-4">
-                        <div @click="showApplicationStatus(post.applicants.find((applicant) => applicant.userId == userData.uid).status)" 
-                            v-for="post, index in myApplications" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] relative ${ index === myApplications.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] duration-200`">
-                            <img :src="post.postPhotoURL" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full border border-c1">
+                        <div @click="showApplicationStatus(post.applicants.find((applicant) => applicant.uid == userData.uid).status)" 
+                            v-for="post, index in myApplications" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] relative ${ index === myApplications.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] hover:bg-c4 duration-200`">
+                            <img :src="post.postPhotoURL ?? post.photoURL.value ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full border border-c1">
                             <div class="flex-grow h-full flex justify-between items-center sm:pr-4 ">
                                 <div class="pl-2">
                                     <p class="sm:text-[1.25rem] text-c1 font-bold uppercase">{{ post.projectTitle }}</p>
                                     <p class="text-[0.7rem] sm:text-[0.75rem] text-c1 uppercase">{{ post.rolePosition }}</p>
                                 </div>
 
-                                    <p class="font-light text-c6 text-[0.75rem] text-wrap">DATE APPLIED: {{ format(post.applicants.find((applicant) => applicant.userId == userData.uid).dateApplied, 'MM/dd/yyyy') }}</p>
+                                    <p class="font-light text-c6 text-[0.75rem] text-wrap">DATE APPLIED: {{ format(post.applicants.find((applicant) => applicant.uid == userData.uid).dateApplied, 'MM/dd/yyyy') }}</p>
 
                                     <p :class="`font-light text-[0.75rem] italic absolute right-2 sm:right-4 bottom-1 
-                                    ${ post.applicants.find((applicant) => applicant.userId == userData.uid).status == 'Under Review' ? 'text-c1' : post.applicants.find((applicant) => applicant.userId == userData.uid).status == 'Accepted' ? 'text-green-500' : 'text-red-500'}`">{{
-                                        post.applicants.find((applicant) => applicant.userId == userData.uid).status
+                                    ${ post.applicants.find((applicant) => applicant.uid == userData.uid).status == 'Under Review' ? 'text-c1' : post.applicants.find((applicant) => applicant.uid == userData.uid).status == 'Accepted' ? 'text-green-500' : 'text-red-500'}`">{{
+                                        post.applicants.find((applicant) => applicant.uid == userData.uid).status
                                     }}</p>
                             </div>
                         </div>
-                        <div v-if="!myApplications.length" class="w-full text-center mt-[8rem] text-c1">No active applications yet 🙂</div>
+                        <div v-if="!myApplications.length" class="w-full text-center mt-[8rem] text-c1">No active applications yet</div>
                     </div>
                 </div>
             
@@ -106,7 +106,7 @@
                                 <div class="text-green-500 italic uppercase text-[0.5rem] sm:text-[1rem] font-light text-start w-[15%]">cOMPLETED</div>
                             </div>
                         </div>
-                        <div v-if="!completedProjects.length" class="w-full text-center mt-[10rem] text-c1">No completed projects yet 🙂</div>
+                        <div v-if="!completedProjects.length" class="w-full text-center mt-[10rem] text-c1">No completed projects yet</div>
                     </div>
                 </div>
             </div>

@@ -304,7 +304,13 @@ const submitPost = async (submitPostSchema) => {
         submitLock.value = true;
         try {
             // Add a new document with a generated id.
-            const uploadedPhotoURL = await uploadPhoto(tempPhotoBucket.value)
+            let uploadedPhotoURL = null;
+            try {
+                uploadedPhotoURL = tempPhotoBucket.value ? await uploadPhoto(tempPhotoBucket.value) : null;
+            } catch (error) {
+                toast('Failed to upload photo.', "top", 3000, '#CB3D3D', '#B74242');
+                return;
+            }
             const docRef = await addDoc(collection(db, "posts"), {...submitPostSchema, postPhotoURL: uploadedPhotoURL, completed: false, applicants: [], members: []});
             toast('Project posted successfully!', "top", 3000);
             emit('close')

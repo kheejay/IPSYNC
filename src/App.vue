@@ -117,6 +117,7 @@ const fetchUsers = () =>  {
       }
       users.value = newUsers;
       setUserData();
+      console.log('mark users', users.value)
     });
 }
 
@@ -130,42 +131,66 @@ const getUniqueTagValues = () => {
   })
 }
 
-const updatePostedProjectApplicantsData = () => {
-  postedProjects.value = postedProjects.value.map((project) => {
-    const updatedApplicants = project.applicants.map((applicant) => {
-      const applicantData = users.value.find((user) => user.uid === applicant.userId);
-      if (applicantData) {
+const updateActiveProjectMembersData = () => {
+  activeProjects.value = activeProjects.value.map((project) => {
+    const updatedMembers = project.members.map((member) => {
+      const memberData = users.value.find((user) => user.uid === member.uid);
+      if (memberData) {
         return {
-          ...applicant,
-          full_name: applicantData.full_name,
-          department: applicantData.department,
-          photoURL: applicantData.photoURL, // Accessing nested photoURL value
+          ...member,
+          full_name: memberData.full_name,
+          department: memberData.department,
+          photoURL: memberData.photoURL, // Accessing nested photoURL value
         };
       }
-      return applicant; // Return unchanged applicant if no match is found
+      return member; // Return unchanged member if no match is found
     });
 
     return {
       ...project,
-      applicants: updatedApplicants,
+      members: updatedMembers,
     };
   });
-}
+};
 
-const filterDashboardComponents = () => {
-  const userRelatedProjects = shapedPostShallow.value.filter((projectPost) => {
-    return (projectPost.authorId == userData.uid) || (projectPost.applicants.some((applicant) => applicant.userId == userData.uid))
-  })
-  activeProjects.value = [...userRelatedProjects.filter((projectPost) => !projectPost.completed)]
-  completedProjects.value = [...userRelatedProjects.filter((projectPost) => projectPost.completed)]
-  // myApplications here if post.applicants.includes(userData.uid)
-  myApplications.value = userRelatedProjects.filter((projectPost) => {
-    return (projectPost.authorId != userData.uid) && (projectPost.applicants.some((applicant) => applicant.userId == userData.uid))
-  })
-  postedProjects.value = userRelatedProjects.filter((projectPost) => projectPost.authorId == userData.uid )
-  updatePostedProjectApplicantsData()
-  console.log('mark test updatedApplicants', postedProjects.value)
-}
+  const updatePostedProjectApplicantsData = () => {
+    postedProjects.value = postedProjects.value.map((project) => {
+      const updatedApplicants = project.applicants.map((applicant) => {
+        const applicantData = users.value.find((user) => user.uid === applicant.uid);
+        if (applicantData) {
+          return {
+            ...applicant,
+            full_name: applicantData.full_name,
+            department: applicantData.department,
+            photoURL: applicantData.photoURL, // Accessing nested photoURL value
+          };
+        }
+        return applicant; // Return unchanged applicant if no match is found
+      });
+
+      return {
+        ...project,
+        applicants: updatedApplicants,
+      };
+    });
+  }
+
+  const filterDashboardComponents = () => {
+    const userRelatedProjects = shapedPostShallow.value.filter((projectPost) => {
+      return (projectPost.authorId == userData.uid) || (projectPost.applicants.some((applicant) => applicant.uid == userData.uid))
+    })
+    activeProjects.value = [...userRelatedProjects.filter((projectPost) => !projectPost.completed)]
+    completedProjects.value = [...userRelatedProjects.filter((projectPost) => projectPost.completed)]
+    // myApplications here if post.applicants.includes(userData.uid)
+    myApplications.value = userRelatedProjects.filter((projectPost) => {
+      return (projectPost.authorId != userData.uid) && (projectPost.applicants.some((applicant) => applicant.uid == userData.uid))
+    })
+    postedProjects.value = userRelatedProjects.filter((projectPost) => projectPost.authorId == userData.uid )
+    updatePostedProjectApplicantsData()
+    updateActiveProjectMembersData()
+    console.log('mark test membersData', activeProjects.value)
+    console.log('mark test posted', postedProjects.value)
+  }
 
 const sortByDate = () => {
   shapedPostShallow.value = shapedPostShallow.value.sort((a, b) => {
@@ -262,10 +287,10 @@ const setLastMessage = () => {
 const filterOnlyUserExclusiveRooms = () => {
   // console.log('intial v', messagesRooms.value)
       messagesRooms.value = messagesRooms.value.filter((room) =>
-        room.users.some(user => user.uid === userData.uid)
+        room.users.some(user => user.uid == userData.uid)
       ).map((thisRoom) => {
         const matchingRoom = allMessages.value.find(
-                (messageRoom) => messageRoom.roomId === thisRoom.roomId
+                (messageRoom) => messageRoom.roomId == thisRoom.roomId
             );
             const roomMessages = matchingRoom?.roomMessages;
             if (Array.isArray(roomMessages) && roomMessages.length > 0) {
@@ -282,7 +307,7 @@ const filterOnlyUserExclusiveRooms = () => {
 const updateUsersDataInMessagesRooms = () => {
   messagesRooms.value.forEach((room) => {
     room.users = room.users.map((user) => {
-      const userAccount = users.value.find((userAccount) => userAccount.uid === user.uid);
+      const userAccount = users.value.find((userAccount) => userAccount.uid == user.uid);
       if (userAccount) {
         // Update the user object with new data
         return { ...user, full_name: userAccount.full_name, photoURL: userAccount.photoURL };
@@ -301,10 +326,10 @@ const gatherMessages = useDebounceFn(() => {
     querySnapshot.forEach((doc) => {
       roomMessages.push({...doc.data(), formattedStamp: formatDate(doc.data().timestamp), messageId: doc.id, showDeleteButton: false})
     });
-    console.log('get docs ', roomMessages)
+    // console.log('get docs ', roomMessages)
     roomMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
     allMessages.value.push({roomId: room.roomId, roomMessages: roomMessages})
-    console.log('all messages: ', allMessages.value)
+    // console.log('all messages: ', allMessages.value)
     setLastMessage()
   })
 }, 150)
@@ -360,6 +385,7 @@ const fetchMessagesRooms = async () => {
         });
 
         // Update dependent data
+        // console.log('mark all rooms:', messagesRooms.value);
         gatherMessages();
         filterOnlyUserExclusiveRooms();
         updateUsersDataInMessagesRooms();

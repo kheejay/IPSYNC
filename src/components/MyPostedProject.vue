@@ -59,7 +59,7 @@
                                 <p class="text-[0.8rem] xs:text-[0.85rem] sm:text-[0.90rem] font-light tracking-[10%] uppercase">{{ applicant.department }}</p>
                             </div>
                         </div>
-                        <p class="text-c6 font-light mr-1 xs:mr-2 sn:mr-4 text-xs sm:text-base">DATE APPLIED: {{ applicant.dateApplied }}</p>
+                        <p class="text-c6 font-light mr-1 xs:mr-2 sn:mr-4 text-xs sm:text-base">DATE APPLIED: {{ format(applicant.dateApplied, 'MM/dd/yyyy') }}</p>
                         <p @click="handleOpenApplicantPopUp(applicant)" class="absolute right-2 sm:right-4 text-c6 italic bottom-[0.05rem] text-[0.8rem] xs:text-[0.85rem] sm:text-[0.90rem] cursor-pointer hover:underline duration-200 hover:font-bold">Review Application</p>
                     </div>
 
@@ -78,7 +78,7 @@
             <ViewApplicantsPopUp v-if="openApplicantPopUp" 
                 :applicantData="applicantData" 
                 @close="handleCloseApplicantPopUp" 
-                @handleAddMember="handleAddMember"
+                @handleAddMemberAction="handleAddMemberAction"
                 @handleDecline="handleDecline"/>
         </transition>
     </div>
@@ -91,10 +91,11 @@ const props = defineProps(['post'])
 
 import { useDebounceFn } from '@vueuse/core';
 import ViewApplicantsPopUp from './ViewApplicantsPopUp.vue';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { toast } from '../functions/toast';
-import { doc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { format } from 'date-fns';
 
 const applicantData = ref({})
 const openApplicantPopUp = ref(false)
@@ -135,8 +136,93 @@ const handleDecline = async (applicantId) => {
     }
 }
 
-const handleAddMember = async () => {
-    // if no members yet create a group chat plus welcome toast else just add the member to current gc
-}
+const { messagesRooms, userData } = inject('userData')
+const isLoading = ref('false')
+
+const handleAddMemberAction = async (applicantId) => {
+    if (buttonLock.value) return;
+
+    try {
+        buttonLock.value = true;
+        isLoading.value = true;
+
+        const currentApplicants = Array.isArray(props.post.applicants) ? props.post.applicants : [];
+        const updatedApplicants = currentApplicants.map((applicant) => applicant.uid == applicantId ? {...applicant, status: 'Accepted'} : applicant )
+
+        const currentMembers = Array.isArray(props.post.members) ? props.post.members : [];
+        const updatedMembers = [...currentMembers, { uid: applicantId }];
+        const postRef = doc(db, 'posts', props.post.postId);
+
+        // Update post members
+        await updateDoc(postRef, { members: updatedMembers, applicants: updatedApplicants });
+        toast('Application accepted!');
+
+        // Handle group chat logic
+        if (!currentMembers.length) {
+            await createGroupChat(updatedMembers);
+        } else {
+            await addMemberToExistingGroup(applicantId);
+        }
+
+        emit('close');
+    } catch (error) {
+        toast(`Error occurred: ${error.message}`, "top", 1500, '#CB3D3D', '#B74242');
+    } finally {
+        isLoading.value = false;
+        buttonLock.value = false;
+        handleCloseApplicantPopUp()
+    }
+};
+
+const createGroupChat = async (updatedMembers) => {
+    const groupMessageRoom = {
+        users: [...updatedMembers, 
+            { uid: userData.uid, photoURL: userData.photoURL, full_name: userData.full_name.value }],
+        type: "Group message",
+        roomPhotoURL: props.post.postPhotoURL ?? 'https://i.ibb.co/rfRCfwf/logo.png',
+        projectTitle: props.post.projectTitle,
+        isNew: true,
+        groupName: props.post.projectTitle,
+        groupAdminId: userData.uid
+    };
+
+    try {
+        const messageRoomRef = await addDoc(collection(db, "messagesRooms"), groupMessageRoom);
+        const postRef = doc(db, 'posts', props.post.postId);
+        await setDoc(postRef, { roomId: messageRoomRef.id }, { merge: true });
+        toast('Group conversation has been created!', "top", 3000);
+    } catch (error) {
+        toast('Error occurred while creating chat room', "top", 5000, '#CB3D3D', '#B74242');
+        throw error;
+    }
+};
+
+const addMemberToExistingGroup = async (applicantId) => {
+    if (!props.post?.roomId) {
+        toast('No group chat associated with this post.', "top", 2000);
+        return;
+    }
+
+    const room = messagesRooms.value.find((room) => room.roomId === props.post.roomId);
+
+    if (!room) {
+        toast('Error finding the group chat.', "top", 2000);
+        return;
+    }
+
+    try {
+        const roomRef = doc(db, 'messagesRooms', props.post.roomId);
+        await updateDoc(roomRef, { 
+            users: [...room.users, { uid: applicantId }] 
+        });
+
+        fetchMessageRoom();
+        toast('Applicant has been added to the group!');
+    } catch (error) {
+        toast('Error adding applicant to the group chat', "top", 5000, '#CB3D3D', '#B74242');
+        throw error;
+    }
+};
+
 
 </script>

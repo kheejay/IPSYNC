@@ -13,11 +13,11 @@
 
             <div class="flex w-full border-b border-c1 relative">
                 <div class="flex xs:p-[0.75rem] relative">
-                    <img @click="$router.push(`/inspect-profile/${ props.post.authorId}`)" 
+                    <img @click="$router.push(`/inspect-profile/${ props.post.authorId }`)" 
                     @mouseover="showPromptProfile = true"
                     @mouseleave="showPromptProfile = false"
                     :src="props.post.photoURL.value" alt="photo" 
-                    :class="`border-2 border-c1 rounded-full min-w-11 min-h-11 w-11 h-11 scale-${ props.post.photoURL.scale     }
+                    :class="`border-2 border-c1 rounded-full min-w-11 min-h-11 w-11 h-11 scale-${ props.post.photoURL.scale }
                     hover:scale-125 duration-200 cursor-pointer`">
                     <span v-if="showPromptProfile"
                         class="text-xs absolute -top-[.90rem] left-1/2 -translate-x-1/2 rounded-lg shadow text-nowrap px-2 text-c1">
@@ -30,10 +30,10 @@
                 </div>
             </div>
             <div class="uppercase font-bold text-c1 text-[2.25rem] relative pt-[1.5rem] sm:pt-[1rem] pb-[0.25rem] leading-[2.85rem]">
-                {{ props.post.rolePosition }}
+                {{ props.post.projectTitle }}
             </div>
             <div class="w-full pl-[0.75rem] sm:pl-[1.5rem] flex flex-col gap-2 relative">
-                <div class="uppercase font-bold text-c1 text-[1.125rem] pt-[0.75rem] sm:pt-[0.5rem]">{{ props.post.projectTitle }}</div>
+                <div class="uppercase font-bold text-c1 text-[1.125rem] pt-[0.75rem] sm:pt-[0.5rem]">{{ props.post.rolePosition }}</div>
                 <div class="text-[0.90rem] flex flex-wrap gap-2 text-c6"><span class="text-nowrap">CONTACT INFORMATION:</span>  
                     <span class="font-semibold">{{ props.post.contactInformation }}</span>
                 </div>
@@ -84,8 +84,8 @@ const updateApplicants = async () => {
     if(userData.uid === props.post.authorId) {
         return toast('You cannot apply to a post you created.', "top", 1500, '#CB3D3D', '#B74242')
     }
-    if(props.post.applicants.some(((applicant) => applicant.userId == userData.uid))) {
-        return toast('Already applied to this post, visit it to your dashboard', "top", 3000)
+    if(props.post.applicants.some(((applicant) => applicant.uid == userData.uid))) {
+        return toast('Application already sent!', "top", 3000)
     }
     if(buttonLock.value) {
         return
@@ -95,20 +95,21 @@ const updateApplicants = async () => {
         isLoading.value = true
 
         const currentApplicants = Array.isArray(props.post.applicants) ? props.post.applicants : [];
-        const updatedApplicants = [...currentApplicants, { userId: userData.uid, status: 'Under Review', dateApplied: new Date().toISOString() }];
+        const updatedApplicants = [...currentApplicants, { uid: userData.uid, status: 'Under Review', dateApplied: new Date().toISOString() }];
         
         const docRef = doc(db, 'posts', props.post.postId);
         const updatePost = await updateDoc(docRef, {
             applicants: updatedApplicants
         });
 
-        toast('Application sent!')
+        toast('Application sent!', "top", 3000)
         emit('close')
         
     } catch (error) {
         toast('Error occurred while sending application.', "top", 1500, '#CB3D3D', '#B74242')
     } finally {
         isLoading.value = false
+        buttonLock.value = false
     }
 }
 </script>

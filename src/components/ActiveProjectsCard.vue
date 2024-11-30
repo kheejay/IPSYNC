@@ -19,9 +19,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import MailIcon from '../components/icons/MailIcon.vue'
 import { useDebounceFn } from '@vueuse/core';
+import { toast } from '../functions/toast';
+import { useRouter } from 'vue-router';
 const emit = defineEmits(['showActiveProject'])
 const props = defineProps(['post'])
 const showChat = ref(false)
@@ -34,9 +36,18 @@ const openShowChat = useDebounceFn(() => {
     showChat.value = true;
 }, 150)
 
+const { fetchMessageRoom, selectedRoom, messagesRooms } = inject('userData')
+
+const router = useRouter()
+
 const handleMailClick = (event) => {
     event.stopPropagation();
-    alert(1);
+    if(!props.post?.roomId) {
+        return toast('Project hasn\'t created a room yet')
+    }
+    selectedRoom.value = messagesRooms.value.find((room) => room.roomId == props.post.roomId)
+    fetchMessageRoom()
+    router.push({ name: 'Messages' })
 }
 
 </script>

@@ -17,17 +17,19 @@
                 {{ props.applicantData.full_name }}
             </p>
 
-            <p @click="$router.push(`/inspect-profile/${ props.applicantData.userId }`)" class="underline text-c1 text-[1.25rem] cursor-pointer font-[400]">
+            <p @click="$router.push(`/inspect-profile/${ props.applicantData.uid }`)" class="underline text-c1 text-[1.25rem] cursor-pointer font-[400]">
                 View Profile
             </p>
             
             <div class="w-full flex items-center justify-center gap-16 mt-10">
-                <button @click="$emit('handleDecline', props.applicantData.userId)" class="w-[10rem] py-2 text-[1.125rem] text-c1 font-extrabold drop-shadow rounded-[1rem] border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-zinc-50 bg-white">
+                <button v-if="applicantData.status == 'Under Review'" @click="$emit('handleDecline', props.applicantData.uid)" class="w-[10rem] py-2 text-[1.125rem] text-c1 font-extrabold drop-shadow rounded-[1rem] border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-zinc-50 bg-white">
                     DECLINE
                 </button>
-                <button @click="$emit('handleAddMemBer')" class="w-[10rem] py-2 text-[1.125rem] text-white bg-c1 font-extrabold drop-shadow rounded-[1rem] border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-[#0e2d58]">
+                <button v-if="applicantData.status == 'Under Review'" @click="$emit('handleAddMemberAction', props.applicantData.uid)" class="w-[10rem] py-2 text-[1.125rem] text-white bg-c1 font-extrabold drop-shadow rounded-[1rem] border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-[#0e2d58]">
                     ACCEPT
                 </button>
+                <p v-else-if="applicantData.status == 'Accepted'" class="text-[2rem] flex items-center gap-2 text-green-500">Accepted <Check class="w-11 h-11" /></p>
+                <p v-else-if="applicantData.status == 'Declined'" class="text-[2rem] flex items-center gap-2 text-zinc-300">Declined <Close class="w-11 h-11" /></p>
             </div>
          </div>
     </div>
@@ -36,6 +38,8 @@
 
 <script setup>
 import XIcon from '../components/icons/XIcon.vue'
+import Check from './icons/Check.vue';
+import Close from '../components/icons/Close.vue'
 const props = defineProps(['applicantData'])
-const emit = defineEmits(['close', 'handleDecline', 'handleAddMember'])
+const emit = defineEmits(['close', 'handleDecline', 'handleAddMemberAction'])
 </script>

@@ -47,12 +47,18 @@
                                 border-c6 border-2 bg-white`">
                             <!-- <img src="https://i.ibb.co/LJPrkjQ/np.png" alt="" class="w-[3.5rem] h-[3.5rem]"> -->
                         </div>
+                        <div v-else-if="room.type == 'Group message'" class="h-full flex items-center px-4">
+                            <img :src="(room.roomPhotoURL) ?? 'https://i.ibb.co/rfRCfwf/logo.png'" 
+                                alt="" :class="`w-[3.5rem] h-[3.5rem] rounded-full
+                                border-c6 border-2 bg-white`">
+                        </div>
                         <div v-if="room.type == 'Private message'" :class="`flex-grow flex flex-col justify-center pb-2 gap-1 ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'text-white' : 'text-c1'}`">
                             <p class="font-bold pt-1">{{ room.users[0].uid != userData.uid ? room.users[0].full_name : room.users[1].full_name }}</p>
-                           {{ room.lastMessage }}                             
+                            {{ room.lastMessage }}                             
                         </div>
-                        <div v-else-if="room.type === 'Group message'" :class="`font-bold pl-4 text-[1rem] ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'text-white' : 'text-c1'} flex items-center w-full`">
-                            {{ room.groupName }}
+                        <div v-else-if="room.type == 'Group message'" :class="`flex-grow flex flex-col justify-center pb-2 gap-1 ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'text-white' : 'text-c1'}`">
+                            <p class="font-bold pt-1">{{ room.projectTitle }}</p>
+                            {{ room.lastMessage }}                             
                         </div>
                     </div>
                 </div>
