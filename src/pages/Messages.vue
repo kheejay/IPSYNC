@@ -125,7 +125,113 @@
             </div>
         </div>
 
-        <div v-if="openMessageRoom" class="flex-grow h-[calc(100vh-4rem)] w-full lg:h-auto lg:w-auto flex p-2 sm:p-4 lg:p-0 lg:pl-2 lg:py-4 lg:pr-4">
+        <div class="flex-grow h-[calc(100vh-4rem)] w-full lg:h-auto lg:w-auto hidden lg:flex p-2 sm:p-4 lg:p-0 lg:pl-2 lg:py-4 lg:pr-4">
+            <div class="border border-c6 flex-grow flex flex-col rounded-[0.25rem]">
+
+                <div class="w-full min-h-[4rem] h-[4rem] flex justify-start bg-gradient-to-r from-c2 to-c6 drop-shadow relative z-[1]">
+                    <div v-if="selectedRoom && selectedRoom.type === 'Private message'" class="h-full flex">
+                        <div class="h-full flex lg:hidden items-center px-4">
+                            <ArrowLeft class="w-8 h-8 text-c5" @click="hideMessageRoom" />
+                        </div>
+                        <div class="flex items-center lg:pr-2 lg:pl-4">
+                            <img @click="seeUser(selectedRoom.users[0].uid != userData.uid ? selectedRoom.users[0].uid : selectedRoom.users[1].uid)" :src="selectedRoom.users[0].uid != userData.uid ? selectedRoom.users[0].photoURL.value : selectedRoom.users[1].photoURL.value ?? 'https://i.ibb.co/LJPrkjQ/np.png'" alt="profile" :class="`w-11 h-11 cursor-pointer rounded-full`">
+                        </div>
+                        <div class="flex items-center px-2.5 lg:text-[1.125rem] text-white">
+                            {{ selectedRoom.users[0].uid != userData.uid ? selectedRoom.users[0].full_name : selectedRoom.users[1].full_name ?? 'IPSYNC User' }}
+                        </div>
+                    </div>
+                    <div v-else-if="selectedRoom && selectedRoom.type === 'Group message'"
+                        class="h-full flex items-center justify-between w-full pl-4 text-[1.125rem] font-semibold text-white relative">
+                        <div class="flex items-center gap-2 lg:gap-4">
+                            <div class="h-full flex lg:hidden items-center xs:px-4">
+                                <ArrowLeft class="w-6 h-6 sm:w-8 sm:h-8 text-c5" @click="hideMessageRoom" />
+                            </div>
+                            <img :src="selectedRoom.roomPhotoURL ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="profile" :class="`w-11 h-11 rounded-full border border-white`">
+                            {{ selectedRoom.groupName }}
+                        </div>
+                        <DotsVertical @click="toggleGroupChatSettings" class="mr-4 w-7 h-7 cursor-pointer " />
+                        <div v-if="openGroupChatSettings" class="absolute p-2 right-12 w-[15rem] h-max bg-white top-[105%] rounded-[0.25rem]" ref="targetGroupChatSetting">
+                            <button @click="handleSeeGroupUsers" 
+                                class="bg-c2 p-2 text-center w-full active:bg-c6 rounded-[0.25rem]">See users!</button>
+                            <button @click="handleShowManageUsers" v-if="selectedRoom.groupAdminId === userData.uid" class="bg-c2 p-2 text-center w-full active:bg-c6 mt-2 rounded-[0.25rem]">Manage Users</button>
+                        </div>
+                    </div>
+                    <div v-else class="h-full flex items-center px-4 lg:text-[1.125rem] text-white">
+                        <ArrowLeft class="w-8 h-8 block lg:hidden text-c5 mr-4" @click="hideMessageRoom" />
+                        IPSYNC Message</div>
+                </div>
+
+                <div class="flex-grow flex flex-col p-2 overflow-y-scroll text-white gap-4 no-scrollbar"
+                    ref="chatBox">
+                    <div v-if="!selectedRoom" class="flex-grow flex items-center justify-center text-[#91add5]">
+                        {{ 'Select a chat' }}
+                    </div>
+                    <div v-else-if="messageRoom && messageRoom?.roomMessages?.length"
+                        v-for="message, index in messageRoom.roomMessages" :key="index" :class="`w-full flex ${ message.author_uid != userData.uid ? 'justify-start' : 'justify-end' }`">
+                        <div :class="`flex-col flex ${ message.author_uid != userData.uid ? 'items-start' : 'items-end'}`">
+                            <div v-if="message.author_uid != userData.uid" class="flex text-black items-center">
+                                <img @click="seeUser(message.author_uid)" 
+                                    :src="message.author_photoURL.value" alt="" class="w-4 h-4 rounded-full mb-[0.25rem] mr-[0.35rem] border cursor-pointer hover:scale-125 duration-200">
+                                <p class="text-[0.8rem] font-semibold">{{ message.author_name.split(" ")[0] }}</p>
+                            </div>
+                            <div @click="toggleDeleteButton(message.messageId)" v-if="message.type === 'Text'" class="flex flex-wrap gap-1 items-center relative cursor-pointer">
+                                <span v-if="message.showDeleteButton && message.author_uid === userData.uid" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute px-2 shadow cursor-pointer -bottom-[1.125rem] left-1/2 -translate-x-1/2 bg-c6 text-white">Delete message</span>
+                                <div class="w-fit max-w-[39rem] bg-c2 py-2 px-6 text-wrap rounded-[0.25rem]">
+                                    {{ message.value }}
+                                </div>
+                            </div>
+                            <div v-else-if="message.type === 'Photo'" @click="toggleDeleteButton(message.messageId)" class="bg-c5 p-2 cursor-pointer relative">
+                                <span v-if="message.showDeleteButton" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black p-2 shadow bg-white cursor-pointer -left-[7rem]">Delete message</span>
+                                <img :src="message.value" alt="Image" class="h-max max-h-[11rem]">
+                            </div>
+                            <div :class="`text-[0.60rem] text-c1 w-full ${message.author_uid != userData.uid ? 'text-start' : 'text-end'} py-[0.25rem]`">
+                                <span>{{ message.formattedStamp }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="messageRoom && !messageRoom?.roomMessages?.length && selectedRoom" class="flex-grow text-[#91add5] flex items-center justify-center">
+                        IPSYNC Message Room
+                    </div>
+                </div>
+
+                <div class="w-full p-2 flex flex-col justify-start items-end bg-transparent to-c6 gap-4">
+                    <div v-if="photoBucket.length && !photoLoading" 
+                        class="h-max flex-wrap w-full bg-c5 border border-c2 flex justify-end p-4 gap-4">
+                        <div v-for="photo, index in photoBucket" :key="index" class="w-max h-max relative">
+                            <XIcon @click="handleRemoveImage(index)" class="w-7 h-7 -right-[0.75rem] -top-[0.75rem] absolute z-[1] drop-shadow rounded-full cursor-pointer active:translate-y-[0.125rem]" />
+                            <img :src="photoURL[index]" alt=""  class="max-h-[5rem] sm:max-h-[9rem] bg-c4 drop-shadow rounded">
+                        </div>
+                    </div>
+                    <div v-else-if="photoLoading" class="h-max w-full flex items-center flex-col px-1 text-c1">
+                        <p class="text-xs">Uploading photo</p>
+                        <BarScale class="h-7 w-7" />
+                    </div>
+                    <div class="w-full flex items-end">
+                        <textarea
+                            ref="textarea"
+                            v-model="input"
+                            @keyup.enter="handleSendMessage"
+                            class="resize-none w-full p-4 outline-none max-h-[10rem] caret-c2 text-c1 
+                            hover:ring-[0.125rem] focus:ring-[0.25rem] ring-c2 rounded-[0.25rem]"
+                            placeholder="Type message"
+                        />
+                        <div class="flex items-center h-[3.3rem] justify-center relative overflow-hidden w-[4rem] text-c2 hover:text-c1 active:translate-y-[0.125rem] duration-200">
+                            <input @change="addPhoto" 
+                                :disabled="0" type="file" accept="image/*" class="w-[180%] h-[180%] opacity-0 bottom-0 bg-c1 absolute cursor-pointer outline">
+                            <PlusIcon class="w-9 h-9 cursor-wait hover:text-c6 hover:scale-105 
+                            duration-200 active:translate-y-[0.125rem]" />
+                        </div>
+                        <button  @click="handleSendMessage"
+                        class="px-4 sm:px-9 h-[3.25rem] bg-c6 text-white rounded hover:bg-[hsl(215,52%,38%)] duration-75 
+                        active:translate-y-[0.125rem]">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div v-if="openMessageRoom" class="flex-grow h-[calc(100vh-4rem)] w-full lg:h-auto lg:w-auto flex lg:hidden p-2 sm:p-4 lg:p-0 lg:pl-2 lg:py-4 lg:pr-4">
             <div class="border border-c6 flex-grow flex flex-col rounded-[0.25rem]">
 
                 <div class="w-full min-h-[4rem] h-[4rem] flex justify-start bg-gradient-to-r from-c2 to-c6 drop-shadow relative z-[1]">
@@ -497,6 +603,7 @@ const sendMessage = async () => {
             console.log('new message id ', docRef.id)
             console.log(messageRoom.value)
         } catch (error) {
+            alert(error.message)
             toast('Error occurred while sending message', "top", 5000, '#CB3D3D', '#B74242')
         } finally {
             textButtonLock.value = false;
