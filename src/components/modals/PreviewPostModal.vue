@@ -103,7 +103,7 @@ const updateApplicants = async () => {
             applicants: updatedApplicants
         });
 
-        toast('Application sent!', "top", 3000)
+        toast('Application was sent. Wait for updates on your dashboard.', "top", 3000)
         emit('close')
         
     } catch (error) {
