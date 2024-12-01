@@ -55,7 +55,8 @@
                 </div>
             </div>
             <div class="w-full flex justify-center sm:justify-end pt-8 sm:pr-8 ">
-                <button @click="updateApplicants" class="flex items-center gap-2 drop-shadow px-12 py-1 text-[1.125rem] bg-c1 text-white rounded-full active:translate-y-[0.1rem] duration-100">
+                <p class="text-c3 relative text-xs xs:text-base" v-if="props.post.applicants.some(((applicant) => applicant.uid == userData.uid))">You already applied. Wait for a response.</p>
+                <button v-else @click="updateApplicants" class="flex items-center gap-2 drop-shadow px-12 py-1 text-[1.125rem] bg-c1 text-white rounded-full active:translate-y-[0.1rem] duration-100">
                     <BarsSpin v-if="isLoading" />
                     APPLY NOW
                 </button>
@@ -84,9 +85,9 @@ const updateApplicants = async () => {
     if(userData.uid === props.post.authorId) {
         return toast('You cannot apply to a post you created.', "top", 1500, '#CB3D3D', '#B74242')
     }
-    if(props.post.applicants.some(((applicant) => applicant.uid == userData.uid))) {
-        return toast('Application already sent!', "top", 3000)
-    }
+    // if(props.post.applicants.some(((applicant) => applicant.uid == userData.uid))) {
+    //     return toast('Application already sent!', "top", 3000)
+    // }
     if(buttonLock.value) {
         return
     }
