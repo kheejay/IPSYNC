@@ -386,7 +386,7 @@ import { useRouter } from 'vue-router';
 import Check from '../components/icons/Check.vue'
 import DotsVertical from '../components/icons/DotsVertical.vue';
 
-const openMessageRoom = ref(true)
+const openMessageRoom = ref(false)
 
 const hideMessageRoom = useDebounceFn(() => {
     openMessageRoom.value = false
