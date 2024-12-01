@@ -218,7 +218,9 @@ const goToMessages = useDebounceFn(() => {
 const goTo = useDebounceFn((name) => {
     router.push({ name: name})
     showMobileNav.value = false
-    toast('Please sign in to get started!', "center", "3000", "#184c95", "#1c58ab")
+    if(name == 'Login') {
+        toast('Please sign in to get started!', "center", "3000", "#184c95", "#1c58ab")
+    }
 }, 150)
 
 const handleLogout = () => {
