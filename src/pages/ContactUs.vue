@@ -56,25 +56,28 @@
                         <!-- CONTACT FORM -->
                         <div class="font-bold md:text-[2rem] text-[1.75rem] md:text-start text-center">Got Something to Say?</div>
                         <div>
-                            <div class="pt-10 font-semibold grid grid-cols-2 gap-4 md:text-[1rem] text-[0.8rem]">
+                            <div class="pt-10 font-semibold grid sm:grid-cols-2 gap-4 md:text-[1rem] text-[0.8rem]">
                                 <div>
                                     <div>FIRST NAME</div>
-                                    <input type="text" class="md:p-2 xs:p-1 w-full border-2 border-c1 rounded-md" />
+                                    <input v-model="templateParams.from_first_name" type="text" class="p-2 w-full border-2 border-c1 rounded-md" />
                                 </div>
                                 <div>
                                     <div>LAST NAME</div>
-                                    <input type="text" class="md:p-2 xs:p-1 w-full border-2 border-c1 rounded-md" />
+                                    <input v-model="templateParams.from_last_name" type="text" class="p-2 w-full border-2 border-c1 rounded-md" />
                                 </div>
                             </div>
                             <div class="pt-4 font-semibold md:text-[1rem] text-[0.8rem]">
                                 <div>EMAIL</div>
-                                <input type="email" class="md:p-2 xs:p-1 w-full border-2 border-c1 rounded-md" />
+                                <input v-model="templateParams.from_email" type="email" class="p-2 w-full border-2 border-c1 rounded-md" />
                             </div>
                             <div class="pt-4 font-semibold md:text-[1rem] text-[0.8rem]">
                                 <div>MESSAGE</div>
-                                <textarea class="md:p-2 xs:p-1 w-full h-[8rem] border-2 border-c1 rounded-md"></textarea>
+                                <textarea v-model="templateParams.message" class="p-2 w-full h-[8rem] border-2 border-c1 rounded-md"></textarea>
                             </div>
-                            <button class="bg-c1 mt-4 text-white font-semibold py-2 px-4 w-full hover:bg-c2 md:text-[1rem] text-[0.8rem]">SEND MESSAGE</button>
+                            <button @click="sendEmail" class="bg-c1 mt-4 text-white font-semibold h-[3rem] flex items-center justify-center px-4 w-full hover:bg-c2 md:text-[1rem] text-[0.8rem]">
+                                <BarsSpin v-if="isLoading" class="w-7 h-7" />
+                                <p v-else>SEND MESSAGE</p>
+                            </button>
                         </div>
                         <!-- View Contact Details Toggle Button -->
                         <div class="text-center mt-4">
@@ -134,17 +137,17 @@
                         Got Something to Say?
                     </div>
                     <!-- CONTACT FORM -->
-                    <div>
+                    <div :action="mailtoLink" method="post">
                         <div>
                             <div class="pt-10 font-semibold grid grid-cols-2 text-start">
                                 <!-- name details -->
                                 <div class=" pr-4 lg:text-[1rem] md: text-[0.9rem]">
                                     <div>FIRST NAME</div>
-                                    <input type="text" class="p-2 w-full h-[2rem] border-2 border-c1 rounded-md" />
+                                    <input v-model="templateParams.from_first_name" type="text" class="p-2 w-full h-[2rem] border-2 border-c1 rounded-md" />
                                 </div>
                                 <div>
                                     <div> LAST NAME</div>
-                                    <input type="text" class="p-2 w-full h-[2rem] border-2 border-c1 rounded-md" />
+                                    <input v-model="templateParams.from_last_name" type="text" class="p-2 w-full h-[2rem] border-2 border-c1 rounded-md" />
                                 </div>
                             </div>
                         </div>
@@ -153,16 +156,19 @@
                                 <!-- other details -->
                                 <div>
                                     <div>EMAIL</div>
-                                    <input type="email" class="p-2 w-full h-[2rem] border-2 border-c1 rounded-md" />
+                                    <input v-model="templateParams.from_email" type="email" class="p-2 w-full h-[2rem] border-2 border-c1 rounded-md" />
                                 </div>
                                 <div class="pt-4">
                                     <div> MESSAGE</div>
-                                    <textarea type="text" class=" p-2 w-full h-[8rem] border-2 border-c1 rounded-md" />
+                                    <textarea v-model="templateParams.message" type="text" class=" p-2 w-full h-[8rem] border-2 border-c1 rounded-md" />
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <button class="bg-c1 mt-4 text-white font-semibold py-2 px-4 w-full hover:bg-c2">SEND MESSAGE</button>
+                            <button @click="sendEmail" class="bg-c1 mt-4 text-white font-semibold h-[3rem] px-4 w-full flex items-center justify-center hover:bg-c2">
+                                <BarsSpin v-if="isLoading" class="w-7 h-7" />
+                                <p v-else>SEND MESSAGE</p>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -171,14 +177,55 @@
     </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            currentView: "details",
-        };
-    },
-};
+<script setup>
+const currentView =  ref("details")
+import { ref, reactive } from "vue";
+import emailjs from '@emailjs/browser';
+import { toast } from "../functions/toast";
+import BarsSpin from "../components/icons/BarsSpin.vue";
+
+const templateParams = reactive({
+  to_name: 'MARK ANDREI ENCANTO',
+  from_first_name: '',
+  from_last_name: '',
+  message: '',
+  from_email: ''
+})
+
+const isLoading = ref(false)
+
+const emptyFields = () => {
+    templateParams.from_first_name = ''
+    templateParams.from_last_name = ''
+    templateParams.message = ''
+    templateParams.from_email = ''
+}
+
+const sendEmail = () => {
+    if(templateParams.from_first_name == false || templateParams.from_last_name == false ||
+    templateParams.message == false || templateParams.from_email == false 
+    ) {
+        return toast('Please fill out empty fields.', "top", 5000, '#CB3D3D', '#B74242')
+    }
+    isLoading.value = true;
+emailjs
+    .send('service_inj5q3e', 'template_lo6ojdf', templateParams, {
+        publicKey: 'dv9yJEIkIopjMnwxr',
+    })
+    .then(
+        (response) => {
+            toast("Message successfully sent!")
+            isLoading.value = false;
+            emptyFields()
+        },
+        (err) => {
+            toast("Failed to send message.")    
+            isLoading.value = false;
+            emptyFields()
+        },
+    );
+}
+
 </script>
 
 <style scoped>
