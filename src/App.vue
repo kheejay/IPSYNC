@@ -141,7 +141,7 @@ const updateActiveProjectMembersData = () => {
           full_name: memberData.full_name,
           department: memberData.department,
           photoURL: memberData.photoURL, // Accessing nested photoURL value
-        };
+        }
       }
       return member; // Return unchanged member if no match is found
     });
@@ -176,21 +176,42 @@ const updateActiveProjectMembersData = () => {
   }
 
   const filterDashboardComponents = () => {
-    const userRelatedProjects = shapedPostShallow.value.filter((projectPost) => {
-      return (projectPost.authorId == userData.uid) || (projectPost.applicants.some((applicant) => applicant.uid == userData.uid))
-    })
-    activeProjects.value = [...userRelatedProjects.filter((projectPost) => !projectPost.completed)]
-    completedProjects.value = [...userRelatedProjects.filter((projectPost) => projectPost.completed)]
-    // myApplications here if post.applicants.includes(userData.uid)
-    myApplications.value = userRelatedProjects.filter((projectPost) => {
-      return (projectPost.authorId != userData.uid) && (projectPost.applicants.some((applicant) => applicant.uid == userData.uid))
-    })
-    postedProjects.value = userRelatedProjects.filter((projectPost) => projectPost.authorId == userData.uid )
-    updatePostedProjectApplicantsData()
-    updateActiveProjectMembersData()
-    // console.log('test membersData', activeProjects.value)
-    // console.log('test posted', postedProjects.value)
-  }
+  const userRelatedProjects = shapedPostShallow.value.filter((projectPost) => {
+    // User is the author or has an "Accepted" application
+    return (
+      projectPost.authorId === userData.uid || 
+      projectPost.applicants.some(
+        (applicant) => applicant.uid === userData.uid && applicant.status === 'Accepted'
+      )
+    );
+  });
+
+  // Separate projects based on completion status
+  activeProjects.value = [...userRelatedProjects.filter((projectPost) => !projectPost.completed)];
+  completedProjects.value = [...userRelatedProjects.filter((projectPost) => projectPost.completed)];
+
+  // User's applications excluding those authored by the user
+  myApplications.value = userRelatedProjects.filter((projectPost) => {
+    return (
+      projectPost.authorId !== userData.uid &&
+      projectPost.applicants.some(
+        (applicant) => applicant.uid === userData.uid && applicant.status === 'Accepted'
+      )
+    );
+  });
+
+  // Projects posted by the user
+  postedProjects.value = userRelatedProjects.filter(
+    (projectPost) => projectPost.authorId === userData.uid
+  );
+
+  // Update additional data
+  updatePostedProjectApplicantsData();
+  updateActiveProjectMembersData();
+
+  console.log('Test posted projects:', postedProjects.value);
+};
+
 
 const sortByDate = () => {
   shapedPostShallow.value = shapedPostShallow.value.sort((a, b) => {
@@ -312,7 +333,6 @@ const updateUsersDataInMessagesRooms = () => {
         // Update the user object with new data
         return { ...user, full_name: userAccount.full_name, photoURL: userAccount.photoURL };
       }
-      // Return the original user object if no match is found
       return user;
     });
   });
@@ -387,8 +407,8 @@ const fetchMessagesRooms = async () => {
         // Update dependent data
         // console.log('mark all rooms:', messagesRooms.value);
         gatherMessages();
-        filterOnlyUserExclusiveRooms();
         updateUsersDataInMessagesRooms();
+        filterOnlyUserExclusiveRooms();
         // console.log('Updated messagesRooms:', messagesRooms.value);
       }
     });
