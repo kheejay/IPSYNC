@@ -91,7 +91,7 @@
                         SIGN IN TO GET STARTED <LightArrowRight class="w-[1.75rem] h-[1.75rem]" />
                     </RouterLink>
                     <div v-if="isAuthenticated" 
-                        :class="`w-full rounded`">
+                        :class="`w-full border-b-2 border-b-zin-400 pb-2`">
                         <div class="flex p-2">
                             <img :src="userData.photoURL.value" alt="" 
                                 @mousedown="goToProfile"
