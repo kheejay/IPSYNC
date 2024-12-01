@@ -36,10 +36,10 @@
             </div>
         </div>
         <div v-if="backToTopArrow" @click="handleBackToTop" @mouseover="promptToTop = true" @mouseleave="promptToTop = false"
-            class="drop-shadow flex items-center justify-center bg-c4 fixed bottom-[2rem] right-[2rem] rounded-full cursor-pointer opacity-70 w-[3rem] h-[3rem] hover:opacity-100 duration-200">
-            <ArrowToTop class="w-11 h-11 text-black" />
+            class="drop-shadow flex items-center justify-center bg-c4 fixed bottom-[2rem] right-[2rem] sm:bottom-[4rem] sm:right-[4rem] rounded-full cursor-pointer opacity-70 w-[3rem] h-[3rem] sm:w-[5rem] sm:h-[5rem] hover:opacity-100 duration-200">
+            <ArrowToTop class="w-11 h-11 sm:w-16 sm:h-16 text-black" />
             <div class="relative">
-                <span v-if="promptToTop" class="absolute text-xs -left-[4.5725rem] -top-[4rem] text-nowrap bg-c4 rounded-full py-1 px-4">Back to top</span>
+                <span v-if="promptToTop || $route.name == 'Profile'" class="absolute text-base -left-[6rem] -top-[6rem] text-nowrap bg-c4 rounded-full py-1 px-4">Back to top</span>
             </div>
         </div>
     </div>
@@ -54,6 +54,7 @@ import x from './icons/socmed/x.vue';
 import yt from './icons/socmed/yt.vue';
 import ArrowToTop from './icons/ArrowToTop.vue'
 import { useWindowScroll } from '@vueuse/core';
+import { useRoute } from 'vue-router';
 
 const { y } = useWindowScroll({ behavior: 'smooth' })
 
@@ -64,10 +65,13 @@ const handleBackToTop = () => {
     y.value = 0;
 }
 
+const route = useRoute()
+
 watch(y, (newValue) => {
-    if(newValue > 2000) {
+    let threshold = route.name == 'Profile' ? 1400 : 1800;
+    if(newValue > threshold) {
         backToTopArrow.value = true;
-    } else if(newValue < 2000) {
+    } else if(newValue < threshold) {
         backToTopArrow.value = false;
         promptToTop.value = false;
     }
