@@ -2,14 +2,14 @@
     <div class="w-full h-fit max-h-[calc(100vh-4rem)] flex">
 
         <div class="h-[calc(100vh-4rem)] w-[34rem] min-w-[34rem] pl-4 py-4 pr-2 hidden lg:flex">
-            <div class="w-full h-full flex flex-col gap-2.5 p-2 overflow-y-auto border border-c2">
+            <div class="w-full h-full flex flex-col gap-2.5 p-2 overflow-y-auto border border-c2 rounded-[0.25rem]">
                 <div class="w-full flex gap-2">
                     <div class="flex w-full relative">
                         <input 
                         @focus="handleFocus"
                         @click="handleFocus"
                         class="h-fit flex-grow focus:outline-none p-4 resize-none caret-c2 focus:ring focus:ring-c2 text-c1
-                        ring-1 ring-c3 duration-200 bg-white"
+                        ring-1 ring-c3 duration-200 bg-white rounded-[0.25rem]"
                         v-model="searchPattern"
                         @input="handleSearch"
                         placeholder="Search user"/>
@@ -31,7 +31,7 @@
                         </transition>
                     </div>
                     <button v-if="addGroup" @click="handleAddGroup"
-                        class="text-c1 flex flex-col items-center justify-center text-[0.5rem] text-nowrap px-4 border border-c3 bg-white transition-opacity from-100% to-0% hover:bg-c2 hover:text-white active:scale-[98%] duration-200">
+                        class="text-c1 flex flex-col items-center justify-center text-[0.5rem] text-nowrap px-4 border border-c3 bg-white transition-opacity from-100% to-0% hover:bg-c2 hover:text-white active:scale-[98%] duration-200 rounded-[0.25rem]">
                         <PlusBaseline class="w-6 h-6" />
                         Add Group
                     </button>
@@ -39,7 +39,7 @@
                 <div v-if="messagesRooms.length">
                     <div v-for="(room, index) in messagesRooms" :key="index" 
                         @click="handleSetRoom(room)"
-                        :class="`w-full h-[5.2rem] flex shadow-sm border cursor-pointer
+                        :class="`w-full h-[5.2rem] flex shadow-sm border cursor-pointer rounded-[0.25rem]
                             ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'bg-gradient-to-r from-c2 to-c6' : 'bg-c4 hover:bg-white'}`">
                         <div v-if="room.type == 'Private message'" class="h-full flex items-center px-4">
                             <img :src="(room.users[0].uid != userData.uid ? room.users[0].photoURL.value : room.users[1].photoURL.value) ?? 'https://i.ibb.co/LJPrkjQ/np.png'" 
@@ -67,14 +67,14 @@
         </div>
 
         <div v-if="!openMessageRoom" class="h-[calc(100vh-4rem)] w-full sm:min-w-[34rem] p-2 lg:pl-4 lg:py-4 lg:pr-2 flex lg:hidden">
-            <div class="w-full h-full flex flex-col gap-2.5 p-2 overflow-y-auto border border-c2">
+            <div class="w-full h-full flex flex-col gap-2.5 p-2 overflow-y-auto border border-c2 rounded-[0.25rem]">
                 <div class="w-full flex gap-2">
                     <div class="flex w-full relative">
                         <input 
                         @focus="handleFocus"
                         @click="handleFocus"
                         class="h-fit flex-grow min-w-[2rem]  focus:outline-none p-4 resize-none caret-c2 focus:ring focus:ring-c2 text-c1
-                        ring-1 ring-c3 duration-200 bg-white"
+                        ring-1 ring-c3 duration-200 bg-white rounded-[0.25rem]"
                         v-model="searchPattern"
                         @input="handleSearch"
                         placeholder="Search user"/>
@@ -96,7 +96,7 @@
                         </transition>
                     </div>
                     <button v-if="addGroup" @click="handleAddGroup"
-                        class="text-c1 flex flex-col items-center justify-center text-[0.5rem] text-nowrap px-4 border border-c3 bg-white transition-opacity from-100% to-0% hover:bg-c2 hover:text-white active:scale-[98%] duration-200">
+                        class="text-c1 flex flex-col items-center justify-center text-[0.5rem] text-nowrap px-4 border border-c3 bg-white transition-opacity from-100% to-0% hover:bg-c2 hover:text-white active:scale-[98%] duration-200 rounded-[0.25rem]">
                         <PlusBaseline class="w-6 h-6" />
                         Add Group
                     </button>
@@ -104,7 +104,7 @@
                 <div v-if="messagesRooms.length">
                     <div v-for="(room, index) in messagesRooms" :key="index" 
                         @click="handleSetRoomMobile(room)"
-                        :class="`w-full h-[5.2rem] flex shadow-sm border cursor-pointer
+                        :class="`w-full h-[5.2rem] flex shadow-sm border cursor-pointer rounded-[0.25rem]
                             ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'bg-gradient-to-r from-c2 to-c6' : 'bg-c4 hover:bg-white'}`">
                         <div v-if="room.type == 'Private message'" class="h-full flex items-center px-4">
                             <img :src="(room.users[0].uid != userData.uid ? room.users[0].photoURL.value : room.users[1].photoURL.value) ?? 'https://i.ibb.co/LJPrkjQ/np.png'" 
@@ -126,7 +126,7 @@
         </div>
 
         <div v-if="openMessageRoom" class="flex-grow h-[calc(100vh-4rem)] w-full lg:h-auto lg:w-auto flex p-2 sm:p-4 lg:p-0 lg:pl-2 lg:py-4 lg:pr-4">
-            <div class="border border-c6 flex-grow flex flex-col">
+            <div class="border border-c6 flex-grow flex flex-col rounded-[0.25rem]">
 
                 <div class="w-full min-h-[4rem] h-[4rem] flex justify-start bg-gradient-to-r from-c2 to-c6 drop-shadow relative z-[1]">
                     <div v-if="selectedRoom && selectedRoom.type === 'Private message'" class="h-full flex">
@@ -174,7 +174,7 @@
                                     :src="message.author_photoURL.value" alt="" class="w-4 h-4 rounded-full mb-[0.25rem] mr-[0.35rem] border cursor-pointer hover:scale-125 duration-200">
                                 <p class="text-[0.8rem] font-semibold">{{ message.author_name.split(" ")[0] }}</p>
                             </div>
-                            <div @click="toggleDeleteButton(message.messageId)" v-if="message.type === 'Text'" class="flex flex-wrap gap-1 items-center relative cursor-pointer">
+                            <div @click="toggleDeleteButton(message.messageId)" v-if="message.type === 'Text'" class="flex flex-wrap gap-1 items-center relative cursor-pointer rounded-[0.25rem]">
                                 <span v-if="message.showDeleteButton && message.author_uid === userData.uid" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute px-2 shadow cursor-pointer -bottom-[1.125rem] left-1/2 -translate-x-1/2 bg-c6 text-white">Delete message</span>
                                 <div class="w-fit max-w-[39rem] bg-c2 py-2 px-6 text-wrap">
                                     {{ message.value }}
@@ -212,7 +212,7 @@
                             v-model="input"
                             @keyup.enter="handleSendMessage"
                             class="resize-none w-full p-4 outline-none max-h-[10rem] caret-c2 text-c1 
-                            hover:ring-[0.125rem] focus:ring-[0.25rem] ring-c2"
+                            hover:ring-[0.125rem] focus:ring-[0.25rem] ring-c2 rounded-[0.25rem]"
                             placeholder="Type message"
                         />
                         <div class="flex items-center h-[3.3rem] justify-center relative overflow-hidden w-[4rem] text-c2 hover:text-c1 active:translate-y-[0.125rem] duration-200">
