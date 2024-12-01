@@ -9,7 +9,7 @@
                 <div class="relative">
                     <span v-show="showChat" class="absolute -top-5 left-[-0.2rem] text-[0.75rem] text-nowrap">Chat!</span>
                     <MailIcon @mouseover="openShowChat" @mouseleave="hideShowChat" @click="handleMailClick"
-                        class="mail cursor-pointer font-bold text-c1 active:scale-95 duration-200" />
+                        class="mail cursor-pointer font-bold text-c1 active:scale-95 duration-200 relative" />
                 </div>
                 <p class="text text-c6 mt-2"><span class="font-bold">PROJECT TIMELINE:</span> {{ props.post.projTimeline}}</p>
                 <p class="text text-c6 my-[0.125rem]"><span class="font-bold">APPLICATION DEADLINE:</span> {{ props.post.deadline}}</p>
@@ -40,15 +40,16 @@ const { fetchMessageRoom, selectedRoom, messagesRooms } = inject('userData')
 
 const router = useRouter()
 
-const handleMailClick = useDebounceFn((event) => {
+const handleMailClick = (event) => {
     event.stopPropagation();
     if(!props.post?.roomId) {
         return toast('Project hasn\'t created a room yet')
+    } else {
+        selectedRoom.value = messagesRooms.value.find((room) => room.roomId == props.post.roomId)
+        fetchMessageRoom()
+        router.push({ name: 'Messages' })
     }
-    selectedRoom.value = messagesRooms.value.find((room) => room.roomId == props.post.roomId)
-    fetchMessageRoom()
-    router.push({ name: 'Messages' })
-})
+}
 
 </script>
 
