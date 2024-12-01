@@ -14,11 +14,11 @@
                         @input="handleSearch"
                         placeholder="Search user"/>
                         <transition name="fade" mode="out-in">
-                            <div v-if="usersTab && tempUsers.length" class="p-2 w-full h-[25rem] outline outline-c2 absolute left-0 top-full mt-2 transition duration-200 bg-c5 flex flex-col gap-2 overflow-y-auto no-scrollbar"
+                            <div v-if="usersTab && tempUsers.length" class="p-2 w-full h-[25rem] outline outline-c2 absolute left-0 top-full mt-2 transition duration-200 bg-c5 flex flex-col gap-2 overflow-y-auto no-scrollbar rounded-[0.25rem]"
                                 ref="target">
                                 <div @click="handleCreateMessageRoom(user)" 
                                     v-for="user, index in tempUsers" :key="index"  
-                                    class="w-full cursor-pointer h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white">
+                                    class="w-full cursor-pointer h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white rounded-[0.25rem]">
                                     <div class="p-2">
                                         <img :src="user.photoURL.value" alt="profile" :class="`w-[3.5rem] h-[3.5rem] rounded-full border border-c2`">
                                     </div>
@@ -79,13 +79,13 @@
                         @input="handleSearch"
                         placeholder="Search user"/>
                         <transition name="fade" mode="out-in">
-                            <div v-if="usersTab && tempUsers.length" class="p-2 w-full h-[25rem] outline outline-c2 absolute left-0 top-full mt-2 transition duration-200 bg-c5 flex flex-col gap-2 overflow-y-auto no-scrollbar"
+                            <div v-if="usersTab && tempUsers.length" class="p-2 w-full h-[25rem] outline outline-c2 absolute left-0 top-full mt-2 transition duration-200 bg-c5 flex flex-col gap-2 overflow-y-auto no-scrollbar rounded-[0.25rem]"
                                 ref="target">
                                 <div @click="handleCreateMessageRoom(user)" 
                                     v-for="user, index in tempUsers" :key="index"  
-                                    class="w-full cursor-pointer h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white">
+                                    class="w-full cursor-pointer h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white rounded-[0.25rem]">
                                     <div class="p-2">
-                                        <img :src="user.photoURL.value" alt="profile" :class="`w-[3.5rem] h-[3.5rem] rounded-full border border-c2`">
+                                        <img :src="user.photoURL.value" alt="profile" :class="`min-w-[3.5rem] w-[3.5rem] h-[3.5rem] rounded-full border border-c2`">
                                     </div>
                                     <div class="pl-2">
                                         <p class="font-bold text-c1">{{ user.full_name }}</p>
@@ -142,18 +142,18 @@
                     </div>
                     <div v-else-if="selectedRoom && selectedRoom.type === 'Group message'"
                         class="h-full flex items-center justify-between w-full pl-4 text-[1.125rem] font-semibold text-white relative">
-                        <div class="h-full flex lg:hidden items-center xs:px-4">
-                            <ArrowLeft class="w-8 h-8 text-c5" @click="hideMessageRoom" />
-                        </div>
                         <div class="flex items-center gap-2 lg:gap-4">
-                            <img :src="selectedRoom.roomPhotoURL ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="profile" :class="`w-11 h-11 rounded-full`">
+                            <div class="h-full flex lg:hidden items-center xs:px-4">
+                                <ArrowLeft class="w-6 h-6 sm:w-8 sm:h-8 text-c5" @click="hideMessageRoom" />
+                            </div>
+                            <img :src="selectedRoom.roomPhotoURL ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="profile" :class="`w-11 h-11 rounded-full border border-white`">
                             {{ selectedRoom.groupName }}
                         </div>
                         <DotsVertical @click="toggleGroupChatSettings" class="mr-4 w-7 h-7 cursor-pointer " />
-                        <div v-if="openGroupChatSettings" class="absolute p-2 right-12 w-[15rem] h-max bg-white top-[105%]" ref="targetGroupChatSetting">
+                        <div v-if="openGroupChatSettings" class="absolute p-2 right-12 w-[15rem] h-max bg-white top-[105%] rounded-[0.25rem]" ref="targetGroupChatSetting">
                             <button @click="handleSeeGroupUsers" 
-                                class="bg-c2 p-2 text-center w-full active:bg-c6">See users!</button>
-                            <button @click="handleShowManageUsers" v-if="selectedRoom.groupAdminId === userData.uid" class="bg-c2 p-2 text-center w-full active:bg-c6 mt-2">Manage Users</button>
+                                class="bg-c2 p-2 text-center w-full active:bg-c6 rounded-[0.25rem]">See users!</button>
+                            <button @click="handleShowManageUsers" v-if="selectedRoom.groupAdminId === userData.uid" class="bg-c2 p-2 text-center w-full active:bg-c6 mt-2 rounded-[0.25rem]">Manage Users</button>
                         </div>
                     </div>
                     <div v-else class="h-full flex items-center px-4 lg:text-[1.125rem] text-white">
@@ -174,9 +174,9 @@
                                     :src="message.author_photoURL.value" alt="" class="w-4 h-4 rounded-full mb-[0.25rem] mr-[0.35rem] border cursor-pointer hover:scale-125 duration-200">
                                 <p class="text-[0.8rem] font-semibold">{{ message.author_name.split(" ")[0] }}</p>
                             </div>
-                            <div @click="toggleDeleteButton(message.messageId)" v-if="message.type === 'Text'" class="flex flex-wrap gap-1 items-center relative cursor-pointer rounded-[0.25rem]">
+                            <div @click="toggleDeleteButton(message.messageId)" v-if="message.type === 'Text'" class="flex flex-wrap gap-1 items-center relative cursor-pointer">
                                 <span v-if="message.showDeleteButton && message.author_uid === userData.uid" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute px-2 shadow cursor-pointer -bottom-[1.125rem] left-1/2 -translate-x-1/2 bg-c6 text-white">Delete message</span>
-                                <div class="w-fit max-w-[39rem] bg-c2 py-2 px-6 text-wrap">
+                                <div class="w-fit max-w-[39rem] bg-c2 py-2 px-6 text-wrap rounded-[0.25rem]">
                                     {{ message.value }}
                                 </div>
                             </div>
@@ -236,11 +236,11 @@
             <div v-if="addGroupForm" class="fixed w-screen h-screen top-0 left-0 z-[2] flex items-start pt-[4rem] justify-center">
                 <div class="fixed w-screen h-screen top-0 left-0 bg-c2 opacity-45"></div>
                 <div class="w-[32rem] px-2.5 sm:px-0">
-                    <div class="w-full h-max p-2 sm:p-8 bg-c4 relative drop-shadow text-c1 border">
-                        <XIcon @click="handleCloseAddGroup" class="absolute right-2 top-2 drop-shadow rounded-full sm:w-7 sm:h-7 w-5 h-5 active:translate-y-[0.125rem] cursor-pointer duration-200" />
+                    <div class="w-full h-max p-2 sm:p-8 bg-c4 relative drop-shadow text-c1 border rounded-[0.25rem]">
+                        <XIcon @click="handleCloseAddGroup" class="absolute right-2 top-2 hover:drop-shadow rounded-full sm:w-7 sm:h-7 w-5 h-5 active:translate-y-[0.125rem] cursor-pointer duration-200" />
                         <div class="w-full flex justify-start gap-2 flex-col">
                             <label class="text-xs sm:text-base" for="groupName">Group Name</label>
-                            <input class="text-[1.25rem] sm:text-[1.5rem] p-2 outline-c2" id="groupName" type="text" v-model="groupName" ref="groupNameField">
+                            <input class="text-[1.25rem] sm:text-[1.5rem] p-2 outline-c2" id="groupName rounded-[0.25rem]" type="text" v-model="groupName" ref="groupNameField">
                         </div>
                         <div class="flex w-full justify-normal gap-2 mt-2 flex-col">
                             <label class="text-xs sm:text-base" for="users">Add Users</label>
@@ -250,13 +250,13 @@
                         </div>  
                         <button v-if="groupUsers.length" @click="handleCreateGroup"
                             class="w-full text-[1.25rem] h-[3rem] bg-c2 mt-4 text-white active:translate-y-[.125rem] duration-200">Create Now!</button>  
-                        <div v-if="tempUsers.length && addGroupUsers" class="p-2 w-full h-[12rem] outline outline-c2 absolute left-0 top-full mt-2 transition duration-200 bg-c5 flex flex-col gap-2 overflow-y-auto"
+                        <div v-if="tempUsers.length && addGroupUsers" class="p-2 w-full h-[12rem] outline outline-c2 absolute left-0 top-full mt-2 transition duration-200 bg-c5 flex flex-col gap-2 overflow-y-auto rounded-[0.25rem]"
                             ref="targetAddGroupUsers">
                             <div
                                 v-for="user, index in tempUsers" :key="index"  
-                                class="w-full cursor-pointer h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white">
+                                class="w-full cursor-pointer h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white rounded-[0.25rem]">
                                 <div class="p-2">
-                                    <img :src="user.photoURL.value" alt="profile" :class="`w-[2.5rem] h-[2.5rem] sm:w-[3.5rem] sm:h-[3.5rem] rounded-full border border-c2`">
+                                    <img :src="user.photoURL.value" alt="profile" :class="`min-w-[2.5rem] w-[2.5rem] h-[2.5rem] sm:min-w-[3.5rem] sm:w-[3.5rem] sm:h-[3.5rem] rounded-full border border-c2`">
                                 </div>
                                 <div class="pl-2">
                                     <p class="text-sm sm:text-base font-bold text-c1">{{ user.full_name }}</p>
@@ -277,14 +277,14 @@
             <div v-if="openGroupUsers" class="fixed w-screen h-screen top-0 left-0 z-[2] flex items-center justify-center">
                 <div class="fixed w-screen h-screen top-0 left-0 bg-c2 opacity-45"></div>
                 <div class="w-[30rem]  h-[25rem] z-[1] px-2">
-                    <div v-if="selectedRoom.users.length" class="p-2 border bg-c5 border-c2 flex flex-col gap-2 overflow-y-auto"
+                    <div v-if="selectedRoom.users.length" class="p-2 border bg-c5 border-c2 flex flex-col gap-2 overflow-y-auto rounded-[0.25rem]"
                         ref="targetOpenGroupUsers">
                         <div class="w-full text-center text-c1 text-[1.5rem] font-semibold sticky top-0 py-2 bg-white">{{ selectedRoom.groupName }}</div>
                         <div
                             v-for="user, index in selectedRoom.users" :key="index"  
-                            class="w-full h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white">
+                            class="w-full h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white rounded-[0.25rem]">
                             <div class="p-2">
-                                <img @click="seeUser(user.uid)" :src="user.photoURL.value" alt="profile" :class="`w-[2.5rem] h-[2.5rem] sm:w-[3.5rem] sm:h-[3.5rem] rounded-full cursor-pointer border border-c2`">
+                                <img @click="seeUser(user.uid)" :src="user.photoURL.value" alt="profile" :class="`sm:min-w-[3.5rem] min-w-[2.5rem] w-[2.5rem] h-[2.5rem] sm:w-[3.5rem] sm:h-[3.5rem] rounded-full cursor-pointer border border-c2`">
                             </div>
                             <div class="pl-2">
                                 <p class="text-sm sm:text-base font-bold text-c1">{{ user.full_name }}</p>
@@ -301,27 +301,27 @@
             <div v-if="openManageUsers" class="fixed w-screen h-screen top-0 left-0 z-[2] flex items-center justify-center">
                 <div class="fixed w-screen h-screen top-0 left-0 bg-c2 opacity-45"></div>
                 <div class="px-1.5 w-[32rem] h-[32rem] sm:h-[36rem] z-[2] ">
-                    <div class="w-full h-full bg-white text-c1 flex flex-col p-2">
+                    <div class="w-full h-full bg-white text-c1 flex flex-col p-2 rounded-[0.25rem]">
                         <div class="w-full px-2 sm:px-4 py-2.5 flex justify-between items-center">
                             <p class="text-c2 font-semibold">Manage Group Users!</p>
                             <XIcon @click="closeManageUsers" class="w-6 h-6 drop-shadow rounded-full cursor-pointer active:translate-y-[0.125rem]" />
                         </div>
                         <div class="w-full flex">
-                            <button @click="handleManageAddUsers" :class="`py-2 w-1/2 ${ manageAddUsers ? 'bg-c2 text-white border-0' : 'border-2'}`">Add Users!</button>
-                            <button @click="handleManageRemoveUsers" :class="`py-2 w-1/2 ${ !manageAddUsers ? 'bg-c2 text-white border-0' : 'border-2'}`">Remove User</button>
+                            <button @click="handleManageAddUsers" :class="`py-2 w-1/2  rounded-t-[0.25rem] ${ manageAddUsers ? 'bg-c2 text-white border-0' : 'border-2'}`">Add Users!</button>
+                            <button @click="handleManageRemoveUsers" :class="`py-2 w-1/2  rounded-t-[0.25rem] ${ !manageAddUsers ? 'bg-c2 text-white border-0' : 'border-2'}`">Remove User</button>
                         </div>
                         <div class="flex-grow bg-c2 py-2 overflow-y-auto flex flex-col px-1">
                             <div v-if="manageAddUsers">
-                                <div class="w-full h-[2.5rem] sm:h-[3rem] bg-white focus-within:border-c6 focus-within:border-2">
+                                <div class="w-full h-[2.5rem] sm:h-[3rem] bg-white focus-within:border-c6 focus-within:border-2 rounded-[0.25rem]">
                                     <input type="text" class="sm:text-[1.125rem] focus:outline-none bg-transparent w-full h-full px-2" placeholder="Type to search"
                                     v-model="searchPatternManageUser" @input="handleSearchManageUsers">
                                 </div>
                                 <div class="flex-grow mt-1 overflow-y-auto">
                                     <div
                                         v-for="user, index in addUsersContainerManageUsers" :key="index"  
-                                        class="w-full h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white">
+                                        class="w-full h-[4.75rem] border-2 bg-c4 border-c2 flex items-center hover:bg-white rounded-[0.25rem]">
                                         <div class="p-2">
-                                            <img @click="seeUser(user.uid)" :src="user.photoURL.value" alt="profile" :class="`w-[2.5rem] h-[2.5rem] sm:w-[3.5rem] sm:h-[3.5rem] rounded-full cursor-pointer border border-c2`">
+                                            <img @click="seeUser(user.uid)" :src="user.photoURL.value" alt="profile" :class="`sm:min-w-[3.5rem] min-w-[2.5rem] w-[2.5rem] h-[2.5rem] sm:w-[3.5rem] sm:h-[3.5rem] rounded-full cursor-pointer border border-c2`">
                                         </div>
                                         <div class="pl-2">
                                             <p class="text-sm sm:text-base font-bold text-c1">{{ user.full_name }}</p>
@@ -329,7 +329,7 @@
                                         </div>
                                         <div class="flex-grow flex justify-end">
                                             <button v-if="!usersToAddContainer.includes(user)" @click="usersToAddContainer.push(user)"
-                                                class="py-1 px-4 mr-[0.75rem] text-white bg-c2 text-sm active:translate-y-[0.125rem]">Add</button>
+                                                class="py-1 px-4 mr-[0.75rem] text-white bg-c2 text-sm active:translate-y-[0.125rem] rounded-[0.25rem]">Add</button>
                                             <Check v-else class="mr-4 rounded-full w-5 h-5 p-[0.125rem] bg-[hsl(207,44%,89%)] text-white" />
                                         </div>
                                     </div>
@@ -359,7 +359,7 @@
                         </div>
                         <div class="w-full bg-white">
                             <button @click="handleUpdateManageUsers" 
-                                class="w-full p-2 text-c2 border mt-1.5 border-c2 hover:bg-c2 hover:text-white active:translate-y-[0.125rem] duration-200">Save</button>
+                                class="w-full p-2 text-c2 border mt-1.5 border-c2 hover:bg-c2 hover:text-white active:translate-y-[0.125rem] duration-200 rounded-[0.25rem]">Save</button>
                         </div>
                     </div>
                 </div>
