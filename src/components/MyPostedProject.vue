@@ -180,7 +180,6 @@ const createGroupChat = async (updatedMembers) => {
             { uid: userData.uid, photoURL: userData.photoURL, full_name: userData.full_name.value }],
         type: "Group message",
         roomPhotoURL: props.post.postPhotoURL ?? 'https://i.ibb.co/rfRCfwf/logo.png',
-        projectTitle: props.post.projectTitle,
         isNew: true,
         groupName: props.post.projectTitle,
         groupAdminId: userData.uid

@@ -47,7 +47,9 @@
                     <div class="py-[0.125rem] pr-6 border-t border-t-c1 flex justify-end">
                         <div class="relative">
                             <span v-show="showChat" class="absolute -top-5 left-[-3.5rem] text-[0.75rem] text-nowrap bg-white rounded-xl text-black shadow px-2">Open Group Chat!</span>
-                            <MailIcon @mouseover="openShowChat" @mouseleave="hideShowChat" class="w-[1.75rem] h-auto cursor-pointer active:scale-95 duration-200" />
+                            <MailIcon @mouseover="openShowChat" @mouseleave="hideShowChat" 
+                                @click="handleMailClick"
+                                class="w-[1.75rem] h-auto cursor-pointer active:scale-95 duration-200" />
                         </div>
                     </div>
                 </div>
@@ -73,7 +75,8 @@ import XIcon from '../components/icons/XIcon.vue'
 import MailIcon from '../components/icons/MailIcon.vue'
 import { format } from 'date-fns';
 import { useDebounceFn } from '@vueuse/core';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
+import { useRouter } from 'vue-router';
 const emit = defineEmits(['close'])
 const props = defineProps(['post'])
 
@@ -81,4 +84,18 @@ const showChat = ref(false)
 
 const openShowChat = useDebounceFn(() => showChat.value = true, 150)
 const hideShowChat = useDebounceFn(() => showChat.value = false, 150)
+
+const { fetchMessageRoom, selectedRoom, messagesRooms } = inject('userData')
+
+const router = useRouter()
+
+const handleMailClick = useDebounceFn((event) => {
+    event.stopPropagation();
+    if(!props.post?.roomId) {
+        return toast('Project hasn\'t created a room yet')
+    }
+    selectedRoom.value = messagesRooms.value.find((room) => room.roomId == props.post.roomId)
+    fetchMessageRoom()
+    router.push({ name: 'Messages' })
+}, 150)
 </script>

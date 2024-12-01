@@ -117,7 +117,7 @@ const fetchUsers = () =>  {
       }
       users.value = newUsers;
       setUserData();
-      console.log('mark users', users.value)
+      // console.log('users', users.value)
     });
 }
 
@@ -136,7 +136,7 @@ const updateActiveProjectMembersData = () => {
     const updatedMembers = project.members.map((member) => {
       const memberData = users.value.find((user) => user.uid === member.uid);
       if (memberData) {
-        return {
+        return {    
           ...member,
           full_name: memberData.full_name,
           department: memberData.department,
@@ -188,8 +188,8 @@ const updateActiveProjectMembersData = () => {
     postedProjects.value = userRelatedProjects.filter((projectPost) => projectPost.authorId == userData.uid )
     updatePostedProjectApplicantsData()
     updateActiveProjectMembersData()
-    console.log('mark test membersData', activeProjects.value)
-    console.log('mark test posted', postedProjects.value)
+    // console.log('test membersData', activeProjects.value)
+    // console.log('test posted', postedProjects.value)
   }
 
 const sortByDate = () => {
@@ -389,7 +389,7 @@ const fetchMessagesRooms = async () => {
         gatherMessages();
         filterOnlyUserExclusiveRooms();
         updateUsersDataInMessagesRooms();
-        console.log('Updated messagesRooms:', messagesRooms.value);
+        // console.log('Updated messagesRooms:', messagesRooms.value);
       }
     });
   } catch (error) {

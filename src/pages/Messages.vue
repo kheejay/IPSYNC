@@ -57,7 +57,7 @@
                             {{ room.lastMessage }}                             
                         </div>
                         <div v-else-if="room.type == 'Group message'" :class="`flex-grow flex flex-col justify-center pb-2 gap-1 ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'text-white' : 'text-c1'}`">
-                            <p class="font-bold pt-1">{{ room.projectTitle }}</p>
+                            <p class="font-bold pt-1">{{ room.groupName }}</p>
                             {{ room.lastMessage }}                             
                         </div>
                     </div>
@@ -66,14 +66,14 @@
             </div>
         </div>
 
-        <div v-if="!openMessageRoom" class="h-[calc(100vh-4rem)] w-full min-w-[34rem] pl-4 py-4 pr-2 flex lg:hidden">
+        <div v-if="!openMessageRoom" class="h-[calc(100vh-4rem)] w-full sm:min-w-[34rem] p-2 lg:pl-4 lg:py-4 lg:pr-2 flex lg:hidden">
             <div class="w-full h-full flex flex-col gap-2.5 p-2 overflow-y-auto border border-c2">
                 <div class="w-full flex gap-2">
                     <div class="flex w-full relative">
                         <input 
                         @focus="handleFocus"
                         @click="handleFocus"
-                        class="h-fit flex-grow focus:outline-none p-4 resize-none caret-c2 focus:ring focus:ring-c2 text-c1
+                        class="h-fit flex-grow min-w-[2rem]  focus:outline-none p-4 resize-none caret-c2 focus:ring focus:ring-c2 text-c1
                         ring-1 ring-c3 duration-200 bg-white"
                         v-model="searchPattern"
                         @input="handleSearch"
@@ -142,10 +142,13 @@
                     </div>
                     <div v-else-if="selectedRoom && selectedRoom.type === 'Group message'"
                         class="h-full flex items-center justify-between w-full pl-4 text-[1.125rem] font-semibold text-white relative">
-                        <div class="h-full flex lg:hidden items-center px-4">
+                        <div class="h-full flex lg:hidden items-center xs:px-4">
                             <ArrowLeft class="w-8 h-8 text-c5" @click="hideMessageRoom" />
                         </div>
-                        {{ selectedRoom.groupName }}
+                        <div class="flex items-center gap-2 lg:gap-4">
+                            <img :src="selectedRoom.roomPhotoURL ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="profile" :class="`w-11 h-11 rounded-full`">
+                            {{ selectedRoom.groupName }}
+                        </div>
                         <DotsVertical @click="toggleGroupChatSettings" class="mr-4 w-7 h-7 cursor-pointer " />
                         <div v-if="openGroupChatSettings" class="absolute p-2 right-12 w-[15rem] h-max bg-white top-[105%]" ref="targetGroupChatSetting">
                             <button @click="handleSeeGroupUsers" 
@@ -400,6 +403,7 @@ const { focused } = useFocus(groupNameField)
 const { messagesRooms, selectedRoom, userData, fetchMessageRoom, fetchMessagesRooms, messageRoom, users, findPreExistingRoom } = inject('userData')
 
 const handleSetRoom = (room) => {
+    console.log("mark room ghere", room)
     selectedRoom.value = room;
     fetchMessageRoom()
 }

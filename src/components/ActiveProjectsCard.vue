@@ -40,7 +40,7 @@ const { fetchMessageRoom, selectedRoom, messagesRooms } = inject('userData')
 
 const router = useRouter()
 
-const handleMailClick = (event) => {
+const handleMailClick = useDebounceFn((event) => {
     event.stopPropagation();
     if(!props.post?.roomId) {
         return toast('Project hasn\'t created a room yet')
@@ -48,7 +48,7 @@ const handleMailClick = (event) => {
     selectedRoom.value = messagesRooms.value.find((room) => room.roomId == props.post.roomId)
     fetchMessageRoom()
     router.push({ name: 'Messages' })
-}
+})
 
 </script>
 
