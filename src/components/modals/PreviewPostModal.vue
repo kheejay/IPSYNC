@@ -85,9 +85,6 @@ const updateApplicants = async () => {
     if(userData.uid === props.post.authorId) {
         return toast('You cannot apply to a post you created.', "top", 1500, '#CB3D3D', '#B74242')
     }
-    // if(props.post.applicants.some(((applicant) => applicant.uid == userData.uid))) {
-    //     return toast('Application already sent!', "top", 3000)
-    // }
     if(buttonLock.value) {
         return
     }
