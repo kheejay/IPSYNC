@@ -83,7 +83,7 @@
                         <img src="/src/assets/images/kj.png" alt="Person 1" class="h-[18rem] w-auto" />
                     </div>
                     <div class="font-bold text-white tracking-wider mt-2">
-                        Chicken Bilog
+                        Khee Jay Galvez
                     </div>
                     <div class="text-white tracking-wider">
                         DEVELOPER
