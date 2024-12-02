@@ -63,7 +63,7 @@ const selectedRoom = ref()
 const allMessages = ref([])
 const messageRoom = ref({})
 const isLoadingMessagesRooms = ref(false)
-const verifiedUsers = ref(['x4xMyOXtPFYzfMZO97JM3cIuZJy2', '9ASX5ToFXfYeLnK7aztxae9n3tU2', 'mtNyuTO4gFbTLjmSROfV87NiWuI2', 'm37gTYcbIdYxNqTHllpnPm9X0rz2', '58UH3Lr6lNbC1XkdYx6iq6KvwE83'])
+const verifiedUsers = ref(['x4xMyOXtPFYzfMZO97JM3cIuZJy2', '9ASX5ToFXfYeLnK7aztxae9n3tU2', 'mtNyuTO4gFbTLjmSROfV87NiWuI2', 'm37gTYcbIdYxNqTHllpnPm9X0rz2', '58UH3Lr6lNbC1XkdYx6iq6KvwE83', 'WQtTuqxqm9aR0tuh4nVLwsZ99AJ2'])
 
 watch(selectedRoom, (newValue) => {
   messageRoom.value = allMessages.value.filter((room) => room.roomId === newValue.roomId)
