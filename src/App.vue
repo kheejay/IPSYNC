@@ -126,13 +126,15 @@ const fetchUsers = () =>  {
 }
 
 const getUniqueTagValues = () => {
+  let rawTags = []
   posts.value.forEach((post) => {
     post.categoryTags.forEach((tag) => {
-      if(!categoryTags.value.includes(tag)) {
-        categoryTags.value.push(tag)
+      if(!rawTags.some((rawTag) => rawTag.value.trim() == tag.value.trim())) {
+        rawTags.push(tag)
       }
     })
   })
+  categoryTags.value = rawTags
 }
 
 const updateActiveProjectMembersData = () => {
@@ -288,6 +290,8 @@ const fetchPosts = () => {
       }
       reshapePosts();
       getUniqueTagValues();
+      console.log('mark tags', categoryTags.value)
+      console.log('mark posts', posts.value)
     });
 }
 
