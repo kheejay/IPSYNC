@@ -39,7 +39,7 @@
                         <div v-if="!isEditMode"
                             class="h-[2.2rem] sm:h-[2.5rem] flex items-center mr-2 gap-2">
                             <EditProfileInfo @click="handleEdit" class="w-[1.1rem] h-[1.1rem] hover:scale-125 cursor-pointer" />
-                            <span @click="handleEdit" class="hover:underline cursor-pointer">edit info</span>
+                            <span @click="handleEdit" class="hover:underline cursor-pointer">Edit Information</span>
                         </div>  
                     </div>
                     <div class="w-full flex flex-col items-start pt-2 mt-[4.4rem] sm:mt-0">
