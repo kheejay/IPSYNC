@@ -58,9 +58,10 @@
                 <p class="sm:text-[1.125rem] font-bold text-c6 py-1.5">DEADLINE: <span class="font-light pl-2">{{ props.post.deadline }}</span></p>
 
                 <div class="w-full flex justify-end">
-                    <button class="py-[0.5rem] mt-2 sm:py-[0.75rem] px-4 sm:px-8 text-c1 font-extrabold drop-shadow rounded-[1.125rem] bg-white border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-zinc-50">
+                    <button v-if="props.post.authorId === userData.uid" @click="markAsComplete" class="py-[0.5rem] mt-2 sm:py-[0.75rem] px-4 sm:px-8 text-c1 font-extrabold drop-shadow rounded-[1.125rem] bg-white border border-black active:translate-y-[0.25rem] duration-200 active:shadow-none hover:bg-zinc-50">
                         MARK AS COMPLETE
                     </button>
+                    <p v-else class="text-c3 text-[1rem]">Viewing Project As Member</p>
                 </div>
 
             </div>
@@ -77,6 +78,9 @@ import { format } from 'date-fns';
 import { useDebounceFn } from '@vueuse/core';
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { toast } from '../functions/toast';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 const emit = defineEmits(['close'])
 const props = defineProps(['post'])
 
@@ -85,7 +89,7 @@ const showChat = ref(false)
 const openShowChat = useDebounceFn(() => showChat.value = true, 150)
 const hideShowChat = useDebounceFn(() => showChat.value = false, 150)
 
-const { fetchMessageRoom, selectedRoom, messagesRooms } = inject('userData')
+const { fetchMessageRoom, selectedRoom, messagesRooms, userData } = inject('userData')
 
 const router = useRouter()
 
@@ -98,4 +102,28 @@ const handleMailClick = useDebounceFn((event) => {
     fetchMessageRoom()
     router.push({ name: 'Messages' })
 }, 150)
+
+const buttonLock = ref(false)
+
+const markAsComplete = async () => {
+    if(buttonLock.value) {
+        return
+    }
+    try {
+        buttonLock.value = true
+
+        const docRef = doc(db, 'posts', props.post.postId);
+        const updatePost = await updateDoc(docRef, {
+            completed: true
+        });
+
+        toast('Project set completed!')
+        
+    } catch (error) {
+        toast(error.message)
+    }  finally {
+        emit('close')
+        buttonLock.value = false
+    }
+}
 </script>

@@ -214,6 +214,7 @@ const updateActiveProjectMembersData = () => {
   updateActiveProjectMembersData();
 
   console.log('Test posted projects:', postedProjects.value);
+  console.log('project schema', activeProjects.value)
 };
 
 
