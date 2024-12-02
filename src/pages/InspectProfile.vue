@@ -293,18 +293,18 @@ const stopLoading = () => {
 const route = useRoute()
 
 onMounted(() => {
-    // if(users.value.length) {
-    //     getUserInformation(route.params.id)
-    // } else {
-    //     startLoading('Getting user data')
-    //     let newInterval = setInterval(() => {
-    //         if(users.value.length) {
-    //             getUserInformation(route.params.id)
-    //             stopLoading()
-    //             return clearInterval(newInterval)
-    //         }
-    //     })
-    // }
+    if(users.value.length) {
+        getUserInformation(route.params.id)
+    } else {
+        startLoading('Getting user data')
+        let newInterval = setInterval(() => {
+            if(users.value.length) {
+                getUserInformation(route.params.id)
+                stopLoading()
+                return clearInterval(newInterval)
+            }
+        })
+    }
 })
 
 const router = useRouter()
