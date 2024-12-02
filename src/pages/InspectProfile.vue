@@ -21,6 +21,11 @@
             <div class="z-[1] w-full h-[70%] lg:h-[60%] bg-white rounded-[0.625rem] border border-c1 px-4 lg:p-4 relative">
                 <div class="w-full flex flex-col-reverse sm:flex-col">
                     <div class="w-full grid md:flex justify-center sm:justify-end items-center gap-4 mt-4 sm:mt-0 py-6">
+                        <button v-if="dashboardBackToUser" @click="$router.push({name: 'Dashboard'})"
+                            class="rounded-full bg-white text-c1 h-[2.2rem]
+                            sm:h-[2.5rem] px-6 sm:px-0 sm:w-[10rem] text-[1rem] active:scale-[99%] border border-black hover:bg-zinc-50">
+                            Back to user!
+                        </button>
                         <button @click="handleCreateRoom"
                             class="rounded-full bg-c1 text-white h-[2.2rem]
                             sm:h-[2.5rem] px-6 sm:px-0 sm:w-[10rem] text-[1rem] active:scale-[99%]">
@@ -213,6 +218,8 @@ import { db } from '../firebase';
 import { addDoc, collection } from 'firebase/firestore';
 const { textarea, input } = useTextareaAutosize()
 
+const { dashboardBackToUser } = inject('userData')
+
 const previewProfile = ref(false)
 const isLoading = ref(false)
 const loadingPrompt = ref('Processing request')
@@ -286,18 +293,18 @@ const stopLoading = () => {
 const route = useRoute()
 
 onMounted(() => {
-    if(users.value.length) {
-        getUserInformation(route.params.id)
-    } else {
-        startLoading('Getting user data')
-        let newInterval = setInterval(() => {
-            if(users.value.length) {
-                getUserInformation(route.params.id)
-                stopLoading()
-                return clearInterval(newInterval)
-            }
-        })
-    }
+    // if(users.value.length) {
+    //     getUserInformation(route.params.id)
+    // } else {
+    //     startLoading('Getting user data')
+    //     let newInterval = setInterval(() => {
+    //         if(users.value.length) {
+    //             getUserInformation(route.params.id)
+    //             stopLoading()
+    //             return clearInterval(newInterval)
+    //         }
+    //     })
+    // }
 })
 
 const router = useRouter()

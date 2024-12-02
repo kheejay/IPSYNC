@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!openMyPostedProject" class="w-full p-4 sm:px-6 sm:pt-6 pb-12">
+    <div v-if="!openMyPostedProject && !dashboardBackToUser" class="w-full p-4 sm:px-6 sm:pt-6 pb-12">
 
        <div class="flex flex-col lg:flex-row w-full gap-4">
             <div class="h-[22rem] sm:h-[25rem] lg:h-[38rem] w-full lg:w-[24rem] bg-c1 rounded-[0.75rem] shadow-glass backdrop-blur-[1.56rem] flex flex-col justify-center">
@@ -126,7 +126,7 @@
                 :post="activeProjectData"/>
         </transition>
     </div>
-    <MyPostedProject v-else @close="hideMyPostedProject" :post="myPostedProjectData" />
+    <MyPostedProject v-else @close="hideMyPostedProject" :post="myPostedProject" />
 </template>
 
 <script setup>
@@ -141,7 +141,7 @@ import { inject, ref } from 'vue';
 import { useDebounceFn, useWindowScroll } from '@vueuse/core';
 import { format } from 'date-fns';
 
-const { userData, activeProjects, completedProjects, myApplications, postedProjects } = inject('userData')
+const { userData, activeProjects, completedProjects, myApplications, postedProjects, myPostedProject, dashboardBackToUser } = inject('userData')
 
 const applicationStatus = ref('')
 
@@ -157,7 +157,6 @@ const closeStatusPopUp = useDebounceFn((fromAcceptedPopUp = false) => {
 }, 150)
 
 const openMyPostedProject = ref(false)
-const myPostedProjectData = ref({})
 
 const { y } = useWindowScroll({ behavior: 'smooth' })
 
@@ -166,7 +165,7 @@ const handleBackToTop = () => {
 }
 
 const showMyPostedProject = useDebounceFn((post) => {
-    myPostedProjectData.value = post
+    myPostedProject.value = post
     openMyPostedProject.value = true
     handleBackToTop()
 }, 150)

@@ -75,7 +75,7 @@
         </div>
 
         <transition name="fadeComponent" mode="out-in">
-            <ViewApplicantsPopUp v-if="openApplicantPopUp" 
+            <ViewApplicantsPopUp v-if="openApplicantPopUp || dashboardBackToUser" 
                 :applicantData="applicantData" 
                 @close="handleCloseApplicantPopUp" 
                 @handleAddMemberAction="handleAddMemberAction"
@@ -97,8 +97,9 @@ import { addDoc, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { format } from 'date-fns';
 
-const applicantData = ref({})
 const openApplicantPopUp = ref(false)
+const { dashboardBackToUser, applicantData } = inject('userData')
+
 
 const handleOpenApplicantPopUp = useDebounceFn((applicant) => {
     applicantData.value = applicant
@@ -107,6 +108,7 @@ const handleOpenApplicantPopUp = useDebounceFn((applicant) => {
 
 const handleCloseApplicantPopUp = useDebounceFn(() => {
     openApplicantPopUp.value = false
+    dashboardBackToUser.value = false
 }, 150)
 
 const buttonLock = ref(false)

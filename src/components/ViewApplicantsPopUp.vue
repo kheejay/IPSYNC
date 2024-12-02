@@ -17,7 +17,7 @@
                 {{ props.applicantData.full_name }}
             </p>
 
-            <p @click="$router.push(`/inspect-profile/${ props.applicantData.uid }`)" class="underline text-c1 text-[1.25rem] cursor-pointer font-[400]">
+            <p @click="handleViewUserProfile" class="underline text-c1 text-[1.25rem] cursor-pointer font-[400]">
                 View Profile
             </p>
             
@@ -42,4 +42,15 @@ import Check from './icons/Check.vue';
 import Close from '../components/icons/Close.vue'
 const props = defineProps(['applicantData'])
 const emit = defineEmits(['close', 'handleDecline', 'handleAddMemberAction'])
+import { inject } from 'vue';
+import { useRouter } from 'vue-router';
+
+const { dashboardBackToUser } = inject('userData')
+
+const router = useRouter()
+
+const handleViewUserProfile = () => {
+    dashboardBackToUser.value = true
+    router.push(`inspect-profile/${props.applicantData.uid}`)
+}
 </script>

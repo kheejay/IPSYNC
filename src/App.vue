@@ -27,6 +27,10 @@ const route = useRoute()
 const isAuthPage = computed(() => route.meta.isAuthPage)
 const isAuthenticated = ref(false)
 
+const dashboardBackToUser = ref(false)
+const applicantData = ref({})
+const myPostedProject = ref({})
+
 // USER
 const genericProfile = ref('https://i.ibb.co/LJPrkjQ/np.png')
 const userGmailName = ref('User fullname')
@@ -592,7 +596,10 @@ provide('userData', {
     activeProjects,
     completedProjects,
     myApplications,
-    postedProjects
+    postedProjects,
+    dashboardBackToUser,
+    applicantData,
+    myPostedProject
 })
 
 watch(messagesRooms.value, () => {
