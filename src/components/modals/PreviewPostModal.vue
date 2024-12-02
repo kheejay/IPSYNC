@@ -50,7 +50,7 @@
             </div>
             <div class="flex flex-col w-full xs:pl-[1.5rem] relative">
                 <span class="text-c1 font-bold text-[1.125rem] pt-4 pb-2">Project Description</span>
-                <div class="drop-shadow bg-c4 w-full min-h-[7rem] p-2 text-[0.90rem] text-font rounded-[0.25rem] overflow-auto no-scrollbar">
+                <div class="border bg-c4 w-full min-h-[7.7rem] p-2 text-[0.90rem] text-font rounded-[0.25rem] overflow-auto no-scrollbar">
                     {{  props.post.projDescription }}
                 </div>
             </div>
