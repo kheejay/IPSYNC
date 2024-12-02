@@ -19,14 +19,14 @@
                         py-3 md:py-4 relative shadow cursor-pointer">
                     <GoogleIcon @click="loginGoogle" class="w-[1.12rem] h-[1.25rem] sm:w-[1.5rem] sm:h-[1.5rem] md:w-[1.75rem] 
                         md:h-[1.75rem] absolute left-3 top-1/2 -translate-y-1/2" /> 
-                    signin with Google
+                    Sign In with Google
                 </div>
                 <div @click="loginGithub"
                     class="flex items-center justify-center border border-black w-full text-[0.90rem] sm:text-[1rem]   
                         py-3 md:py-4 relative shadow cursor-pointer">
                     <GithubIcon @click="loginGoogle" class="w-[1.12rem] h-[1.25rem] sm:w-[1.5rem] sm:h-[1.5rem] md:w-[1.75rem] 
                         md:h-[1.75rem] absolute left-3 top-1/2 -translate-y-1/2" /> 
-                    signin with Github
+                    Sign In with Github
                 </div>
                 <div class="flex items-center justify-center w-full sm:my-1">
                     <span class="border-b border-black flex-grow"></span>
