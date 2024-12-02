@@ -243,7 +243,6 @@ const categoryTags = ref([
     {value: 'Media & Communications', selected: false},
     {value: 'Science & Environment', selected: false},
     {value: 'Law & Governance', selected: false},
-    {value: 'Technology', selected: false},
 ])
 
 
