@@ -35,7 +35,7 @@
 
                 <div class="flex-grow px-2 sm:px-4 flex mb-4">
                     <div class="flex-grow overflow-y-auto thumb-scrollbar max-h-[20rem] px-2 sm:px-4">
-                        <div @click="showMyPostedProject(post)" v-for="post, index in postedProjects" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] ${ index === postedProjects.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] hover:bg-c4 duration-200`">
+                        <div @click="showMyPostedProject(post)" v-for="post, index in postedProjects" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] ${ index === postedProjects.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] duration-200`">
                             <img :src="post.postPhotoURL ?? post.photoURL.value ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full border-2 border-c1">
                             <div class="flex-grow flex justify-between items-center pr-2 sm:pr-8">
                                 <div class="pl-2">
@@ -57,7 +57,7 @@
                 <div class="flex-grow px-2 sm:px-4 flex mb-4">
                     <div class="flex-grow overflow-y-auto thumb-scrollbar max-h-[20rem] px-2 sm:px-4">
                         <div @click="showApplicationStatus(post.applicants.find((applicant) => applicant.uid == userData.uid).status)" 
-                            v-for="post, index in myApplications" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] relative ${ index === myApplications.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] hover:bg-c4 duration-200`">
+                            v-for="post, index in myApplications" :key="index" :class="`w-full border-t border-c1 flex items-center h-[5.7rem] relative ${ index === myApplications.length - 1 && 'border-b'} cursor-pointer hover:scale-[98%] duration-200`">
                             <img :src="post.postPhotoURL ?? post.photoURL.value ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="" class="w-[3rem] h-[3rem] sm:w-[3.75rem] sm:h-[3.75rem] rounded-full border border-c1">
                             <div class="flex-grow h-full flex justify-between items-center sm:pr-4 ">
                                 <div class="pl-2">
