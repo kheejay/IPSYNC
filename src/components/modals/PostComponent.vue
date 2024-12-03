@@ -1,13 +1,13 @@
 <template>
     <div class="drop-shadow post-wrapper bg-white relative overflow-hidden flex flex-col">
 
-        <div class="z-[0] light-lg rounded-full bg-c3 absolute"></div>
-        <div class="z-[2] dark-sm drop-shadow rounded-full bg-c1 absolute"></div>
-        <div class="z-[1] light-sm rounded-full bg-c3 absolute"></div>
-        <div class="dark-lg rounded-full bg-c1 absolute"></div>
-        <div class="z-[2] lightest drop-shadow rounded-full bg-c5 absolute"></div>
+        <div class="z-[0] light-lg rounded-full bg-[hsl(215,56%,89%)] absolute"></div>
+        <div class="z-[1] dark-sm drop-shadow rounded-full bg-[hsl(215,72%,79%)] absolute"></div>
+        <div class="z-[1] light-sm rounded-full bg-[hsl(215,56%,89%)] absolute"></div>
+        <div class="dark-lg rounded-full bg-[hsl(215,72%,79%)] absolute"></div>
+        <div class="z-[2] lightest drop-shadow rounded-full bg-[hsl(219,100%,104%)] absolute"></div>
 
-        <div class="z-[1] flex w-full border-b border-c1 relative">
+        <div class="z-[2] flex w-full border-b border-c1 relative">
             <div class="pic-wrapper flex items-center justify-center relative">
                 <img @click="handleInspectProfile" 
                     @mouseover="showPromptProfile = true"
