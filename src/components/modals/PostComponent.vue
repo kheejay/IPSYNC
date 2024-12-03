@@ -28,7 +28,7 @@
 
         <div class="texts-wrapper relative shadow-subtle">
             <div class="title z-[2] relative font-bold text-c1">{{ props.post.projectTitle }}</div>
-            <div class=" looking-for z-[2] relative font-bold text-c6">PROJECT/AGENDA: <span class="font-normal">{{ props.post.rolePosition }}</span></div>
+            <div class=" looking-for z-[2] relative font-bold text-c6">ROLE LOOKING FOR: <span class="font-normal">{{ props.post.rolePosition }}</span></div>
             <div class="deadline z-[2] relative font-bold text-c6">APPLICATION DEADLINE: <span class="font-normal">{{ props.post.deadline }} </span></div>
             <div class="tags-wrapper flex w-full flex-wrap">
                 <div v-for="tag in props.post.categoryTags" :key="tag"
