@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!openMyPostedProject && !dashboardBackToUser" class="w-full p-4 sm:px-6 sm:pt-6 pb-12">
+    <div v-if="!openMyPostedProject && !dashboardBackToUser" class="w-full p-4 sm:px-6 sm:pt-6 pb-12 bg-white">
 
        <div class="flex flex-col lg:flex-row w-full gap-4">
             <div class="h-[22rem] sm:h-[25rem] lg:h-[38rem] w-full lg:w-[24rem] bg-c1 rounded-[0.75rem] shadow-glass backdrop-blur-[1.56rem] flex flex-col justify-center">
@@ -14,7 +14,7 @@
                     </button>
                 </div>
             </div>
-            <div class="flex-grow max-h-[38rem] border shadow-glass backdrop-blur-[1.56rem] bg-[#DFEAFF4D] bg-opacity-30 rounded-[0.75rem] p-2 sm:p-4 flex flex-col">
+            <div class="flex-grow max-h-[38rem] border shadow-glass backdrop-blur-[1.56rem] bg-c1 bg-opacity-[10%] rounded-[0.75rem] p-2 sm:p-4 flex flex-col">
                 <div class="text-[1.75rem] xs:text-[2rem] sm:text-[2.25rem] font-bold tracking-[1%] h-[4rem] w-full flex items-center border-b border-b-c1 relative p-4 sm:p-0">
                     ACTIVE PROJECTS
                     <Diamond class="w-[0.55rem] h-[0.55rem] absolute text-c1 -left-[0.33rem] -bottom-[0.35rem]" />
@@ -30,7 +30,7 @@
        </div>
 
        <div class="flex flex-col lg:flex-row w-full mt-[5rem] gap-4">
-            <div class="w-full lg:w-1/2 h-[28rem] shadow-glass backdrop-blur-[1.56rem] bg-[#DFEAFF4D] bg-opacity-40 rounded-[0.75rem] border flex flex-col">
+            <div class="w-full lg:w-1/2 h-[28rem] shadow-glass backdrop-blur-[1.56rem] bg-c1 bg-opacity-[10%] rounded-[0.75rem] border flex flex-col">
                 <div class="w-full text-[1.5rem] sm:text-[2rem] font-bold text-c1 tracking-[1%] py-4 pl-4 border-b border-c1 mb-6">POSTED PROJECTS</div>
 
                 <div class="flex-grow px-2 sm:px-4 flex mb-4">
@@ -51,7 +51,7 @@
                 </div>
 
             </div>
-            <div class="w-full lg:w-1/2 h-[28rem] shadow-glass backdrop-blur-[1.56rem] bg-[#DFEAFF4D] bg-opacity-40 rounded-[0.75rem] border flex flex-col">
+            <div class="w-full lg:w-1/2 h-[28rem] shadow-glass backdrop-blur-[1.56rem] bg-c1 bg-opacity-[10%] rounded-[0.75rem] border flex flex-col">
                 <div class="w-full text-[1.5rem] sm:text-[2rem] font-bold text-c1 tracking-[1%] py-4 pl-4 border-b border-c1 mb-6">MY APPLICATIONS</div>
 
                 <div class="flex-grow px-2 sm:px-4 flex mb-4">
@@ -83,8 +83,8 @@
        <div class="w-full my-[3.5rem] border border-c1 shadow-[0px_0.2rem_0.2rem_rgba(0,0,0,0.15)]"></div>
 
        <div class="w-full rounded-b-[0.75rem]">
-           <div class="w-full text-[1.5rem] sm:text-[2rem] font-bold text-c1 tracking-[1%] py-4 pl-1" style="text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);">COMPLETED PROJECTS</div>
-           <div class="w-full rounded-b-[0.75rem] drop-shadow bg-[#DFEAFF4D] bg-opacity-40">
+           <div class="w-full text-[1.5rem] sm:text-[2rem] font-bold text-c1 tracking-[1%] py-4 pl-1" style="text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);">COMPLETED PROJECTS</div>
+           <div class="w-full rounded-b-[0.75rem] drop-shadow bg-c1 bg-opacity-[10%]">
                 <div class="w-full h-[30rem]">
                     <div class="h-[4rem] flex w-full bg-c1 text-white items-center">
                         <div class="font-normal text-sm sm:text-[1.25rem] text-start pl-2 sm:pl-8 w-[30%]">Project Name</div>
