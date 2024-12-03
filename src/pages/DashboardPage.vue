@@ -15,10 +15,10 @@
                 </div>
             </div>
             <div class="flex-grow max-h-[38rem] border shadow-glass backdrop-blur-[1.56rem] bg-c1 bg-opacity-[10%] rounded-[0.75rem] p-2 sm:p-4 flex flex-col">
-                <div class="text-[1.75rem] xs:text-[2rem] sm:text-[2.25rem] font-bold tracking-[1%] h-[4rem] w-full flex items-center border-b border-b-c1 relative p-4 sm:p-0">
+                <div class="text-[1.75rem] xs:text-[2rem] sm:text-[2.25rem] font-bold text-font tracking-[1%] h-[4rem] w-full flex items-center border-b border-b-font relative p-4 sm:p-0">
                     ACTIVE PROJECTS
-                    <Diamond class="w-[0.55rem] h-[0.55rem] absolute text-c1 -left-[0.33rem] -bottom-[0.35rem]" />
-                    <Diamond class="w-[0.55rem] h-[0.55rem] absolute text-c1 -right-[0.33rem] -bottom-[0.35rem]" />
+                    <Diamond class="w-[0.55rem] h-[0.55rem] absolute -left-[0.33rem] -bottom-[0.35rem]" />
+                    <Diamond class="w-[0.55rem] h-[0.55rem] absolute -right-[0.33rem] -bottom-[0.35rem]" />
                 </div>
                 <div v-if="!activeProjects.length" class="w-full text-center mt-[10rem] text-c1">No active projects yet</div>
                 <div class="flex-grow p-2 overflow-y-auto grid project-cards gap-4 mt-2.5 thumb-scrollbar">
