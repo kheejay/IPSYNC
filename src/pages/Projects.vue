@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full px-[1.5rem] sm:px-[2rem] lg:px-[2.8rem] bg-image bg-white pt-10 pb-[12rem]">
+    <div class="w-full px-[1.5rem] sm:px-[2rem] lg:px-[2.8rem] bg-white pt-10 pb-[12rem]">
 
         <div class="w-full">
 
@@ -193,33 +193,33 @@ watch(tags, () => {
 .fade-enter-from {
     opacity: 0;
 }
-.bg-image {
-    background-image: url('/src/assets/images/ProjectsBg.svg');
-    background-repeat: no-repeat;
-    background-position-y: bottom;
-    background-position-x: 42rem;
-    background-size: calc(65rem / var(--scale-factor));
-    user-select: none;
-}
-
-@media (max-width: 80rem) {
-    .bg-image {
-        background-position-x: 14rem;
-    }
-}
-@media (max-width: 65rem) {
-    .bg-image {
-        background-position-x: 1rem;
-    }
-}
-@media (max-width: 48rem) {
-    .bg-image {
-        background-position-x: -16rem;
-    }
-}
-@media (max-width: 37.5rem) {
-    .bg-image {
-        background-position-x: -9rem;   
-    }
-}
 </style>
+// .bg-image {
+//     background-image: url('/src/assets/images/ProjectsBg.svg');
+//     background-repeat: no-repeat;
+//     background-position-y: bottom;
+//     background-position-x: 42rem;
+//     background-size: calc(65rem / var(--scale-factor));
+//     user-select: none;
+// }
+
+// @media (max-width: 80rem) {
+//     .bg-image {
+//         background-position-x: 14rem;
+//     }
+// }
+// @media (max-width: 65rem) {
+//     .bg-image {
+//         background-position-x: 1rem;
+//     }
+// }
+// @media (max-width: 48rem) {
+//     .bg-image {
+//         background-position-x: -16rem;
+//     }
+// }
+// @media (max-width: 37.5rem) {
+//     .bg-image {
+//         background-position-x: -9rem;   
+//     }
+// }
