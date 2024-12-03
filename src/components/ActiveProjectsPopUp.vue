@@ -4,14 +4,19 @@
     
         <!-- 1.357784431137725 -->
          <div class="drop-shadow max-w-[50.84rem] w-[50.84rem] bg-white rounded-[1.125rem] relative py-12 px-4 sm:p-12">
+            <!-- <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
+                class="absolute top-[0.675rem] -right-[0.725rem] xs:top-[1rem] xs:-right-[1.1rem] sm:top-[1.4rem] sm:-right-[1.45rem] w-[18rem] xs:w-[26rem] sm:w-[36rem] -rotate-90 h-auto rounded-[1.125rem] z-[-1] opacity-95">
             <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
-                class="absolute top-[0.675rem] -right-[0.725rem] xs:top-[1rem] xs:-right-[1.1rem] sm:top-[1.4rem] sm:-right-[1.45rem] w-[18rem] xs:w-[26rem] sm:w-[36rem] -rotate-90 h-auto rounded-[1.125rem] z-[-1]">
+                class="absolute bottom-[0.675rem] -left-[0.75rem] xs:bottom-[1rem] sm:bottom-[1.4rem] xs:-left-[1.1rem] sm:-left-[1.4575rem] rotate-90 w-[18rem] xs:w-[26rem] sm:w-[36rem] h-auto rounded-[1.125rem] z-[-1] opacity-95"> -->
+
             <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
-                class="absolute bottom-[0.675rem] -left-[0.75rem] xs:bottom-[1rem] sm:bottom-[1.4rem] xs:-left-[1.1rem] sm:-left-[1.4575rem] rotate-90 w-[18rem] xs:w-[26rem] sm:w-[36rem] h-auto rounded-[1.125rem] z-[-1]">
+                class="absolute top-[0.5rem] -right-[0.6rem] sm:top-[0.95rem] sm:-right-[0.95rem] w-[14rem] sm:w-[24rem] -rotate-90 h-auto rounded-[1.125rem] z-[-1]">
+            <img src="/src/assets/images/ProjectsBg.svg" alt="projectBg" 
+                class="absolute bottom-[0.5rem] -left-[0.58rem] sm:bottom-[0.9rem] sm:-left-[0.95rem] rotate-90 w-[14rem] sm:w-[24rem] h-auto rounded-[1.125rem] z-[-1]">
 
             <XIcon @click="$emit('close')" class="w-7 h-7 sm:w-9 sm:h-9 text-black absolute right-[1rem] top-[1rem] sm:right-[1.5rem] sm:top-[1.5rem] z-[2] cursor-pointer active:translate-y-[0.1rem] duration-200 rounded-full" />
             
-            <div class="font-bold tracking-[10%] text-c1 text-[2.25rem] md:text-[2.5rem] py-2 sm:py-0 sm:p-2">
+            <div class="font-bold tracking-[10%] text-c1 text-[2.25rem] md:text-[2.5rem] py-2 sm:py-0 sm:p-2 pr-[2rem]">
                 {{ props.post.projectTitle }}
             </div>
 
