@@ -108,13 +108,13 @@
                             ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'bg-gradient-to-r from-c2 to-c6' : 'bg-c4 hover:bg-white'}`">
                         <div v-if="room.type == 'Private message'" class="h-full flex items-center px-4">
                             <img :src="(room.users[0].uid != userData.uid ? room.users[0].photoURL.value : room.users[1].photoURL.value) ?? 'https://i.ibb.co/LJPrkjQ/np.png'" 
-                                alt="" :class="`w-[3.5rem] h-[3.5rem] rounded-full
+                                alt="" :class="`min-w-[3rem] w-[3rem] h-[3rem] sm:w-[3.5rem] sm:h-[3.5rem] rounded-full
                                 border-c6 border-2 bg-white`">
                             <!-- <img src="https://i.ibb.co/LJPrkjQ/np.png" alt="" class="w-[3.5rem] h-[3.5rem]"> -->
                         </div>
                         <div v-if="room.type == 'Private message'" :class="`flex-grow flex flex-col justify-center pb-2 gap-1 ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'text-white' : 'text-c1'}`">
                             <p class="font-bold pt-1">{{ room.users[0].uid != userData.uid ? room.users[0].full_name : room.users[1].full_name }}</p>
-                           {{ room.lastMessage }}                             
+                           {{ room.lastMessage.length >= 25 ? room.lastMessage.slice(0, 22) + '...' : room.lastMessage }}                             
                         </div>
                         <div v-else-if="room.type === 'Group message'" :class="`font-bold pl-4 text-[1rem] ${(selectedRoom && selectedRoom.roomId == room.roomId) ? 'text-white' : 'text-c1'} flex items-center w-full`">
                             {{ room.groupName }}
@@ -181,7 +181,8 @@
                                 </div>
                             </div>
                             <div v-else-if="message.type === 'Photo'" @click="toggleDeleteButton(message.messageId)" class="bg-c5 p-2 cursor-pointer relative">
-                                <span v-if="message.showDeleteButton" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black p-2 shadow bg-white cursor-pointer -left-[7rem]">Delete message</span>
+                                <span v-if="message.showDeleteButton" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black py-2 w-[6rem] text-center shadow bg-white cursor-pointer -left-[7rem]">Delete Photo</span>
+                                <span v-if="message.showDeleteButton" @click="handlePreviewImage(message.value)" class="text-[0.60rem] text-nowrap absolute text-black py-2 w-[6rem] text-center shadow bg-white cursor-pointer -left-[7rem] top-[3rem]">Preview Photo</span>
                                 <img :src="message.value" alt="Image" class="h-max max-h-[11rem]">
                             </div>
                             <div :class="`text-[0.60rem] text-c1 w-full ${message.author_uid != userData.uid ? 'text-start' : 'text-end'} py-[0.25rem]`">
@@ -287,7 +288,8 @@
                                 </div>
                             </div>
                             <div v-else-if="message.type === 'Photo'" @click="toggleDeleteButton(message.messageId)" class="bg-c5 p-2 cursor-pointer relative">
-                                <span v-if="message.showDeleteButton" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black p-2 shadow bg-white cursor-pointer -left-[7rem]">Delete message</span>
+                                <span v-if="message.showDeleteButton" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black py-1 w-[6rem] text-center shadow bg-white cursor-pointer left-0 -top-[1.5rem]">Delete Photo</span>
+                                <span v-if="message.showDeleteButton" @click="handlePreviewImage(message.value)" class="text-[0.60rem] text-nowrap absolute text-black py-1 w-[6rem] text-center shadow bg-white cursor-pointer left-[7rem] -top-[1.5rem]">Preview Photo</span>
                                 <img :src="message.value" alt="Image" class="h-max max-h-[11rem]">
                             </div>
                             <div :class="`text-[0.60rem] text-c1 w-full ${message.author_uid != userData.uid ? 'text-start' : 'text-end'} py-[0.25rem]`">
@@ -471,6 +473,16 @@
                 </div>
             </div>
         </transition>
+        <transition name="fade" mode="out-in">
+            <div v-if="previewImage" 
+                class="w-screen h-screen fixed top-0 left-0 z-[4] flex items-center justify-center shadow sm:px-12 px-2">
+                <div class="fixed top-0 left-0 w-full h-full bg-c1 opacity-45 cursor-pointer"></div>
+                <div ref="targetImage" 
+                    class="w-full h-max sm:h-[30rem] sm:w-[44rem] lg:h-[40rem] lg:w-[64rem] z-[1] bg-c5 flex justify-center relative py-8 rounded-lg overflow-hidden p-2">
+                    <img :src="previewImageValue" alt="profile" class="h-full w-auto z-[5]">
+                </div>
+            </div>
+        </transition> 
     </div>
 </template>
 
@@ -491,6 +503,7 @@ import LoadingScreen from '../components/LoadingScreen.vue';
 import { useRouter } from 'vue-router';
 import Check from '../components/icons/Check.vue'
 import DotsVertical from '../components/icons/DotsVertical.vue';
+import { roundToNearestHours } from 'date-fns';
 
 const openMessageRoom = ref(false)
 
@@ -531,6 +544,21 @@ const handleRemoveImage = useDebounceFn((index) => {
     photoBucket.value.splice(index, 1)
     photoURL.value.splice(index, 1)
 })
+
+const previewImage = ref(false)
+const previewImageValue = ref(null)
+
+const handlePreviewImage = useDebounceFn((image) => {
+    previewImageValue.value = image;
+    previewImage.value = true;
+}, 150)
+
+const closePreviewImage = useDebounceFn((image) => {
+    previewImage.value = false;
+}, 150)
+
+const targetImage = ref(null)
+onClickOutside(targetImage, event => closePreviewImage())
 
 const addPhoto = (event) => {
     const file = event.target.files[event.target.files.length - 1]
@@ -976,6 +1004,20 @@ watch(messageRoom, () => {
 <style scoped>
 .fade-enter-active {
     transition: opacity 200ms;
+}
+.fade-enter-from {
+    opacity: 0; /* End state */
+}
+
+.fade-leave-to {
+    opacity: 0; /* Start state */
+    transition: opacity 300ms;
+}
+.fade-leave-from {
+    opacity: 100; /* Start state */
+}
+.fade-enter-active {
+    transition: opacity 300ms;
 }
 .fade-enter-from {
     opacity: 0; /* End state */
