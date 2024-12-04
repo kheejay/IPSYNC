@@ -133,13 +133,17 @@ const getCurrentUser = () => {
 
 router.beforeEach(async (to) => {
     if (to.meta.requiresAuth && !(await getCurrentUser())) {
-        toast('You need to log in first.');
-        return '/';
+        toast('You need to log in first.', "top", 2000);
+        return '/login';
     }
 
     if(localStorage.getItem('isRegistered') !== 'true' && to.name !== 'Profile' && to.meta.requiresAuth) {
         toast('Please fill out required fields')
         return '/profile'
+    }
+
+    if(to.meta.isAuthPage && (await getCurrentUser())) {
+        return '/'
     }
 
     return true

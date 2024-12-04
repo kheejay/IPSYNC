@@ -97,8 +97,12 @@ const { isAuthenticated, runAllNecessaryFunctions } = inject('userData')
 
 const router = useRouter()
 const handlePush = useDebounceFn((name) => {
-    toast('Please sign in to get started!', "center", "3000", "#184c95", "#1c58ab")
-    isAuthenticated.value ? router.push({ name: name }) : router.push({ name: 'Login' })
+    if(isAuthenticated.value) {
+        router.push({ name: name })
+    } else {
+        router.push({ name: 'Login' })
+        toast('Please sign in to get started!', "center", "3000", "#184c95", "#1c58ab")
+    }
 }, 150)
 
 onBeforeMount(() => {
