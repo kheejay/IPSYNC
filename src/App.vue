@@ -201,7 +201,7 @@ const updateActiveProjectMembersData = () => {
     return (
       projectPost.authorId !== userData.uid &&
       projectPost.applicants.some(
-        (applicant) => applicant.uid === userData.uid && applicant.status === 'Accepted'
+        (applicant) => applicant.uid === userData.uid
       )
     );
   });
