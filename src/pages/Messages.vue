@@ -174,15 +174,15 @@
                                     :src="message.author_photoURL.value" alt="" class="w-4 h-4 rounded-full mb-[0.25rem] mr-[0.35rem] border cursor-pointer hover:scale-125 duration-200">
                                 <p class="text-[0.8rem] font-semibold">{{ message.author_name.split(" ")[0] }}</p>
                             </div>
-                            <div @click="toggleDeleteButton(message.messageId)" v-if="message.type === 'Text'" class="flex flex-wrap gap-1 items-center relative cursor-pointer">
+                            <div @click="toggleDeleteButton(message.messageId)" v-if="message.type === 'Text'" :class="`flex flex-wrap gap-1 items-center relative ${message.author_uid === userData.uid && 'cursor-pointer'}`">
                                 <span v-if="message.showDeleteButton && message.author_uid === userData.uid" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute px-2 shadow cursor-pointer -bottom-[1.125rem] left-1/2 -translate-x-1/2 bg-c6 text-white">Delete message</span>
                                 <div class="w-fit max-w-[39rem] bg-c2 py-2 px-6 text-wrap rounded-[0.25rem]">
                                     {{ message.value }}
                                 </div>
                             </div>
                             <div v-else-if="message.type === 'Photo'" @click="toggleDeleteButton(message.messageId)" class="bg-c5 p-2 cursor-pointer relative">
-                                <span v-if="message.showDeleteButton" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black py-2 w-[6rem] text-center shadow bg-white cursor-pointer -left-[7rem]">Delete Photo</span>
-                                <span v-if="message.showDeleteButton" @click="handlePreviewImage(message.value)" class="text-[0.60rem] text-nowrap absolute text-black py-2 w-[6rem] text-center shadow bg-white cursor-pointer -left-[7rem] top-[3rem]">Preview Photo</span>
+                                <span v-if="message.showDeleteButton && message.author_uid === userData.uid" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black py-2 w-[6rem] text-center shadow bg-white cursor-pointer -left-[7rem]">Delete Photo</span>
+                                <span v-if="message.showDeleteButton" @click="handlePreviewImage(message.value)" :class="`text-[0.60rem] text-nowrap absolute text-black py-2 w-[6rem] text-center shadow bg-white cursor-pointer top-[3rem] ${ message.author_uid === userData.uid ? '-left-[7rem]' : '-right-[7rem]'}`">Preview Photo</span>
                                 <img :src="message.value" alt="Image" class="h-max max-h-[11rem]">
                             </div>
                             <div :class="`text-[0.60rem] text-c1 w-full ${message.author_uid != userData.uid ? 'text-start' : 'text-end'} py-[0.25rem]`">
@@ -288,8 +288,8 @@
                                 </div>
                             </div>
                             <div v-else-if="message.type === 'Photo'" @click="toggleDeleteButton(message.messageId)" class="bg-c5 p-2 cursor-pointer relative">
-                                <span v-if="message.showDeleteButton" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black py-1 w-[6rem] text-center shadow bg-white cursor-pointer left-0 -top-[1.5rem]">Delete Photo</span>
-                                <span v-if="message.showDeleteButton" @click="handlePreviewImage(message.value)" class="text-[0.60rem] text-nowrap absolute text-black py-1 w-[6rem] text-center shadow bg-white cursor-pointer left-[7rem] -top-[1.5rem]">Preview Photo</span>
+                                <span v-if="message.showDeleteButton && message.author_uid === userData.uid" @click="handleDeleteMessage(message.messageId)" class="text-[0.60rem] text-nowrap absolute text-black py-1 w-[6rem] text-center shadow bg-white cursor-pointer left-0 -top-[1.5rem]">Delete Photo</span>
+                                <span v-if="message.showDeleteButton" @click="handlePreviewImage(message.value)" :class="`text-[0.60rem] text-nowrap absolute text-black py-1 w-[6rem] text-center shadow bg-white cursor-pointer left-[7rem] -top-[1.125rem] ${message.author_uid === userData.uid ? 'left-[7rem]' : 'left-[2rem]'}`">Preview Photo</span>
                                 <img :src="message.value" alt="Image" class="h-max max-h-[11rem]">
                             </div>
                             <div :class="`text-[0.60rem] text-c1 w-full ${message.author_uid != userData.uid ? 'text-start' : 'text-end'} py-[0.25rem]`">
@@ -856,7 +856,6 @@ const handleCreateMessageRoom = async (user) => {
 }
 
 const toggleDeleteButton = useDebounceFn((messageId) => {
-    console.log(messageRoom.value)
     messageRoom.value = {...messageRoom.value, roomMessages: messageRoom.value.roomMessages.map((message) => 
         message.messageId === messageId 
         ? { ...message, showDeleteButton: !message.showDeleteButton } 
