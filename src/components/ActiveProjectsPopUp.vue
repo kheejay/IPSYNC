@@ -39,7 +39,7 @@
                         <div class="max-h-[14rem] h-[14rem] pr-2 pl-4 py-4 overflow-y-scroll thumb-scrollbar">
                             <div v-for="member, index in props.post.members" :key="index" :class="`w-full flex border-t border-t-c3 h-[4.5rem] ${ index == props.post.members.length - 1 && 'border-b border-b-c3'} hover:scale-[98%] hover:bg-zinc-50 duration-200`">
                                 <div class="w-[64.5%] flex items-center gap-2.5">
-                                    <img @click="$router.push(`/inspect-profile/${member.uid}`)" :src="member.photoURL.value ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="" class="w-[3rem] h-[3rem] rounded-full cursor-pointer duration-200 hover:scale-105">
+                                    <img @click="member.uid !== userData.uid ? $router.push(`/inspect-profile/${member.uid}`) : $router.push({ name: 'Profile' })" :src="member.photoURL.value ?? 'https://i.ibb.co/rfRCfwf/logo.png'" alt="" class="w-[3rem] h-[3rem] rounded-full cursor-pointer duration-200 hover:scale-105">
                                     <p class="uppercase">{{ member.full_name }}</p>
                                 </div>
                                 <div class="uppercase font-[300] flex items-center">

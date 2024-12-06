@@ -576,7 +576,7 @@ const sendPhotoMessage = async (newPhotoURL) => {
             type: "Photo",
             value: newPhotoURL,
             timestamp: new Date().toISOString(),
-            author_name: userData.full_name,
+            author_name: userData.full_name.value,
             author_photoURL: userData.photoURL,
             author_uid: userData.uid
         }); 

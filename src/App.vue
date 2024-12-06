@@ -187,13 +187,22 @@ const updateActiveProjectMembersData = () => {
     return (
       projectPost.authorId === userData.uid || 
       projectPost.applicants.some(
-        (applicant) => applicant.uid === userData.uid && applicant.status === 'Accepted'
+        (applicant) => applicant.uid === userData.uid
       )
     );
   });
-
+  activeProjects.value = [...shapedPostShallow.value.filter((projectPost) => {
+    // User is the author or has an "Accepted" application
+    return (
+      (
+        projectPost.authorId === userData.uid || 
+        projectPost.applicants.some(
+          (applicant) => applicant.uid === userData.uid && applicant.status === 'Accepted'
+        )
+      ) && !projectPost.completed
+    );
+  })]
   // Separate projects based on completion status
-  activeProjects.value = [...userRelatedProjects.filter((projectPost) => !projectPost.completed)];
   completedProjects.value = [...userRelatedProjects.filter((projectPost) => projectPost.completed)];
 
   // User's applications excluding those authored by the user
@@ -215,6 +224,7 @@ const updateActiveProjectMembersData = () => {
   updatePostedProjectApplicantsData();
   updateActiveProjectMembersData();
 
+  console.log('My applications', myApplications.value)
   console.log('Test posted projects:', postedProjects.value);
   console.log('project schema', activeProjects.value)
 };
