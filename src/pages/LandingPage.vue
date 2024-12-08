@@ -74,20 +74,49 @@
                 Too good to be true? Hear from real students.
             </div>
             <div class="flex flex-row flex-wrap justify-center gap-9 pt-[4rem] pb-[8rem]">
-                <div v-for="testimony, index of testimonials" :key="index" class="h-[40rem] w-[24rem] bg-c4 rounded-[10px] drop-shadow">
-                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('${testimony.imageURL}')]`">
+                <div class="h-[40rem] w-[24rem] bg-c4 rounded-[10px] drop-shadow">
+                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('/src/assets/testimonials/jep.png')]`">
 
                     </div>
                     <div class="w-full h-[40%] border-x border-b border-c1 rounded-b-[10px] flex flex-col justify-between p-2">
-                        <p class="flex-grow text-start text-[#666262]">{{ testimony.details }}</p>
+                        <p class="flex-grow text-start text-[#666262]">
+                            "You can’t have a say at the table if you don’t have a seat at the table. So these programs and these opportunities for people who look like me, act like me and think like me, are an opportunity to have a seat at the table so we can have a better future for the people behind us."
+                        </p>
                         <div class="w-full text-start">
-                            <p class="text-c1 font-bold">{{ testimony.name }}</p>
-                            <p>{{ testimony.department }}</p>
+                            <p class="text-c1 font-bold">Jephone Piolo Padilla</p>
+                            <p>CICT 3rd year student</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-[40rem] w-[24rem] bg-c4 rounded-[10px] drop-shadow">
+                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('/src/assets/testimonials/image.png')]`">
+                    </div>
+                    <div class="w-full h-[40%] border-x border-b border-c1 rounded-b-[10px] flex flex-col justify-between p-2">
+                        <p class="flex-grow text-start text-[#666262]">
+                            "All I can say is, I love the guy on the right."
+                        </p>
+                        <div class="w-full text-start">
+                            <p class="text-c1 font-bold">Cherilyn Marie D. Torre</p>
+                            <p>CICT Computer Science Head</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-[40rem] w-[24rem] bg-c4 rounded-[10px] drop-shadow">
+                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('/src/assets/testimonials/image2.png')]`">
+                    </div>
+                    <div class="w-full h-[40%] border-x border-b border-c1 rounded-b-[10px] flex flex-col justify-between p-2">
+                        <p class="flex-grow text-start text-[#666262]">
+                            "I hate them both."
+                        </p>
+                        <div class="w-full text-start">
+                            <p class="text-c1 font-bold">Cutesy V. Demure</p>
+                            <p>CICT Dean</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
     </div>
 </template>
 
@@ -120,10 +149,4 @@ const handlePush = useDebounceFn((name) => {
 onBeforeMount(() => {
     runAllNecessaryFunctions()
 })
-
-const testimonials = ref([
-    { imageURL: `/src/assets/testimonials/jep.png`, details: '"You can’t have a say at the table if you don’t have a seat at the table. So these programs and these opportunities for people who look like me, act like me and think like me, are an opportunity to have a seat at the table so we can have a better future for the people behind us."', name: 'Jephone Piolo Padilla', department: 'CICT 3rd year student'},
-    { imageURL: `/src/assets/testimonials/image.png`, details: '"All I can say is, I love the guy on the right."', name: 'Cherilyn Marie D. Torre', department: 'CICT Computer Science Head'},
-    { imageURL: `/src/assets/testimonials/image2.png`, details: '"I hate them both."', name: 'Cutesy V. Demure', department: 'CICT Dean '},
-])
 </script>
