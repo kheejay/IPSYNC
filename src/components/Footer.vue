@@ -36,7 +36,7 @@
             </div>
         </div>
         <div v-if="backToTopArrow" @click="handleBackToTop" @mouseover="promptToTop = true" @mouseleave="promptToTop = false"
-            class="drop-shadow flex items-center justify-center bg-c4 fixed bottom-[2rem] right-[2rem] sm:bottom-[4rem] sm:right-[4rem] rounded-full cursor-pointer opacity-70 w-[3rem] h-[3rem] sm:w-[5rem] sm:h-[5rem] hover:opacity-100 duration-200">
+            class="drop-shadow flex items-center justify-center bg-c4 fixed bottom-[2rem] right-[2rem] sm:bottom-[4rem] sm:right-[4rem] rounded-full cursor-pointer opacity-[60%] w-[3rem] h-[3rem] sm:w-[5rem] sm:h-[5rem] hover:opacity-100 duration-200">
             <ArrowToTop class="w-11 h-11 sm:w-16 sm:h-16 text-black" />
             <div class="relative">
                 <span v-if="promptToTop || $route.name == 'Profile'" class="absolute text-base left-1/2 -translate-x-[78%] -top-[4.5rem] sm:-top-[6rem] text-nowrap bg-c4 rounded-full py-1 px-4">Back to top</span>

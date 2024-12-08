@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <div class="sm:h-[calc(100vh-4rem)] bg-image text-white">
+        <div class="sm:h-[calc(100vh-4rem)] bg-image bg-[url('/src/assets/images/landingBg.png')] text-white">
             <div class="px-6 text-center md:text-left md:pl-[7.5rem] pt-[10rem] sm:pt-[12rem] tracking-widest">
                 <div class="font-black text-[1.6rem] md:text-[3.25rem] md:w-[60%] sm:text-[3rem] leading-tight">
                     CONNECT, COLLABORATE, SUCCEED
@@ -69,9 +69,23 @@
         </div>
 
         <!-- Testimonial Section -->
-        <div class="mt-10 md:mt-20 px-6 text-center">
+        <div class="pt-10 md:pt-20 px-6 text-center bg-white">
             <div class="text-[#113567] font-black text-[1.75rem] md:text-[3rem] leading-tight">
                 Too good to be true? Hear from real students.
+            </div>
+            <div class="flex flex-row flex-wrap justify-center gap-9 pt-[4rem] pb-[8rem]">
+                <div v-for="testimony, index of testimonials" :key="index" class="h-[40rem] w-[24rem] bg-c4 rounded-[10px] drop-shadow">
+                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('${testimony.imageURL}')]`">
+
+                    </div>
+                    <div class="w-full h-[40%] border-x border-b border-c1 rounded-b-[10px] flex flex-col justify-between p-2">
+                        <p class="flex-grow text-start text-[#666262]">{{ testimony.details }}</p>
+                        <div class="w-full text-start">
+                            <p class="text-c1 font-bold">{{ testimony.name }}</p>
+                            <p>{{ testimony.department }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -79,16 +93,14 @@
 
 <style scoped>
 .bg-image {
-    background-image: url('/src/assets/images/landingBg.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    height: 100vh;
 }
 </style>
 
 <script setup>
-import { inject, onBeforeMount } from 'vue';
+import { inject, onBeforeMount, ref } from 'vue';
 import LightArrowRight from '../components/icons/LightArrowRight.vue';
 import { useDebounceFn } from '@vueuse/core';
 import { useRouter } from 'vue-router';
@@ -108,4 +120,10 @@ const handlePush = useDebounceFn((name) => {
 onBeforeMount(() => {
     runAllNecessaryFunctions()
 })
+
+const testimonials = ref([
+    { imageURL: `/src/assets/testimonials/jep.png`, details: '"You can’t have a say at the table if you don’t have a seat at the table. So these programs and these opportunities for people who look like me, act like me and think like me, are an opportunity to have a seat at the table so we can have a better future for the people behind us."', name: 'Jephone Piolo Padilla', department: 'CICT 3rd year student'},
+    { imageURL: `/src/assets/testimonials/image.png`, details: '"All I can say is, I love the guy on the right."', name: 'Cherilyn Marie D. Torre', department: 'CICT Computer Science Head'},
+    { imageURL: `/src/assets/testimonials/image2.png`, details: '"I hate them both."', name: 'Cutesy V. Demure', department: 'CICT Dean '},
+])
 </script>
