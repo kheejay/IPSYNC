@@ -89,7 +89,7 @@
                     </div>
                 </div>
                 <div class="h-[40rem] w-[24rem] bg-c4 rounded-[10px] drop-shadow">
-                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('/src/assets/testimonials/image.png')]`">
+                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('/src/assets/testimonials/che.png')]`">
                     </div>
                     <div class="w-full h-[40%] border-x border-b border-c1 rounded-b-[10px] flex flex-col justify-between p-2">
                         <p class="flex-grow text-start text-[#666262]">
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <div class="h-[40rem] w-[24rem] bg-c4 rounded-[10px] drop-shadow">
-                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('/src/assets/testimonials/image2.png')]`">
+                    <div :class="`w-full h-[60%] rounded-t-[10px] bg-image bg-[url('/src/assets/testimonials/mark.png')]`">
                     </div>
                     <div class="w-full h-[40%] border-x border-b border-c1 rounded-b-[10px] flex flex-col justify-between p-2">
                         <p class="flex-grow text-start text-[#666262]">
