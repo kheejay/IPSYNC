@@ -79,7 +79,7 @@
                 </div>
                 <!--kj-->
                 <div class="flex flex-col items-center text-center">
-                    <div>
+                    <div class=" bg-c5 rounded-[30px]">
                         <img src="/src/assets/images/kj.png" alt="Person 1" class="h-[18rem] w-auto" />
                     </div>
                     <div class="font-bold text-white tracking-wider mt-2">
