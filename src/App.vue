@@ -10,6 +10,7 @@
 </template>
 
 <script setup>
+// 711
 import { computed, onBeforeMount, onUnmounted, provide, reactive, ref, watch } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
 import LoadingScreen from './components/LoadingScreen.vue';
