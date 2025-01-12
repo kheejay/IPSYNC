@@ -11,6 +11,7 @@
 
 <script setup>
 // 711
+// sample push
 import { computed, onBeforeMount, onUnmounted, provide, reactive, ref, watch } from 'vue';
 import NavigationBar from './components/NavigationBar.vue';
 import LoadingScreen from './components/LoadingScreen.vue';
@@ -54,7 +55,7 @@ const userData = reactive({
     interest: {value: [''], hasError: false, errorMessage: ''},
     facebook: '',
     gmail: '',
-    mobileNumber: '', 
+    mobileNumber: '',
     uid: localStorage.getItem('userId'),
     photoURL: { value: genericProfile.value, scale: 100}
 })
@@ -100,7 +101,7 @@ const setUserData = () => {
 
 const fetchUsers = () =>  {
     const q = query(collection(db, "users"));
-    
+
     let newUsers = []
     unsubscribeUser.value = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
       const changes = snapshot.docChanges();
@@ -112,9 +113,9 @@ const fetchUsers = () =>  {
         changes.forEach((change) => {
             if(change.type === 'added') {
               newUsers.push({...change.doc.data()});
-            } 
+            }
             if(change.type == 'modified') {
-              newUsers = newUsers.map(user => 
+              newUsers = newUsers.map(user =>
                 user.uid === userData.uid ? {...change.doc.data()} : user
               );
             }
@@ -143,7 +144,7 @@ const updateActiveProjectMembersData = () => {
     const updatedMembers = project.members.map((member) => {
       const memberData = users.value.find((user) => user.uid === member.uid);
       if (memberData) {
-        return {    
+        return {
           ...member,
           full_name: memberData.full_name,
           department: memberData.department,
@@ -186,7 +187,7 @@ const updateActiveProjectMembersData = () => {
   const userRelatedProjects = shapedPostShallow.value.filter((projectPost) => {
     // User is the author or has an "Accepted" application
     return (
-      projectPost.authorId === userData.uid || 
+      projectPost.authorId === userData.uid ||
       projectPost.applicants.some(
         (applicant) => applicant.uid === userData.uid
       )
@@ -196,7 +197,7 @@ const updateActiveProjectMembersData = () => {
     // User is the author or has an "Accepted" application
     return (
       (
-        projectPost.authorId === userData.uid || 
+        projectPost.authorId === userData.uid ||
         projectPost.applicants.some(
           (applicant) => applicant.uid === userData.uid && applicant.status === 'Accepted'
         )
@@ -274,7 +275,7 @@ const fetchPosts = () => {
       const changes = snapshot.docChanges();
       // console.log('post snapshot', snapshot);
       if (!changes.length) {
-        // 
+        //
       } else {
         changes.forEach((change) => {
             const postData = {
@@ -287,7 +288,7 @@ const fetchPosts = () => {
                   posts.value.push(postData);
               }
             } else if (change.type === "modified") {
-              
+
                 if (existingIndex !== -1) {
                     posts.value[existingIndex] = postData;
                 }
@@ -307,7 +308,7 @@ const fetchPosts = () => {
 }
 
 
-const setLastMessage = () => { 
+const setLastMessage = () => {
     messagesRooms.value = messagesRooms.value.map((thisRoom) => {
     const matchingRoom = allMessages.value.find(
       (messageRoom) => messageRoom.roomId === thisRoom.roomId
@@ -387,7 +388,7 @@ const fetchMessagesRooms = async () => {
     console.log('Initializing query snapshot...');
     unsubscribeMessagesRooms.value = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
       const changes = snapshot.docChanges();
-      
+
       if (!changes.length) {
         console.log('No changes in messagesRooms');
       } else {
@@ -473,7 +474,7 @@ const updateRoomMessages = (newMessages) => {
 
 const fetchMessageRoom = () => {
     turnOffMessageRoomListener();
-    
+
     let newMessages = []
 
     const q = query(collection(db, "messagesRooms", selectedRoom.value.roomId, "messages"));
@@ -486,7 +487,7 @@ const fetchMessageRoom = () => {
         changes.forEach((change) => {
             if(change.type === 'added') {
               newMessages.push({...change.doc.data(), formattedStamp: formatDate(change.doc.data().timestamp), messageId: change.doc.id, showDeleteButton: false});
-            } 
+            }
             if(change.type == 'removed') {
               newMessages = newMessages.filter((message) => message.messageId !== change.doc.id)
             }
@@ -560,7 +561,7 @@ const emptyUserData = () => {
   userData.uid = null;
   userData.photoURL = { value: genericProfile.value, scale: 100 };
   localStorage.setItem('isRegistered', 'false')
-} 
+}
 
 const findPreExistingRoom = (otherUserUid) => {
   for (const room of messagesRooms.value) {
@@ -569,10 +570,10 @@ const findPreExistingRoom = (otherUserUid) => {
 
     if (hasBothUsers && room.type === "Private message") {
       console.log("found! ", room.roomId)
-      return room.roomId; 
+      return room.roomId;
     }
   }
-  return null; 
+  return null;
 };
 
 const runAllNecessaryFunctions = async () => {
@@ -606,7 +607,7 @@ provide('userData', {
     fetchMessagesRooms,
     findPreExistingRoom,
     runAllNecessaryFunctions,
-    allMessages, 
+    allMessages,
     gatherMessages,
     setLastMessage,
     activeProjects,
